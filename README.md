@@ -11,7 +11,9 @@ model.
 
 ## References
 [Ray Tracing in One Weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)<br />
+[Huygens–Fresnel principle](https://en.wikipedia.org/wiki/Huygens%E2%80%93Fresnel_principle)<br />
 [Fast Poisson Disk Sampling in Arbitrary Dimensions](https://www.cs.ubc.ca/~rbridson/docs/bridson-siggraph07-poissondisk.pdf)<br />
+[Physically Based Rendering:From Theory To Implementation](https://pbr-book.org/)<br />
 
 ### License
 MIT © [Ryan Chanlatte](https://github.com/rchanlatte95) 2024 
