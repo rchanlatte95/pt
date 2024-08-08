@@ -1,5 +1,7 @@
 # SIMD Pathtracer
-![Spheres drawn on a blue-white background](./README-RESOURCES/pathtrace.jpg)
+<p align="center">
+  <img src="./README-RESOURCES/pathtrace.jpg" alt="Spheres drawn on a blue-white background"/>
+</p>
 <br />
 <br />
 I wanted to take a break from OpenGL rasterizers and try my hand at path tracing.
