@@ -9,5 +9,9 @@ model.
 ## Reflectance model
 -
 
+## References
+[Ray Tracing in One Weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
+[Fast Poisson Disk Sampling in Arbitrary Dimensions](https://www.cs.ubc.ca/~rbridson/docs/bridson-siggraph07-poissondisk.pdf)
+
 ### License
 MIT © [Ryan Chanlatte](https://github.com/rchanlatte95) 2024 
