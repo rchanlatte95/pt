@@ -1,6 +1,6 @@
 # SIMD Pathtracer
 <p align="center">
-  <img src="./README-RESOURCES/pathtrace.jpg" alt="Spheres drawn on a blue-white background"/>
+  <img src="./_README-RESOURCES/pathtrace.jpg" alt="Spheres drawn on a blue-white background"/>
 </p>
 <br />
 <br />
