@@ -39,6 +39,13 @@ namespace rac::color
             g = (u8)(_g * 255.999f);
             r = (u8)(_r * 255.999f);
         }
+        mut_color(colorf_ref c)
+        {
+            opacity = (u8)(c.opacity * 255.999f);
+            b = (u8)(c.b * 255.999f);
+            g = (u8)(c.g * 255.999f);
+            r = (u8)(c.r * 255.999f);
+        }
 
         INLINE f32 LinearToGamma(f32 linear_color_component) const noexcept
         {
@@ -61,9 +68,13 @@ namespace rac::color
         }
 
         INLINE u32 GetU32() const noexcept { return *(u32ptr(&opacity)); }
+        INLINE operator u32() const noexcept { return GetU32(); }
+
         INLINE i32 GetI32() const noexcept { return *(i32ptr(&opacity)); }
-        operator u32() const noexcept { return GetU32(); }
-        operator i32() const noexcept { return GetI32(); }
+        INLINE operator i32() const noexcept { return GetI32(); }
+
+        INLINE colorf ToColorf() const noexcept { return colorf(*this); }
+        INLINE operator colorf() const noexcept { return ToColorf(); }
 
         INLINE color_ref operator=(color_ref rhs) noexcept
         {
@@ -116,6 +127,13 @@ namespace rac::color
             b = _b;
             opacity = _a;
         }
+        mut_colorf(color_ref c)
+        {
+            r = c.r * INV_U8_MAX;
+            g = c.g * INV_U8_MAX;
+            b = c.b * INV_U8_MAX;
+            opacity = c.opacity * INV_U8_MAX;
+        }
 
         INLINE f32 LinearToGamma(f32 linear_color_component) const noexcept
         {
@@ -141,6 +159,9 @@ namespace rac::color
             f32 bY = LUMA_REC709_B * LinearToGamma(b);
             return colorf(rY, gY, bY, opacity);
         }
+
+        INLINE color ToColor() const noexcept { return color(*this); }
+        INLINE operator color() const noexcept { return ToColor(); }
 
         INLINE colorf_ref operator=(colorf_ref rhs) noexcept
         {
