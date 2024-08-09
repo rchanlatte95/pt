@@ -19,9 +19,9 @@ namespace rac::color
         static u8 BITS_PER_COLOR_COMPONENT = sizeof(mut_f32) * BITS_IN_BYTE;
         static u8 BITS_PER_PIXEL = BITS_PER_COLOR_COMPONENT * 4;
 
-        mut_f32 b;
-        mut_f32 g;
         mut_f32 r;
+        mut_f32 g;
+        mut_f32 b;
         mut_f32 opacity;
 
         mut_colorf() { }
@@ -50,6 +50,16 @@ namespace rac::color
             return powf(gamma_color_component, GAMMA);
         }
 
+        INLINE colorf ToLinear() const noexcept
+        {
+            return colorf(LinearToGamma(r), LinearToGamma(g), LinearToGamma(b), opacity);
+        }
+
+        INLINE colorf ToGamma() const noexcept
+        {
+            return colorf(GammaToLinear(r), GammaToLinear(g), GammaToLinear(b), opacity);
+        }
+
         INLINE colorf Luminance() const noexcept
         {
             f32 rY = LUMA_REC709_R * LinearToGamma(r);
@@ -66,6 +76,9 @@ namespace rac::color
             opacity = rhs.opacity;
             return *this;
         }
+
+        mut_f32 operator [] (i32 i) const { return *(&r + i); }
+        mut_f32ref operator [] (i32 i) { return *(&r + i); }
     };
 
     typedef mut_colorf* mut_colorf_ptr;

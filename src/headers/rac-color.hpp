@@ -19,10 +19,10 @@ namespace rac::color
         static u8 BITS_PER_COLOR_COMPONENT = sizeof(mut_u8) * BITS_IN_BYTE;
         static u8 BITS_PER_PIXEL = BITS_PER_COLOR_COMPONENT * 4;
 
+        mut_u8 opacity;
         mut_u8 b;
         mut_u8 g;
         mut_u8 r;
-        mut_u8 opacity;
 
         mut_color() { }
         mut_color(u8 _r, u8 _g, u8 _b, u8 _a = 255)
