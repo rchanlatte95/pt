@@ -27,25 +27,23 @@ namespace rac::color
         mut_color() { }
         mut_color(u8 _r, u8 _g, u8 _b, u8 _a = 255)
         {
-            r = _r;
-            g = _g;
-            b = _b;
             opacity = _a;
+            b = _b;
+            g = _g;
+            r = _r;
         }
         mut_color(f32 _r, f32 _g, f32 _b, f32 _a)
         {
-            f32 ceil_ = 255.999f;
-            r = (u8)(_r * ceil_);
-            g = (u8)(_g * ceil_);
-            b = (u8)(_b * ceil_);
-            opacity = (u8)(_a * ceil_);
+            opacity = (u8)(_a * 255.999f);
+            b = (u8)(_b * 255.999f);
+            g = (u8)(_g * 255.999f);
+            r = (u8)(_r * 255.999f);
         }
 
         INLINE f32 LinearToGamma(f32 linear_color_component) const noexcept
         {
             return powf((f32)linear_color_component * INV_U8_MAX, INV_GAMMA);
         }
-
         INLINE f32 GammaToLinear(f32 gamma_color_component) const noexcept
         {
             return powf((f32)gamma_color_component * INV_U8_MAX, GAMMA);
@@ -68,6 +66,14 @@ namespace rac::color
         operator i32() const noexcept { return GetI32(); }
 
         INLINE color_ref operator=(color_ref rhs) noexcept
+        {
+            b = rhs.b;
+            g = rhs.g;
+            r = rhs.r;
+            opacity = rhs.opacity;
+            return *this;
+        }
+        INLINE color_ref operator=(colorf_ref rhs) noexcept
         {
             b = rhs.b;
             g = rhs.g;
@@ -118,17 +124,14 @@ namespace rac::color
         {
             return powf(linear_color_component, INV_GAMMA);
         }
-
         INLINE f32 GammaToLinear(f32 gamma_color_component) const noexcept
         {
             return powf(gamma_color_component, GAMMA);
         }
-
         INLINE colorf ToLinear() const noexcept
         {
             return colorf(LinearToGamma(r), LinearToGamma(g), LinearToGamma(b), opacity);
         }
-
         INLINE colorf ToGamma() const noexcept
         {
             return colorf(GammaToLinear(r), GammaToLinear(g), GammaToLinear(b), opacity);
