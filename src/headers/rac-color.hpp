@@ -81,9 +81,6 @@ namespace rac::color
             opacity = rhs.opacity;
             return *this;
         }
-
-        mut_u8 operator [] (i32 i) const { return *(&r - i); }
-        mut_u8ref operator [] (i32 i) { return *(&r - i); }
     };
 
     typedef mut_color* mut_color_ptr;
