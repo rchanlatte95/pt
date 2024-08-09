@@ -16,10 +16,10 @@ namespace rac::color
     {
     public:
 
-        mut_u8 opacity;
         mut_u8 b;
         mut_u8 g;
         mut_u8 r;
+        mut_u8 opacity;
 
         static u8 BITS_PER_COLOR_COMPONENT = sizeof(r) * BITS_IN_BYTE;
         static u8 BITS_PER_PIXEL = BITS_PER_COLOR_COMPONENT * 4;
@@ -27,24 +27,24 @@ namespace rac::color
         mut_color() { }
         mut_color(u8 _r, u8 _g, u8 _b, u8 _a = 255)
         {
-            opacity = _a;
             b = _b;
             g = _g;
             r = _r;
+            opacity = _a;
         }
         mut_color(f32 _r, f32 _g, f32 _b, f32 _a)
         {
-            opacity = (u8)(_a * 255.999f);
             b = (u8)(_b * 255.999f);
             g = (u8)(_g * 255.999f);
             r = (u8)(_r * 255.999f);
+            opacity = (u8)(_a * 255.999f);
         }
         mut_color(colorf_ref c)
         {
-            opacity = (u8)(c.opacity * 255.999f);
             b = (u8)(c.b * 255.999f);
             g = (u8)(c.g * 255.999f);
             r = (u8)(c.r * 255.999f);
+            opacity = (u8)(c.opacity * 255.999f);
         }
 
         INLINE f32 LinearToGamma(f32 linear_color_component) const noexcept
