@@ -16,13 +16,13 @@ namespace rac::color
     {
     public:
 
-        static u8 BITS_PER_COLOR_COMPONENT = sizeof(mut_u8) * BITS_IN_BYTE;
-        static u8 BITS_PER_PIXEL = BITS_PER_COLOR_COMPONENT * 4;
-
         mut_u8 opacity;
         mut_u8 b;
         mut_u8 g;
         mut_u8 r;
+
+        static u8 BITS_PER_COLOR_COMPONENT = sizeof(r) * BITS_IN_BYTE;
+        static u8 BITS_PER_PIXEL = BITS_PER_COLOR_COMPONENT * 4;
 
         mut_color() { }
         mut_color(u8 _r, u8 _g, u8 _b, u8 _a = 255)
@@ -40,9 +40,6 @@ namespace rac::color
             b = (u8)(_b * ceil_);
             opacity = (u8)(_a * ceil_);
         }
-
-        INLINE u32 GetU32() const noexcept { return *(u32ptr(&b)); }
-        INLINE i32 GetI32() const noexcept { return *(i32ptr(&b)); }
 
         INLINE f32 LinearToGamma(f32 linear_color_component) const noexcept
         {
@@ -65,6 +62,8 @@ namespace rac::color
             return color(new_r, new_g, new_b, opacity);
         }
 
+        INLINE u32 GetU32() const noexcept { return *(u32ptr(&opacity)); }
+        INLINE i32 GetI32() const noexcept { return *(i32ptr(&opacity)); }
         operator u32() const noexcept { return GetU32(); }
         operator i32() const noexcept { return GetI32(); }
 
@@ -76,6 +75,9 @@ namespace rac::color
             opacity = rhs.opacity;
             return *this;
         }
+
+        mut_u8 operator [] (i32 i) const { return *(&r - i); }
+        mut_u8ref operator [] (i32 i) { return *(&r - i); }
     };
 
     typedef mut_color* mut_color_ptr;
@@ -83,4 +85,79 @@ namespace rac::color
     typedef const mut_color color;
     typedef const mut_color* color_ptr;
     typedef const mut_color& color_ref;
+
+    class mut_colorf
+    {
+    public:
+
+        mut_f32 r;
+        mut_f32 g;
+        mut_f32 b;
+        mut_f32 opacity;
+
+        static u8 BITS_PER_COLOR_COMPONENT = sizeof(r) * BITS_IN_BYTE;
+        static u8 BITS_PER_PIXEL = BITS_PER_COLOR_COMPONENT * 4;
+
+        mut_colorf() { }
+        mut_colorf(u8 _r, u8 _g, u8 _b, u8 _a = 255)
+        {
+            r = _r * INV_U8_MAX;
+            r = _g * INV_U8_MAX;
+            r = _b * INV_U8_MAX;
+            opacity = _a * INV_U8_MAX;
+        }
+        mut_colorf(f32 _r, f32 _g, f32 _b, f32 _a)
+        {
+            r = _r;
+            g = _g;
+            b = _b;
+            opacity = _a;
+        }
+
+        INLINE f32 LinearToGamma(f32 linear_color_component) const noexcept
+        {
+            return powf(linear_color_component, INV_GAMMA);
+        }
+
+        INLINE f32 GammaToLinear(f32 gamma_color_component) const noexcept
+        {
+            return powf(gamma_color_component, GAMMA);
+        }
+
+        INLINE colorf ToLinear() const noexcept
+        {
+            return colorf(LinearToGamma(r), LinearToGamma(g), LinearToGamma(b), opacity);
+        }
+
+        INLINE colorf ToGamma() const noexcept
+        {
+            return colorf(GammaToLinear(r), GammaToLinear(g), GammaToLinear(b), opacity);
+        }
+
+        INLINE colorf Luminance() const noexcept
+        {
+            f32 rY = LUMA_REC709_R * LinearToGamma(r);
+            f32 gY = LUMA_REC709_G * LinearToGamma(g);
+            f32 bY = LUMA_REC709_B * LinearToGamma(b);
+            return colorf(rY, gY, bY, opacity);
+        }
+
+        INLINE colorf_ref operator=(colorf_ref rhs) noexcept
+        {
+            b = rhs.b;
+            g = rhs.g;
+            r = rhs.r;
+            opacity = rhs.opacity;
+            return *this;
+        }
+
+        mut_f32 operator [] (i32 i) const { return *(&r + i); }
+        mut_f32ref operator [] (i32 i) { return *(&r + i); }
+    };
+
+    typedef mut_colorf* mut_colorf_ptr;
+    typedef mut_colorf& mut_colorf_ref;
+    typedef const mut_colorf colorf;
+    typedef const mut_colorf* colorf_ptr;
+    typedef const mut_colorf& colorf_ref;
 }
