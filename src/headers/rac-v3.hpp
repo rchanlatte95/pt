@@ -3,7 +3,7 @@
 
 namespace rac::mth
 {
-    class alignas(f32) mut_v3
+    class mut_v3
     {
     public:
 
@@ -36,7 +36,7 @@ namespace rac::mth
             z = z_;
         }
 
-        INLINE v3 operator-() const noexcept { return v3(x, y, z); }
+        INLINE v3 operator-() const noexcept { return v3(-x, -y, -z); }
         INLINE f32 operator[](i32 i) const noexcept { return *(&x + i); }
         INLINE mut_f32ref operator[](i32 i) { return *(&x + i); }
 
@@ -45,6 +45,12 @@ namespace rac::mth
             x += v.x;
             y += v.y;
             z += v.z;
+        }
+        INLINE mut_v3_ref operator-=(v3 v) noexcept
+        {
+            x -= v.x;
+            y -= v.y;
+            z -= v.z;
         }
         INLINE mut_v3_ref operator*=(f32 v) noexcept
         {
@@ -67,15 +73,36 @@ namespace rac::mth
     typedef const mut_v3* v3_ptr;
     typedef const mut_v3& v3_ref;
 
+    INLINE v3 operator*(v3_ref u, f32 v) { return u * v; }
+    INLINE v3 operator/(v3_ref u, f32 v) { return u * (1.0f / v); }
+
     INLINE v3 operator+(v3_ref u, v3_ref v)
     {
         return v3(u.x + v.x, u.y + v.y, u.z + v.z);
+    }
+    INLINE v3 operator-(v3_ref u, v3_ref v)
+    {
+        return v3(u.x - v.x, u.y - v.y, u.z - v.z);
     }
     INLINE v3 operator*(v3_ref u, v3_ref v)
     {
         return v3(u.x * v.x, u.y * v.y, u.z * v.z);
     }
+    INLINE v3 operator/(v3_ref u, v3_ref v)
+    {
+        return v3(u.x / v.x, u.y / v.y, u.z / v.z);
+    }
 
     INLINE v3 Norm(v3_ref v) noexcept { return v * v.InvMag(); }
     INLINE f32 Dot(v3_ref u, v3_ref v) noexcept { return u.x * v.x + u.y * v.y + u.z * v.z; }
+    INLINE v3 Cross(v3_ref u, v3_ref v) noexcept
+    {
+        /*return v3(u.y * v.z - u.z * v.y,
+                    u.z * v.x - u.x * v.z,
+                    u.x * v.y - u.y * v.x);
+                    */
+        return v3(fmaf(u.y, v.z, -(u.z * v.y)),
+                fmaf(u.z, v.x, -(u.x * v.z)),
+                fmaf(u.x, v.y, -(u.y * v.x)));
+    }
 }
