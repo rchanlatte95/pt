@@ -97,12 +97,8 @@ namespace rac::mth
     INLINE f32 Dot(v3_ref u, v3_ref v) noexcept { return u.x * v.x + u.y * v.y + u.z * v.z; }
     INLINE v3 Cross(v3_ref u, v3_ref v) noexcept
     {
-        /*return v3(u.y * v.z - u.z * v.y,
+        return v3(u.y * v.z - u.z * v.y,
                     u.z * v.x - u.x * v.z,
                     u.x * v.y - u.y * v.x);
-                    */
-        return v3(fmaf(u.y, v.z, -(u.z * v.y)),
-                fmaf(u.z, v.x, -(u.x * v.z)),
-                fmaf(u.x, v.y, -(u.y * v.x)));
     }
 }
