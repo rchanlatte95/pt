@@ -154,6 +154,8 @@
     <ClInclude Include="headers\rac-actions.hpp" />
     <ClInclude Include="headers\rac-color.hpp" />
     <ClInclude Include="headers\rac-ppm.hpp" />
+    <ClInclude Include="headers\rac-v2.hpp" />
+    <ClInclude Include="headers\rac-v3.hpp" />
     <ClInclude Include="headers\rac.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
