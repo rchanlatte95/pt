@@ -1,5 +1,6 @@
 #pragma once
 #include "rac.hpp"
+#include "rac-v2.hpp"
 
 namespace rac::mth
 {
@@ -35,6 +36,12 @@ namespace rac::mth
             y = y_;
             z = z_;
         }
+        mut_v3(v2 v, f32 z_ = 0.0f)
+        {
+            x = v.x;
+            y = v.y;
+            z = z_;
+        }
 
         INLINE v3 operator-() const noexcept { return v3(-x, -y, -z); }
         INLINE f32 operator[](i32 i) const noexcept { return *(&x + i); }
@@ -58,13 +65,31 @@ namespace rac::mth
             y *= v;
             z *= v;
         }
-        INLINE mut_v3_ref operator/=(f32 v) noexcept { *this *= 1.0f / v; }
+        INLINE mut_v3_ref operator/=(f32 v) noexcept
+        {
+            *this *= 1.0f / v;
+        }
 
-        INLINE f32 SqrMag() const noexcept { return x * x + y * y + z * z; }
-        INLINE f32 InvSqrMag() const noexcept { return 1.0f / (x * x + y * y + z * z); }
-        INLINE f32 Mag() const noexcept { return sqrtf(this->SqrMag()); }
-        INLINE f32 InvMag() const noexcept { return 1.0f / sqrtf(this->SqrMag()); }
-        INLINE v3 Norm() const noexcept { return *this * this->InvMag(); }
+        INLINE f32 SqrMag() const noexcept
+        {
+            return x * x + y * y + z * z;
+        }
+        INLINE f32 InvSqrMag() const noexcept
+        {
+            return 1.0f / (x * x + y * y + z * z);
+        }
+        INLINE f32 Mag() const noexcept
+        {
+            return sqrtf(this->SqrMag());
+        }
+        INLINE f32 InvMag() const noexcept
+        {
+            return 1.0f / sqrtf(this->SqrMag());
+        }
+        INLINE v3 Norm() const noexcept
+        {
+            return *this * this->InvMag();
+        }
     };
 
     typedef mut_v3* mut_v3_ptr;
