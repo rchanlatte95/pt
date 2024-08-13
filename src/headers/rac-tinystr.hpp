@@ -3,7 +3,8 @@
 
 namespace rac::static_strings
 {
-    u8 TARGET_TINYSTR_BYTE_SZ = sizeof(ptr);
+    // https://pvs-studio.com/en/blog/terms/6658/
+    u8 TARGET_TINYSTR_BYTE_SZ = 16;
     u8 LEN_VARIABLE_BYTE_SZ = sizeof(u8);
 
     u8 TINYSTR_CAP = TARGET_TINYSTR_BYTE_SZ - LEN_VARIABLE_BYTE_SZ;
