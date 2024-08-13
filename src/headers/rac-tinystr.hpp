@@ -3,22 +3,22 @@
 
 namespace rac::static_strings
 {
-    u8 TARGET_BYTE_SZ = 16;
+    u8 TARGET_TINYSTR_BYTE_SZ = sizeof(ptr);
     u8 LEN_VARIABLE_BYTE_SZ = sizeof(u8);
-    u8 TINYSTR_CHAR_CT = TARGET_BYTE_SZ - NULL_TERMINATOR_LEN - LEN_VARIABLE_BYTE_SZ;
 
-    class alignas(TARGET_BYTE_SZ) mut_tinystr
+    u8 TINYSTR_CAP = TARGET_TINYSTR_BYTE_SZ - LEN_VARIABLE_BYTE_SZ;
+    u8 MAX_TINYSTR_LEN = TINYSTR_CAP - NULL_TERMINATOR_LEN;
+
+    class alignas(TARGET_TINYSTR_BYTE_SZ) mut_tinystr
     {
     private:
         mut_u8 Length;
-
-    public:
-        mut_u8 characters[TINYSTR_CHAR_CT];
-
-    private:
+        mut_u8 characters[MAX_TINYSTR_LEN];
         u8 NULL_TERM = NULL_TERMINATOR;
 
+    public:
 
+        mut_tinystr() { memset(&Length, NULL_TERMINATOR, TINYSTR_CAP); }
 
     };
 

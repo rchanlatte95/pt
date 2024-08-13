@@ -1,9 +1,9 @@
-#include <iostream>
+#include <stdio.h>
 
 #include "headers\rac.hpp"
-#include "headers\rac-tinystr"
+#include "headers\rac-tinystr.hpp"
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    printf("Hello World!\n");
 }

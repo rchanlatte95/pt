@@ -128,10 +128,10 @@ namespace rac
     f32 INV_U32_MAX = 1.0f / (f32)U32_MAX;
     f32 INV_U64_MAX = 1.0f / (f32)U64_MAX;
 
-    u8 ABS_I8_MIN = -(INT8_MIN);
-    u16 ABS_I16_MIN = -(INT16_MIN);
-    u32 ABS_I32_MIN = -(INT32_MIN);
-    u64 ABS_I64_MIN = -(INT64_MIN);
+    u8 ABS_I8_MIN = (u8)(-(INT8_MIN));
+    u16 ABS_I16_MIN = (u16)(-(INT16_MIN));
+    u32 ABS_I32_MIN = (u32)(-(INT32_MIN));
+    u64 ABS_I64_MIN = (u64)(-(INT64_MIN));
 
     f32 F32_EPSILON = FLT_EPSILON;
     f32 F32_MAX = FLT_MAX;
@@ -149,4 +149,14 @@ namespace rac
 
     u8 NULL_TERMINATOR = '\0';
     u8 NULL_TERMINATOR_LEN = 1;
+
+    // https://en.wikipedia.org/wiki/Whitespace_character
+    u8 CHAR_TAB = 0x09;
+    u8 LINE_FEED = 0x0A;
+    u8 LINE_TAB = 0x0B;
+    u8 FORM_FEED = 0x0C;
+    u8 CARRIAGE_RETURN = 0x0D;
+    u8 SPACE = 0x20;
+    u8 NEXT_LINE = 0x85;
+    u8 NO_BREAK_SPACE = 0xA0;
 }
