@@ -14,26 +14,50 @@ namespace rac::static_strings
     {
     private:
         mut_u8 Length;
-        mut_u8 characters[MAX_TINYSTR_LEN];
+        mut_u8 chars[MAX_TINYSTR_LEN];
         u8 NULL_TERM = NULL_TERMINATOR;
 
     public:
 
-        static constexpr u8 ClampToLen(u64 inputLength)
+        static constexpr u8 ClampLen(u64 inputLength)
         {
-            return (u8)std::min(inputLength, MAX_TINYSTR_LEN);
+            if (inputLength > MAX_TINYSTR_LEN)
+            {
+                return MAX_TINYSTR_LEN;
+            }
+            return (u8)inputLength;
         }
 
         mut_tinystr() { memset(&Length, NULL_TERMINATOR, TINYSTR_CAP); }
         mut_tinystr(cstr str)
         {
-            Length = strnlen_s(str, MAX_TINYSTR_LEN);
-            memcpy_s(characters, MAX_TINYSTR_LEN, str, Length);
+            Length = ClampLen(strnlen_s(str, MAX_TINYSTR_LEN));
+            memcpy_s(chars, MAX_TINYSTR_LEN, str, Length);
         }
         mut_tinystr(cstr str, u64 strLen)
         {
-            Length = ClampToLen(strLen);
-            memcpy_s(characters, MAX_TINYSTR_LEN, str, Length);
+            Length = ClampLen(strLen);
+            memcpy_s(chars, MAX_TINYSTR_LEN, str, Length);
+        }
+
+        INLINE i32 Len() const noexcept { return Length; }
+        INLINE i32 PenultLen() const noexcept
+        {
+            return (i32)std::max(Len() - 1, 0);
+        }
+        INLINE u8 Penultima() const noexcept { return chars[PenultLen()]; }
+        INLINE u8 SpaceLeft() const noexcept
+        {
+            return MAX_TINYSTR_LEN - Length;
+        }
+        INLINE u8ptr ToU8Ptr() const noexcept { return chars; }
+        INLINE cstr ToCstr() const noexcept { return (cstr)chars; }
+        INLINE ptr ToPtr() const noexcept { return chars; }
+        INLINE bool Empty() const noexcept { return Length == 0; }
+        INLINE bool Full() const noexcept { return SpaceLeft() > 0; }
+        INLINE bool Ample() const noexcept
+        {
+            return !Empty() && !Full();
         }
 
         INLINE void Clear()
@@ -42,8 +66,24 @@ namespace rac::static_strings
         }
         INLINE void Fill(u8 charToFillWith, u64 count = MAX_TINYSTR_LEN)
         {
-            Length = ClampToLen(count);
-            memset(characters, charToFillWith, Length);
+            Length = ClampLen(count);
+            memset(chars, charToFillWith, Length);
+        }
+
+        INLINE u8ref operator[](i32 index) noexcept { return chars[index]; }
+        INLINE operator cstr() const noexcept { return ToCstr(); }
+
+        INLINE mut_tinystr& operator+=(cstr rhs) noexcept
+        {
+            if (rhs == nullptr || Full())
+            {
+                return *this;
+            }
+
+            u8 rhs_len = (u8)strnlen_s(rhs, MAX_TINYSTR_LEN);
+            u8 cpy_ct = std::min(SpaceLeft(), rhs_len);
+            memcpy_s(chars, SpaceLeft(), rhs, cpy_ct);
+            return *this;
         }
     };
 
