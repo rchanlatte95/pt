@@ -4,10 +4,10 @@
 namespace rac::static_strings
 {
     u8 TARGET_BYTE_SZ = 16;
-    u8 LEN_VARIABLE_BYTE_SZ = SIZEOF(u8);
+    u8 LEN_VARIABLE_BYTE_SZ = sizeof(u8);
     u8 TINYSTR_CHAR_CT = TARGET_BYTE_SZ - NULL_TERMINATOR_LEN - LEN_VARIABLE_BYTE_SZ;
 
-    class alignas(16) mut_tinystr
+    class alignas(TARGET_BYTE_SZ) mut_tinystr
     {
     private:
         mut_u8 Length;
@@ -17,6 +17,8 @@ namespace rac::static_strings
 
     private:
         u8 NULL_TERM = NULL_TERMINATOR;
+
+
 
     };
 
