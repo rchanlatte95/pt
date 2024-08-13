@@ -94,7 +94,10 @@ namespace rac::mth
     }
 
     INLINE v3 Norm(v3_ref v) noexcept { return v * v.InvMag(); }
-    INLINE f32 Dot(v3_ref u, v3_ref v) noexcept { return u.x * v.x + u.y * v.y + u.z * v.z; }
+    INLINE f32 Dot(v3_ref u, v3_ref v) noexcept
+    {
+        return u.x * v.x + u.y * v.y + u.z * v.z;
+    }
     INLINE v3 Cross(v3_ref u, v3_ref v) noexcept
     {
         return v3(u.y * v.z - u.z * v.y,
