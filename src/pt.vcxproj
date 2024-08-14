@@ -155,6 +155,7 @@
     <ClInclude Include="headers\rac-cachestr.hpp" />
     <ClInclude Include="headers\rac-color.hpp" />
     <ClInclude Include="headers\rac-ppm.hpp" />
+    <ClInclude Include="headers\rac-staticstr.hpp" />
     <ClInclude Include="headers\rac-tinystr.hpp" />
     <ClInclude Include="headers\rac-v2.hpp" />
     <ClInclude Include="headers\rac-v3.hpp" />
