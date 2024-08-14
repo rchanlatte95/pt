@@ -27,13 +27,22 @@ namespace rac::static_strings
             }
             return (u8)inputLength;
         }
+        INLINE static u8 ClampedStrLen(cstr str)
+        {
+            u64 len = strnlen_s(str, MAX_TINYSTR_LEN);
+            if (len > MAX_TINYSTR_LEN)
+            {
+                return MAX_TINYSTR_LEN;
+            }
+            return (u8)len;
+        }
 
         mut_tinystr() { memset(&Length, NULL_TERMINATOR, TINYSTR_CAP); }
         mut_tinystr(cstr str)
         {
-            Length = ClampLen(strnlen_s(str, MAX_TINYSTR_LEN));
+            Length = ClampedStrLen(str);
             memcpy_s(chars, MAX_TINYSTR_LEN, str, Length);
-            chars[Length] = '\0';
+            chars[Length] = NULL_TERMINATOR;
         }
         mut_tinystr(cstr str, u64 startIdx, u64 endIdx = MAX_TINYSTR_LEN)
         {
@@ -44,9 +53,9 @@ namespace rac::static_strings
             }
 
             Length = ClampLen(endIdx - startIdx);
-            u64 strLen = (u8)strnlen_s(str, MAX_TINYSTR_LEN);
+            u64 strLen = strnlen_s(str, MAX_TINYSTR_LEN);
             memcpy_s(chars, MAX_TINYSTR_LEN, (str + startIdx), strLen);
-            chars[Length] = '\0';
+            chars[Length] = NULL_TERMINATOR;
         }
 
         INLINE i32 Len() const noexcept { return Length; }
@@ -93,7 +102,7 @@ namespace rac::static_strings
             u8 cpy_ct = std::min(left, rhs_len);
             memcpy_s(MutEnd(), left, str, cpy_ct);
             Length += cpy_ct;
-            chars[Length] = '\0';
+            chars[Length] = NULL_TERMINATOR;
         }
 
         INLINE void Concat(mut_tinystr& str) noexcept
@@ -102,7 +111,7 @@ namespace rac::static_strings
             u8 cpy_ct = std::min(left, (u8)str.Len());
             memcpy_s(MutEnd(), left, str.Begin(), cpy_ct);
             Length += cpy_ct;
-            chars[Length] = '\0';
+            chars[Length] = NULL_TERMINATOR;
         }
 
         MAY_INLINE mut_tinystr& operator=(cstr rhs) noexcept
@@ -111,7 +120,9 @@ namespace rac::static_strings
             {
                 return *this;
             }
-            Concat(rhs);
+            Length = ClampedStrLen(rhs);
+            memcpy_s(chars, MAX_TINYSTR_LEN, rhs, Length);
+            chars[Length] = NULL_TERMINATOR;
             return *this;
         }
 

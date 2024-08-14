@@ -15,15 +15,15 @@ namespace rac::static_strings
 
     public:
 
-        INLINE constexpr u64 ClampLen(u64 inputLength)
+        INLINE constexpr i32 ClampLen(u64 inputLength) const noexcept
         {
             if (inputLength > Length)
             {
                 return Length;
             }
-            return (u8)inputLength;
+            return (i32)inputLength;
         }
-        INLINE constexpr u64 MaxLen()
+        INLINE constexpr i32 MaxLen() const noexcept
         {
             if (Capacity <= 0)
             {
@@ -37,26 +37,14 @@ namespace rac::static_strings
             Capacity = CACHELINE_SIZE - STATICSTR_VARIABLE_BYTE_CT;
             memset(&Length, NULL_TERMINATOR, Capacity);
         }
-        mut_staticstr(cstr str)
-        {
-            Length = ClampLen(strnlen_s(str, MAX_CACHESTR_LEN));
-            memcpy_s(chars, MAX_CACHESTR_LEN, str, Length);
-            chars[Length] = '\0';
-        }
-        mut_staticstr(cstr str, u64 strLen)
-        {
-            Length = ClampLen(strLen);
-            memcpy_s(chars, MAX_CACHESTR_LEN, str, Length);
-            chars[Length] = '\0';
-        }
 
         INLINE i32 Len() const noexcept { return Length; }
         INLINE i32 PenultLen() const noexcept
         {
             return (i32)std::max(Len() - 1, 0);
         }
-        INLINE u8 Penultima() const noexcept { return chars[PenultLen()]; }
-        INLINE u8 SpaceLeft() const noexcept
+        INLINE i32 Penultima() const noexcept { return chars[PenultLen()]; }
+        INLINE i32 SpaceLeft() const noexcept
         {
             return Capacity - Length;
         }
@@ -77,9 +65,10 @@ namespace rac::static_strings
         {
             memset(&Length, NULL_TERMINATOR, Capacity);
         }
-        INLINE void Fill(u8 charToFillWith, u64 count = Capacity)
+        INLINE void Fill(u8 charToFillWith, u64 count = U64_MAX)
         {
-            Length = ClampLen(count);
+            u64 safeCount = count == U64_MAX ? Capacity : ClampLen(count);
+            Length = ClampLen(safeCount);
             memset(chars, charToFillWith, Length);
         }
 
@@ -88,21 +77,21 @@ namespace rac::static_strings
 
         INLINE void Concat(cstr str) noexcept
         {
-            u8 left = SpaceLeft();
-            u8 rhs_len = (u8)strnlen_s(str, Capacity);
-            u8 cpy_ct = std::min(left, rhs_len);
+            i32 left = SpaceLeft();
+            i32 rhs_len = (u8)strnlen_s(str, Capacity);
+            i32 cpy_ct = std::min(left, rhs_len);
             memcpy_s(MutLast(), left, str, cpy_ct);
             Length += cpy_ct;
-            chars[Length] = '\0';
+            chars[Length] = NULL_TERMINATOR;
         }
 
         INLINE void Concat(mut_staticstr& str) noexcept
         {
-            u8 left = SpaceLeft();
-            u8 cpy_ct = std::min(left, str.Len());
+            i32 left = SpaceLeft();
+            i32 cpy_ct = std::min(left, str.Len());
             memcpy_s(MutLast(), left, str.ToPtr(), cpy_ct);
             Length += cpy_ct;
-            chars[Length] = '\0';
+            chars[Length] = NULL_TERMINATOR;
         }
 
         MAY_INLINE mut_staticstr& operator+=(cstr rhs) noexcept
@@ -121,11 +110,4 @@ namespace rac::static_strings
     typedef const mut_staticstr staticstr;
     typedef const mut_staticstr* staticstr_ptr;
     typedef const mut_staticstr& staticstr_ref;
-
-    INLINE staticstr operator+(staticstr_ref lhs, staticstr_ref rhs)
-    {
-        mut_staticstr res = mut_staticstr(lhs);
-        res.Concat(rhs);
-        return res;
-    }
 }

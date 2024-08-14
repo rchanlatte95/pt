@@ -8,6 +8,7 @@ using namespace rac::static_strings;
 
 int main()
 {
-    mut_tinystr test_1 = mut_tinystr("Hello World! Hello World!", 6);
+    mut_tinystr test_1 = mut_tinystr("Hello");
+    test_1 = "World!";
     printf(test_1);
 }

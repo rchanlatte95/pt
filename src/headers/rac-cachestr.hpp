@@ -30,13 +30,13 @@ namespace rac::static_strings
         {
             Length = ClampLen(strnlen_s(str, MAX_CACHESTR_LEN));
             memcpy_s(chars, MAX_CACHESTR_LEN, str, Length);
-            chars[Length] = '\0';
+            chars[Length] = NULL_TERMINATOR;
         }
         mut_cachestr(cstr str, u64 strLen)
         {
             Length = ClampLen(strLen);
             memcpy_s(chars, MAX_CACHESTR_LEN, str, Length);
-            chars[Length] = '\0';
+            chars[Length] = NULL_TERMINATOR;
         }
 
         INLINE i32 Len() const noexcept { return Length; }
@@ -82,7 +82,7 @@ namespace rac::static_strings
             u8 cpy_ct = std::min(left, rhs_len);
             memcpy_s(MutLast(), left, str, cpy_ct);
             Length += cpy_ct;
-            chars[Length] = '\0';
+            chars[Length] = NULL_TERMINATOR;
         }
 
         INLINE void Concat(mut_cachestr& str) noexcept
@@ -91,7 +91,7 @@ namespace rac::static_strings
             u8 cpy_ct = std::min(left, (u8)str.Len());
             memcpy_s(MutLast(), left, str.ToPtr(), cpy_ct);
             Length += cpy_ct;
-            chars[Length] = '\0';
+            chars[Length] = NULL_TERMINATOR;
         }
 
         MAY_INLINE mut_cachestr& operator+=(cstr rhs) noexcept

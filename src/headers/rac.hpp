@@ -118,6 +118,11 @@ namespace rac
     f32 DEG2RAD = PI / 180.0f;
     f32 RAD2DEG = 180.0f / PI;
 
+    i8 I8_MAX = INT8_MAX;
+    i16 I16_MAX = INT16_MAX;
+    i32 I32_MAX = INT32_MAX;
+    i64 I64_MAX = INT64_MAX;
+
     u8 U8_MAX = UINT8_MAX;
     u16 U16_MAX = UINT16_MAX;
     u32 U32_MAX = UINT32_MAX;
