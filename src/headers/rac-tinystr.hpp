@@ -73,6 +73,7 @@ namespace rac::static_strings
         INLINE mut_ptr MutBegin() const noexcept { return (mut_ptr)(chars); }
         INLINE ptr End() const noexcept { return chars + Length; }
         INLINE mut_ptr MutEnd() const noexcept { return (mut_ptr)(chars + Length); }
+        INLINE ptr ToFullPtr() const noexcept { return &Length; }
 
         INLINE bool Empty() const noexcept { return Length == 0; }
         INLINE bool Full() const noexcept { return Length >= MAX_TINYSTR_LEN; }
@@ -115,7 +116,7 @@ namespace rac::static_strings
         }
         INLINE void Concat(const mut_tinystr& str) noexcept
         {
-            if (Full() || str == nullptr || str.Empty()) { return; }
+            if (Full() || str.Empty()) { return; }
 
             u8 left = SpaceLeft();
             u8 cpy_ct = std::min(left, (u8)str.Len());
@@ -177,7 +178,7 @@ namespace rac::static_strings
 
         MAY_INLINE mut_tinystr& operator+=(mut_tinystr& rhs) noexcept
         {
-            if (rhs == nullptr || Full())
+            if (Full())
             {
                 return *this;
             }
@@ -269,22 +270,82 @@ namespace rac::static_strings
         return res;
     }
 
-    INLINE bool operator== (const mut_tinystr& lhs, tinystr_ref rhs) noexcept
+    INLINE bool operator==(tinystr_ref lhs, tinystr_ref rhs) noexcept
     {
-        ptr lhs_top = lhs.Begin() - 1;
-        ptr rhs_top = rhs.Begin() - 1;
-        u64 cmp_ct = TARGET_TINYSTR_BYTE_SZ * 2;
-        return memcmp(lhs_top, rhs_top, cmp_ct) == 0;
+        return memcmp(lhs.ToFullPtr(), rhs.ToFullPtr(), TARGET_TINYSTR_BYTE_SZ) == 0;
+    }
+    INLINE bool operator!=(tinystr_ref lhs, tinystr_ref rhs) noexcept
+    {
+        return !(lhs == rhs);
+    }
+    INLINE bool operator<(tinystr_ref lhs, tinystr_ref rhs) noexcept
+    {
+        return memcmp(lhs.ToFullPtr(), rhs.ToFullPtr(), TARGET_TINYSTR_BYTE_SZ) < 0;
+    }
+    INLINE bool operator>(tinystr_ref lhs, tinystr_ref rhs) noexcept
+    {
+        return rhs < lhs;
+    }
+    INLINE bool operator<=(tinystr_ref lhs, tinystr_ref rhs) noexcept
+    {
+        return !(lhs > rhs);
+    }
+    INLINE bool operator>=(tinystr_ref lhs, tinystr_ref rhs) noexcept
+    {
+        return !(lhs < rhs);
+    }
+
+    INLINE bool operator==(tinystr_ref lhs, cstr rhs) noexcept
+    {
+        return strnlen_s(rhs, TARGET_TINYSTR_BYTE_SZ) == lhs.Len() &&
+                memcmp(lhs.ToFullPtr(), rhs, TARGET_TINYSTR_BYTE_SZ) == 0;
+    }
+    INLINE bool operator==(cstr lhs, tinystr_ref rhs) noexcept
+    {
+        return rhs == lhs;
+    }
+    INLINE bool operator!=(tinystr_ref lhs, cstr rhs) noexcept
+    {
+        return !(lhs == rhs);
+    }
+    INLINE bool operator!=(cstr lhs, tinystr_ref rhs) noexcept
+    {
+        return !(rhs == lhs);
+    }
+    INLINE bool operator<(tinystr_ref lhs, cstr rhs) noexcept
+    {
+        return strnlen_s(rhs, TARGET_TINYSTR_BYTE_SZ) < lhs.Len() ||
+                memcmp(lhs.ToFullPtr(), rhs, TARGET_TINYSTR_BYTE_SZ) < 0;
+    }
+    INLINE bool operator<(cstr lhs, tinystr_ref rhs) noexcept
+    {
+        return rhs < lhs;
+    }
+    INLINE bool operator>(tinystr_ref lhs, cstr rhs) noexcept
+    {
+        return rhs < lhs;
+    }
+    INLINE bool operator>(cstr lhs, tinystr_ref rhs) noexcept
+    {
+        return lhs < rhs;
+    }
+    INLINE bool operator<=(tinystr_ref lhs, cstr rhs) noexcept
+    {
+        return !(lhs > rhs);
+    }
+    INLINE bool operator<=(cstr rhs, tinystr_ref lhs) noexcept
+    {
+        return !(rhs > lhs);
+    }
+    INLINE bool operator>=(tinystr_ref lhs, cstr rhs) noexcept
+    {
+        return !(lhs < rhs);
+    }
+    INLINE bool operator>=(cstr rhs, tinystr_ref lhs) noexcept
+    {
+        return !(rhs < lhs);
     }
 
     // f => 1234567.1234 => 12
     // (f, f, f, f)
-    /*
-    bool operator== (const string& lhs, const string& rhs) noexcept;bool operator== (const char*   lhs, const string& rhs);bool operator== (const string& lhs, const char*   rhs);
-    bool operator!= (const string& lhs, const string& rhs) noexcept;bool operator!= (const char*   lhs, const string& rhs);bool operator!= (const string& lhs, const char*   rhs);
-    bool operator<  (const string& lhs, const string& rhs) noexcept;bool operator<  (const char*   lhs, const string& rhs);bool operator<  (const string& lhs, const char*   rhs);
-    bool operator<= (const string& lhs, const string& rhs) noexcept;bool operator<= (const char*   lhs, const string& rhs);bool operator<= (const string& lhs, const char*   rhs);
-    bool operator>  (const string& lhs, const string& rhs) noexcept;bool operator>  (const char*   lhs, const string& rhs);bool operator>  (const string& lhs, const char*   rhs);
-    bool operator>= (const string& lhs, const string& rhs) noexcept;bool operator>= (const char*   lhs, const string& rhs);bool operator>= (const string& lhs, const char*   rhs);
-    */
 }
