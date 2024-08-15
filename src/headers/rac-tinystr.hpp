@@ -269,6 +269,14 @@ namespace rac::static_strings
         return res;
     }
 
+    INLINE bool operator== (const mut_tinystr& lhs, tinystr_ref rhs) noexcept
+    {
+        ptr lhs_top = lhs.Begin() - 1;
+        ptr rhs_top = rhs.Begin() - 1;
+        u64 cmp_ct = TARGET_TINYSTR_BYTE_SZ * 2;
+        return memcmp(lhs_top, rhs_top, cmp_ct) == 0;
+    }
+
     // f => 1234567.1234 => 12
     // (f, f, f, f)
     /*
