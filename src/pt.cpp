@@ -8,6 +8,6 @@ using namespace rac::static_strings;
 
 int main()
 {
-    mut_tinystr test_1 = "World! " + mut_tinystr("Hello");
+    mut_tinystr test_1 = 'H' + mut_tinystr("ello") + ' ' + "World!";
     printf("%s", test_1.ToCstr());
 }

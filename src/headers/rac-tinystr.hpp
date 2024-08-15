@@ -33,6 +33,11 @@ namespace rac::static_strings
         }
 
         mut_tinystr() { memset(&Length, NULL_TERMINATOR, TINYSTR_CAP); }
+        mut_tinystr(u8 c)
+        {
+            memset(&Length, NULL_TERMINATOR, TINYSTR_CAP);
+            chars[Length++] = c;
+        }
         mut_tinystr(cstr str)
         {
             Length = StrLen(str);
@@ -89,9 +94,15 @@ namespace rac::static_strings
         INLINE u8ref operator[](i32 index) noexcept { return chars[index]; }
         INLINE operator cstr() const noexcept { return ToCstr(); }
 
+        INLINE void Concat(u8 c) noexcept
+        {
+            if (Full()) { return; }
+            chars[Length++] = c;
+            AppendNullTerminator();
+        }
         INLINE void Concat(cstr str) noexcept
         {
-            if (str == nullptr) { return; }
+            if (str == nullptr || Full()) { return; }
 
             u8 rhs_len = StrLen(str);
             if (rhs_len <= 0) { return; }
@@ -104,7 +115,7 @@ namespace rac::static_strings
         }
         INLINE void Concat(const mut_tinystr& str) noexcept
         {
-            if (str == nullptr || str.Empty()) { return; }
+            if (Full() || str == nullptr || str.Empty()) { return; }
 
             u8 left = SpaceLeft();
             u8 cpy_ct = std::min(left, (u8)str.Len());
@@ -114,7 +125,7 @@ namespace rac::static_strings
         }
         INLINE void Concat(const std::string& str) noexcept
         {
-            if (str.empty()) { return; }
+            if (Full() || str.empty()) { return; }
 
             u8 left = SpaceLeft();
             u8 cpy_ct = std::min(left, (u8)str.length());
@@ -184,12 +195,7 @@ namespace rac::static_strings
         }
         MAY_INLINE mut_tinystr& operator+=(u8 rhs) noexcept
         {
-            if (Length >= MAX_TINYSTR_LEN)
-            {
-                return *this;
-            }
-            chars[Length++] = rhs;
-            AppendNullTerminator();
+            Concat(rhs);
             return *this;
         }
         MAY_INLINE mut_tinystr& operator+=(const std::string& rhs) noexcept
@@ -209,7 +215,7 @@ namespace rac::static_strings
             }
             Length = ClampLen(rhs.length());
             memcpy_s(chars, MAX_TINYSTR_LEN, rhs.c_str(), Length);
-            chars[Length] = NULL_TERMINATOR;
+            AppendNullTerminator();
             return *this;
         }
     };
@@ -247,6 +253,18 @@ namespace rac::static_strings
     INLINE tinystr operator+(const std::string& lhs, tinystr_ref rhs)
     {
         mut_tinystr res = mut_tinystr(lhs.c_str());
+        res.Concat(rhs);
+        return res;
+    }
+    INLINE tinystr operator+(tinystr_ref lhs, const char rhs)
+    {
+        mut_tinystr res = mut_tinystr(lhs);
+        res.Concat(rhs);
+        return res;
+    }
+    INLINE tinystr operator+(const char lhs, tinystr_ref rhs)
+    {
+        mut_tinystr res = mut_tinystr(lhs);
         res.Concat(rhs);
         return res;
     }
