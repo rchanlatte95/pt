@@ -397,6 +397,4 @@ namespace rac::static_strings
         return !(rhs < lhs);
     }
 
-    // f => 1234567.1234 => 12
-    // (f, f, f, f)
 }

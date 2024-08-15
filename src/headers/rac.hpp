@@ -164,4 +164,10 @@ namespace rac
     u8 SPACE = 0x20;
     u8 NEXT_LINE = 0x85;
     u8 NO_BREAK_SPACE = 0xA0;
+
+    // f => -2345678.789 => 12
+    u64 SIGN_CHAR_CT = 1;
+    u64 FLT_STR_CHAR_CT = 12 + SIGN_CHAR_CT;
+    u64 PARENTHESES_ENCAP_LEN = 2;
+    u64 COMMA_SPACE_LEN = 2;
 }

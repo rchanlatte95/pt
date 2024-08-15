@@ -1,6 +1,7 @@
 #pragma once
 #include "rac.hpp"
 #include "rac-v2.hpp"
+#include "rac-staticstr.hpp"
 
 namespace rac::mth
 {
