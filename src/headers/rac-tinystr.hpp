@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include "rac.hpp"
 
 namespace rac::static_strings
@@ -122,6 +123,35 @@ namespace rac::static_strings
             }
             Length = ClampedStrLen(rhs);
             memcpy_s(chars, MAX_TINYSTR_LEN, rhs, Length);
+            chars[Length] = NULL_TERMINATOR;
+            return *this;
+        }
+        MAY_INLINE mut_tinystr& operator=(u8 rhs) noexcept
+        {
+            chars[0] = rhs;
+            Length = 1;
+            chars[Length] = NULL_TERMINATOR;
+            return *this;
+        }
+        MAY_INLINE mut_tinystr& operator=(const std::string& rhs) noexcept
+        {
+            if (rhs.empty())
+            {
+                return *this;
+            }
+            Length = ClampLen(rhs.length());
+            memcpy_s(chars, MAX_TINYSTR_LEN, rhs.c_str(), Length);
+            chars[Length] = NULL_TERMINATOR;
+            return *this;
+        }
+        MAY_INLINE mut_tinystr& operator=(std::string&& rhs) noexcept
+        {
+            if (rhs.empty())
+            {
+                return *this;
+            }
+            Length = ClampLen(rhs.length());
+            memcpy_s(chars, MAX_TINYSTR_LEN, rhs.c_str(), Length);
             chars[Length] = NULL_TERMINATOR;
             return *this;
         }

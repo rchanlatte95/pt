@@ -8,7 +8,8 @@ using namespace rac::static_strings;
 
 int main()
 {
+    std::string str = "test";
     mut_tinystr test_1 = mut_tinystr("Hello");
-    test_1 = "World!";
-    printf(test_1);
+    test_1 = str;
+    printf("%s", test_1.ToCstr());
 }
