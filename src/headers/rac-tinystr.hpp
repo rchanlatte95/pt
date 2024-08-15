@@ -91,18 +91,34 @@ namespace rac::static_strings
 
         INLINE void Concat(cstr str) noexcept
         {
-            u8 left = SpaceLeft();
+            if (str == nullptr) { return; }
+
             u8 rhs_len = StrLen(str);
+            if (rhs_len <= 0) { return; }
+
+            u8 left = SpaceLeft();
             u8 cpy_ct = std::min(left, rhs_len);
             memcpy_s(MutEnd(), left, str, cpy_ct);
             Length += cpy_ct;
             chars[Length] = NULL_TERMINATOR;
         }
-        INLINE void Concat(mut_tinystr& str) noexcept
+        INLINE void Concat(const mut_tinystr& str) noexcept
         {
+            if (str == nullptr || str.Empty()) { return; }
+
             u8 left = SpaceLeft();
             u8 cpy_ct = std::min(left, (u8)str.Len());
             memcpy_s(MutEnd(), left, str.Begin(), cpy_ct);
+            Length += cpy_ct;
+            chars[Length] = NULL_TERMINATOR;
+        }
+        INLINE void Concat(const std::string& str) noexcept
+        {
+            if (str.empty()) { return; }
+
+            u8 left = SpaceLeft();
+            u8 cpy_ct = std::min(left, (u8)str.length());
+            memcpy_s(MutEnd(), left, str.c_str(), cpy_ct);
             Length += cpy_ct;
             chars[Length] = NULL_TERMINATOR;
         }
@@ -222,7 +238,21 @@ namespace rac::static_strings
         res.Concat(rhs);
         return res;
     }
+    INLINE tinystr operator+(tinystr_ref lhs, const std::string& rhs)
+    {
+        mut_tinystr res = mut_tinystr(lhs);
+        res.Concat(rhs);
+        return res;
+    }
+    INLINE tinystr operator+(const std::string& lhs, tinystr_ref rhs)
+    {
+        mut_tinystr res = mut_tinystr(lhs.c_str());
+        res.Concat(rhs);
+        return res;
+    }
 
+    // f => 1234567.1234 => 12
+    // (f, f, f, f)
     /*
     bool operator== (const string& lhs, const string& rhs) noexcept;bool operator== (const char*   lhs, const string& rhs);bool operator== (const string& lhs, const char*   rhs);
     bool operator!= (const string& lhs, const string& rhs) noexcept;bool operator!= (const char*   lhs, const string& rhs);bool operator!= (const string& lhs, const char*   rhs);
