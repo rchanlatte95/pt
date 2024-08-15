@@ -207,4 +207,13 @@ namespace rac::static_strings
         res.Concat(rhs);
         return res;
     }
+
+    /*
+    bool operator== (const string& lhs, const string& rhs) noexcept;bool operator== (const char*   lhs, const string& rhs);bool operator== (const string& lhs, const char*   rhs);
+    bool operator!= (const string& lhs, const string& rhs) noexcept;bool operator!= (const char*   lhs, const string& rhs);bool operator!= (const string& lhs, const char*   rhs);
+    bool operator<  (const string& lhs, const string& rhs) noexcept;bool operator<  (const char*   lhs, const string& rhs);bool operator<  (const string& lhs, const char*   rhs);
+    bool operator<= (const string& lhs, const string& rhs) noexcept;bool operator<= (const char*   lhs, const string& rhs);bool operator<= (const string& lhs, const char*   rhs);
+    bool operator>  (const string& lhs, const string& rhs) noexcept;bool operator>  (const char*   lhs, const string& rhs);bool operator>  (const string& lhs, const char*   rhs);
+    bool operator>= (const string& lhs, const string& rhs) noexcept;bool operator>= (const char*   lhs, const string& rhs);bool operator>= (const string& lhs, const char*   rhs);
+    */
 }
