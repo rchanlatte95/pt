@@ -18,13 +18,7 @@ namespace rac::static_strings
         mut_u8 chars[MAX_TINYSTR_LEN];
         u8 NULL_TERM = NULL_TERMINATOR;
 
-        constexpr void AppendNullTerminator()
-        {
-            if (Length != MAX_TINYSTR_LEN)
-            {
-                chars[Length] = NULL_TERMINATOR;
-            }
-        }
+        constexpr void AppendNullTerminator() { *(chars + Length) = NULL_TERMINATOR; }
         INLINE static u8 StrLen(cstr str) { return (u8)strnlen_s(str, MAX_TINYSTR_LEN); }
 
     public:
@@ -154,6 +148,15 @@ namespace rac::static_strings
             return *this;
         }
 
+        MAY_INLINE mut_tinystr& operator+=(mut_tinystr& rhs) noexcept
+        {
+            if (rhs == nullptr || Full())
+            {
+                return *this;
+            }
+            Concat(rhs);
+            return *this;
+        }
         MAY_INLINE mut_tinystr& operator+=(cstr rhs) noexcept
         {
             if (rhs == nullptr || Full())
@@ -202,6 +205,18 @@ namespace rac::static_strings
     typedef const mut_tinystr& tinystr_ref;
 
     INLINE tinystr operator+(tinystr_ref lhs, tinystr_ref rhs)
+    {
+        mut_tinystr res = mut_tinystr(lhs);
+        res.Concat(rhs);
+        return res;
+    }
+    INLINE tinystr operator+(tinystr_ref lhs, cstr rhs)
+    {
+        mut_tinystr res = mut_tinystr(lhs);
+        res.Concat(rhs);
+        return res;
+    }
+    INLINE tinystr operator+(cstr lhs, tinystr_ref rhs)
     {
         mut_tinystr res = mut_tinystr(lhs);
         res.Concat(rhs);
