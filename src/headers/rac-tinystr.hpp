@@ -333,7 +333,7 @@ namespace rac::static_strings
     {
         return !(lhs > rhs);
     }
-    INLINE bool operator<=(cstr rhs, tinystr_ref lhs) noexcept
+    INLINE bool operator<=(cstr lhs, tinystr_ref rhs) noexcept
     {
         return !(rhs > lhs);
     }
@@ -341,7 +341,58 @@ namespace rac::static_strings
     {
         return !(lhs < rhs);
     }
-    INLINE bool operator>=(cstr rhs, tinystr_ref lhs) noexcept
+    INLINE bool operator>=(cstr lhs, tinystr_ref rhs) noexcept
+    {
+        return !(rhs < lhs);
+    }
+
+    INLINE bool operator==(tinystr_ref lhs, const std::string& rhs) noexcept
+    {
+        return rhs.length() == lhs.Len() &&
+            memcmp(lhs.ToFullPtr(), rhs.c_str(), TARGET_TINYSTR_BYTE_SZ) == 0;
+    }
+    INLINE bool operator==(const std::string& lhs, tinystr_ref rhs) noexcept
+    {
+        return rhs == lhs;
+    }
+    INLINE bool operator!=(tinystr_ref lhs, const std::string& rhs) noexcept
+    {
+        return !(lhs == rhs);
+    }
+    INLINE bool operator!=(const std::string& lhs, tinystr_ref rhs) noexcept
+    {
+        return !(rhs == lhs);
+    }
+    INLINE bool operator<(tinystr_ref lhs, const std::string& rhs) noexcept
+    {
+        return rhs.length() < lhs.Len() ||
+            memcmp(lhs.ToFullPtr(), rhs.c_str(), TARGET_TINYSTR_BYTE_SZ) < 0;
+    }
+    INLINE bool operator<(const std::string& lhs, tinystr_ref rhs) noexcept
+    {
+        return rhs < lhs;
+    }
+    INLINE bool operator>(tinystr_ref lhs, const std::string& rhs) noexcept
+    {
+        return rhs < lhs;
+    }
+    INLINE bool operator>(const std::string& lhs, tinystr_ref rhs) noexcept
+    {
+        return lhs < rhs;
+    }
+    INLINE bool operator<=(tinystr_ref lhs, const std::string& rhs) noexcept
+    {
+        return !(lhs > rhs);
+    }
+    INLINE bool operator<=(const std::string& rhs, tinystr_ref lhs) noexcept
+    {
+        return !(rhs > lhs);
+    }
+    INLINE bool operator>=(tinystr_ref lhs, const std::string& rhs) noexcept
+    {
+        return !(lhs < rhs);
+    }
+    INLINE bool operator>=(const std::string& rhs, tinystr_ref lhs) noexcept
     {
         return !(rhs < lhs);
     }
