@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
+
 #include "rac.hpp"
 #include "rac-tinystr.hpp"
+#include "rac-v3.hpp"
 
 namespace rac::static_strings
 {
