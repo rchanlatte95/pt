@@ -337,6 +337,56 @@ namespace rac::static_strings
     }
 
     // tinystr comparisons
+    INLINE bool operator==(cachestr_ref lhs, tinystr_ref rhs) noexcept
+    {
+        return rhs.Len() == lhs.Len() &&
+            memcmp(lhs.ToU8Ptr(), rhs.ToU8Ptr(), TARGET_TINYSTR_BYTE_SZ) == 0;
+    }
+    INLINE bool operator==(tinystr_ref lhs, cachestr_ref rhs) noexcept
+    {
+        return rhs == lhs;
+    }
+    INLINE bool operator!=(cachestr_ref lhs, tinystr_ref rhs) noexcept
+    {
+        return !(lhs == rhs);
+    }
+    INLINE bool operator!=(tinystr_ref lhs, cachestr_ref rhs) noexcept
+    {
+        return !(rhs == lhs);
+    }
+    INLINE bool operator<(cachestr_ref lhs, tinystr_ref rhs) noexcept
+    {
+        return rhs.Len() < lhs.Len() ||
+            memcmp(lhs.ToU8Ptr(), rhs.ToU8Ptr(), TARGET_TINYSTR_BYTE_SZ) < 0;
+    }
+    INLINE bool operator<(tinystr_ref lhs, cachestr_ref rhs) noexcept
+    {
+        return rhs < lhs;
+    }
+    INLINE bool operator>(cachestr_ref lhs, tinystr_ref rhs) noexcept
+    {
+        return rhs < lhs;
+    }
+    INLINE bool operator>(tinystr_ref lhs, cachestr_ref rhs) noexcept
+    {
+        return lhs < rhs;
+    }
+    INLINE bool operator<=(cachestr_ref lhs, tinystr_ref rhs) noexcept
+    {
+        return !(lhs > rhs);
+    }
+    INLINE bool operator<=(tinystr_ref lhs, cachestr_ref rhs) noexcept
+    {
+        return !(rhs > lhs);
+    }
+    INLINE bool operator>=(cachestr_ref lhs, tinystr_ref rhs) noexcept
+    {
+        return !(lhs < rhs);
+    }
+    INLINE bool operator>=(tinystr_ref lhs, cachestr_ref rhs) noexcept
+    {
+        return !(rhs < lhs);
+    }
 
     // cstr comparisons
     INLINE bool operator==(cachestr_ref lhs, cstr rhs) noexcept
