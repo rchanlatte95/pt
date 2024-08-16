@@ -91,6 +91,11 @@ namespace rac::mth
         {
             return *this * this->InvMag();
         }
+
+        INLINE cstr ToCstr() const noexcept
+        {
+            return "";
+        }
     };
 
     typedef mut_v3* mut_v3_ptr;
