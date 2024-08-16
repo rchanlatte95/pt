@@ -176,7 +176,7 @@ namespace rac::static_strings
             return *this;
         }
 
-        MAY_INLINE mut_tinystr& operator+=(mut_tinystr& rhs) noexcept
+        MAY_INLINE mut_tinystr& operator+=(const mut_tinystr& rhs) noexcept
         {
             if (Full())
             {

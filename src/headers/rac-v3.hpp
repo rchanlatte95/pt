@@ -2,13 +2,13 @@
 #include "rac.hpp"
 #include "rac-v2.hpp"
 #include "rac-staticstr.hpp"
+#include "rac-cachestr.hpp"
 
 namespace rac::mth
 {
     class mut_v3
     {
     public:
-
         mut_f32 x;
         mut_f32 y;
         mut_f32 z;
@@ -92,7 +92,7 @@ namespace rac::mth
             return *this * this->InvMag();
         }
 
-        INLINE cstr ToCstr() const noexcept
+        INLINE static_strings::cachestr ToStr() const noexcept
         {
             return "";
         }
