@@ -6,6 +6,8 @@ namespace rac::mth
     class alignas(8) mut_v2
     {
     public:
+        static u64 COMPONENT_CT = 2;
+        static u64 MAX_STR_LEN = COMPONENT_CT * (F32_STR_CHAR_CT + COMMA_SPACE_LEN);
 
         mut_f32 x;
         mut_f32 y;

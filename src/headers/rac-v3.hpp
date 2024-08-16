@@ -1,4 +1,6 @@
 #pragma once
+#include <cstdio>
+
 #include "rac.hpp"
 #include "rac-v2.hpp"
 #include "rac-staticstr.hpp"
@@ -9,6 +11,9 @@ namespace rac::mth
     class mut_v3
     {
     public:
+        static u64 COMPONENT_CT = 3;
+        static u64 MAX_STR_LEN = COMPONENT_CT * (F32_STR_CHAR_CT + COMMA_SPACE_LEN) + NULL_TERMINATOR_LEN;
+
         mut_f32 x;
         mut_f32 y;
         mut_f32 z;
@@ -92,9 +97,38 @@ namespace rac::mth
             return *this * this->InvMag();
         }
 
-        INLINE static_strings::cachestr ToStr() const noexcept
+        INLINE static_strings::cachestr ToStr(u32 decimal_places = 4) const noexcept
         {
-            return "";
+            static_strings::cachestr res;
+            u64 MAX = static_strings::MAX_CACHESTR_LEN;
+            bool need_sci_notation = (x >= MAX_F32_FOR_FULL_REP || x <= MIN_F32_FOR_FULL_REP) ||
+                                    (y >= MAX_F32_FOR_FULL_REP || y <= MIN_F32_FOR_FULL_REP) ||
+                                    (z >= MAX_F32_FOR_FULL_REP || z <= MIN_F32_FOR_FULL_REP);
+
+            switch (decimal_places)
+            {
+            case 0:
+                cstr fmt0 = need_sci_notation ? "(%.0f, %.0f, %.0f)" : "(%.0e, %.0e, %.0e)";
+                snprintf(res.ToCharPtr(), MAX, fmt0, x, y, z);
+                break;
+            case 1:
+                cstr fmt1 = need_sci_notation ? "(%.1f, %.1f, %.1f)" : "(%.1e, %.1e, %.1e)";
+                snprintf(res.ToCharPtr(), MAX, fmt1, x, y, z);
+                break;
+            case 2:
+                cstr fmt2 = need_sci_notation ? "(%.2f, %.2f, %.2f)" : "(%.2e, %.2e, %.2e)";
+                snprintf(res.ToCharPtr(), MAX, fmt2, x, y, z);
+                break;
+            case 3:
+                cstr fmt3 = need_sci_notation ? "(%.3f, %.3f, %.3f)" : "(%.3e, %.3e, %.3e)";
+                snprintf(res.ToCharPtr(), MAX, fmt3, x, y, z);
+                break;
+            default:
+                cstr fmt_ = need_sci_notation ? "(%.4f, %.4f, %.4f)" : "(%e, %e, %e)";
+                snprintf(res.ToCharPtr(), MAX, fmt_, x, y, z);
+                break;
+            }
+            return res;
         }
     };
 

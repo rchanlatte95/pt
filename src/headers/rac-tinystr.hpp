@@ -69,6 +69,7 @@ namespace rac::static_strings
         }
         INLINE u8ptr ToU8Ptr() const noexcept { return chars; }
         INLINE cstr ToCstr() const noexcept { return (cstr)chars; }
+        INLINE mut_cstr ToCharPtr() const noexcept { return (mut_cstr)chars; }
         INLINE ptr Begin() const noexcept { return chars; }
         INLINE mut_ptr MutBegin() const noexcept { return (mut_ptr)(chars); }
         INLINE ptr End() const noexcept { return chars + Length; }

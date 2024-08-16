@@ -17,11 +17,11 @@ namespace rac::static_strings
         u8 NULL_TERM = NULL_TERMINATOR;
 
         constexpr void AppendNullTerminator() { *(chars + Length) = NULL_TERMINATOR; }
-        INLINE static u16 StrLen(cstr str) { return (u8)strnlen_s(str, MAX_CACHESTR_LEN); }
+        INLINE static u16 StrLen(cstr str) { return (u16)strnlen_s(str, MAX_CACHESTR_LEN); }
 
     public:
 
-        static constexpr u8 ClampLen(u64 inputLength)
+        static constexpr u16 ClampLen(u64 inputLength)
         {
             if (inputLength > MAX_CACHESTR_LEN)
             {
@@ -64,12 +64,13 @@ namespace rac::static_strings
         {
             return chars[PenultLen()];
         }
-        INLINE u8 SpaceLeft() const noexcept
+        INLINE i32 SpaceLeft() const noexcept
         {
             return MAX_CACHESTR_LEN - Length;
         }
         INLINE u8ptr ToU8Ptr() const noexcept { return chars; }
         INLINE cstr ToCstr() const noexcept { return (cstr)chars; }
+        INLINE mut_cstr ToCharPtr() const noexcept { return (mut_cstr)chars; }
         INLINE ptr Begin() const noexcept { return chars; }
         INLINE mut_ptr MutBegin() const noexcept { return (mut_ptr)(chars); }
         INLINE ptr End() const noexcept { return chars + Length; }
@@ -115,11 +116,11 @@ namespace rac::static_strings
         {
             if (str == nullptr || Full()) { return; }
 
-            u8 rhs_len = StrLen(str);
-            if (rhs_len <= 0) { return; }
+            u64 rhs_len = (u64)StrLen(str);
+            if (rhs_len == 0) { return; }
 
-            u8 left = SpaceLeft();
-            u8 cpy_ct = std::min(left, rhs_len);
+            u64 left = (u64)SpaceLeft();
+            u16 cpy_ct = (u16)std::min(left, rhs_len);
             memcpy_s(MutEnd(), left, str, cpy_ct);
             Length += cpy_ct;
             chars[Length] = NULL_TERMINATOR;
@@ -128,8 +129,8 @@ namespace rac::static_strings
         {
             if (Full() || str.Empty()) { return; }
 
-            u8 left = SpaceLeft();
-            u8 cpy_ct = std::min(left, (u8)str.Len());
+            i32 left = SpaceLeft();
+            u16 cpy_ct = (u16)std::min(left, str.Len());
             memcpy_s(MutEnd(), left, str.Begin(), cpy_ct);
             Length += cpy_ct;
             chars[Length] = NULL_TERMINATOR;
@@ -138,8 +139,8 @@ namespace rac::static_strings
         {
             if (Full() || str.Empty()) { return; }
 
-            u8 left = SpaceLeft();
-            u8 cpy_ct = std::min(left, (u8)str.Len());
+            i32 left = SpaceLeft();
+            u16 cpy_ct = (u16)std::min(left, str.Len());
             memcpy_s(MutEnd(), left, str.Begin(), cpy_ct);
             Length += cpy_ct;
             chars[Length] = NULL_TERMINATOR;
@@ -148,8 +149,8 @@ namespace rac::static_strings
         {
             if (Full() || str.empty()) { return; }
 
-            u8 left = SpaceLeft();
-            u8 cpy_ct = std::min(left, (u8)str.length());
+            u64 left = (u64)SpaceLeft();
+            u16 cpy_ct = (u16)std::min(left, str.length());
             memcpy_s(MutEnd(), left, str.c_str(), cpy_ct);
             Length += cpy_ct;
             chars[Length] = NULL_TERMINATOR;
