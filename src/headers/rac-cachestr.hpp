@@ -1,9 +1,4 @@
-#pragma once
-#include <string>
-
 #include "rac.hpp"
-#include "rac-tinystr.hpp"
-#include "rac-v3.hpp"
 
 namespace rac::static_strings
 {
@@ -57,6 +52,12 @@ namespace rac::static_strings
             AppendNullTerminator();
         }
 
+        INLINE void Resize() noexcept
+        {
+            mut_u16 ct = 0;
+            while (ct < MAX_CACHESTR_LEN && chars[ct++] != NULL_TERMINATOR) { }
+            Length = ct;
+        }
         INLINE i32 Len() const noexcept { return Length; }
         INLINE i32 PenultLen() const noexcept
         {

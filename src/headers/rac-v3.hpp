@@ -1,6 +1,3 @@
-#pragma once
-#include <cstdio>
-
 #include "rac.hpp"
 #include "rac-v2.hpp"
 #include "rac-staticstr.hpp"
@@ -101,10 +98,10 @@ namespace rac::mth
             return mut_v3(x * invMag, y * invMag, z * invMag);
         }
 
-        INLINE static_strings::cachestr ToStr(u32 decimal_places = 4) const noexcept
+        INLINE static_strings::mut_cachestr ToStr(u32 decimal_places = 4) const noexcept
         {
             u64 MAX = static_strings::MAX_CACHESTR_LEN;
-            static_strings::cachestr res;
+            static_strings::mut_cachestr res;
             bool use_exp = (x >= MAX_F32_FOR_FULL_REP || x <= MIN_F32_FOR_FULL_REP) ||
                         (y >= MAX_F32_FOR_FULL_REP || y <= MIN_F32_FOR_FULL_REP) ||
                         (z >= MAX_F32_FOR_FULL_REP || z <= MIN_F32_FOR_FULL_REP);
@@ -127,7 +124,7 @@ namespace rac::mth
                 snprintf(res.ToCharPtr(), MAX, use_exp ? "(%.4e, %.4e, %.4e)" : "(%.4f, %.4f, %.4f)", x, y, z);
                 break;
             }
-
+            res.Resize();
             return res;
         }
     };

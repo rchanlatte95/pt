@@ -1,8 +1,45 @@
 #pragma once
+#include <assert.h>
+#include <complex.h>
+#include <ctype.h>
+#include <errno.h>
+#include <fenv.h>
 #include <float.h>
+#include <inttypes.h>
+#include <iso646.h>
+#include <limits.h>
+#include <locale.h>
 #include <math.h>
+#include <setjmp.h>
+#include <signal.h>
+#include <stdalign.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdnoreturn.h>
+#include <string.h>
+#include <tgmath.h>
+#include <threads.h>
+#include <time.h>
+#include <uchar.h>
+#include <wchar.h>
+#include <wctype.h>
+
+#include <unordered_map>
+#include <unordered_set>
+#include <map>
+#include <set>
+#include <vector>
 #include <new>
 #include <thread>
+#include <algorithm>
+#include <filesystem>
+
+#define NOMINMAX 0
+#include <Windows.h>
 
 #define MAY_INLINE __inline
 #define INLINE __forceinline
@@ -40,7 +77,7 @@ namespace rac
     typedef const uint8_t* u8ptr;
     typedef const uint8_t& u8ref;
 
-    typedef int16_t mut_168;
+    typedef int16_t mut_i16;
     typedef int16_t* mut_i16ptr;
     typedef int16_t& mut_i16ref;
     typedef const int16_t i16;

@@ -1,5 +1,3 @@
-#pragma once
-#include <string>
 #include "rac.hpp"
 
 namespace rac::static_strings
@@ -60,7 +58,7 @@ namespace rac::static_strings
         INLINE i32 Len() const noexcept { return Length; }
         INLINE i32 PenultLen() const noexcept
         {
-            return (i32)std::max(Len() - 1, 0);
+            return std::max(Len() - 1, 0);
         }
         INLINE u8 Penultima() const noexcept { return chars[PenultLen()]; }
         INLINE u8 SpaceLeft() const noexcept
