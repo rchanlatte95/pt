@@ -4,6 +4,20 @@
 
 namespace rac::color
 {
+    class alignas(4) mut_color;
+    typedef mut_color* mut_color_ptr;
+    typedef mut_color& mut_color_ref;
+    typedef const mut_color color;
+    typedef const mut_color* color_ptr;
+    typedef const mut_color& color_ref;
+
+    class mut_colorf;
+    typedef mut_colorf* mut_colorf_ptr;
+    typedef mut_colorf& mut_colorf_ref;
+    typedef const mut_colorf colorf;
+    typedef const mut_colorf* colorf_ptr;
+    typedef const mut_colorf& colorf_ref;
+
     // these factors are grabbed from: https://en.wikipedia.org/wiki/Luma_(video)
     // under the section: Rec. 601 luma versus Rec. 709 luma coefficients
     // I am assuming most monitors in circulation are digital HD monitors.
@@ -25,7 +39,13 @@ namespace rac::color
         static u8 BITS_PER_COLOR_COMPONENT = sizeof(r) * BITS_IN_BYTE;
         static u8 BITS_PER_PIXEL = BITS_PER_COLOR_COMPONENT * 4;
 
-        mut_color() { }
+        mut_color()
+        {
+            b = 0;
+            g = 0;
+            r = 0;
+            opacity = 255;
+        }
         mut_color(u8 _r, u8 _g, u8 _b, u8 _a = 255)
         {
             b = _b;
@@ -39,13 +59,6 @@ namespace rac::color
             g = (u8)(_g * 255.999f);
             r = (u8)(_r * 255.999f);
             opacity = (u8)(_a * 255.999f);
-        }
-        mut_color(colorf_ref c)
-        {
-            b = (u8)(c.b * 255.999f);
-            g = (u8)(c.g * 255.999f);
-            r = (u8)(c.r * 255.999f);
-            opacity = (u8)(c.opacity * 255.999f);
         }
 
         INLINE f32 LinearToGamma(f32 linear_color_component) const noexcept
@@ -74,18 +87,7 @@ namespace rac::color
         INLINE i32 GetI32() const noexcept { return *(i32ptr(&opacity)); }
         INLINE operator i32() const noexcept { return GetI32(); }
 
-        INLINE colorf ToColorf() const noexcept { return colorf(*this); }
-        INLINE operator colorf() const noexcept { return ToColorf(); }
-
         INLINE color_ref operator=(color_ref rhs) noexcept
-        {
-            b = rhs.b;
-            g = rhs.g;
-            r = rhs.r;
-            opacity = rhs.opacity;
-            return *this;
-        }
-        INLINE color_ref operator=(colorf_ref rhs) noexcept
         {
             b = rhs.b;
             g = rhs.g;
@@ -113,12 +115,6 @@ namespace rac::color
         }
     };
 
-    typedef mut_color* mut_color_ptr;
-    typedef mut_color& mut_color_ref;
-    typedef const mut_color color;
-    typedef const mut_color* color_ptr;
-    typedef const mut_color& color_ref;
-
     class mut_colorf
     {
     public:
@@ -131,12 +127,18 @@ namespace rac::color
         static u8 BITS_PER_COLOR_COMPONENT = sizeof(r) * BITS_IN_BYTE;
         static u8 BITS_PER_PIXEL = BITS_PER_COLOR_COMPONENT * 4;
 
-        mut_colorf() { }
+        mut_colorf()
+        {
+            r = 0.0f;
+            g = 0.0f;
+            b = 0.0f;
+            opacity = 1.0f;
+        }
         mut_colorf(u8 _r, u8 _g, u8 _b, u8 _a = 255)
         {
             r = _r * INV_U8_MAX;
-            r = _g * INV_U8_MAX;
-            r = _b * INV_U8_MAX;
+            g = _g * INV_U8_MAX;
+            b = _b * INV_U8_MAX;
             opacity = _a * INV_U8_MAX;
         }
         mut_colorf(f32 _r, f32 _g, f32 _b, f32 _a)
@@ -202,29 +204,23 @@ namespace rac::color
             switch (decimal_places)
             {
             case 0:
-                snprintf(res.ToCharPtr(), MAX, "(%.0f, %.0f, %.0f)", r, g, b, opacity);
+                snprintf(res.ToCharPtr(), MAX, "(%.0f, %.0f, %.0f, %.0f)", r, g, b, opacity);
                 break;
             case 1:
-                snprintf(res.ToCharPtr(), MAX, "(%.1f, %.1f, %.1f)", r, g, b, opacity);
+                snprintf(res.ToCharPtr(), MAX, "(%.1f, %.1f, %.1f, %.1f)", r, g, b, opacity);
                 break;
             case 2:
-                snprintf(res.ToCharPtr(), MAX, "(%.2f, %.2f, %.2f)", r, g, b, opacity);
+                snprintf(res.ToCharPtr(), MAX, "(%.2f, %.2f, %.2f, %.2f)", r, g, b, opacity);
                 break;
             case 3:
-                snprintf(res.ToCharPtr(), MAX, "(%.3f, %.3f, %.3f)", r, g, b, opacity);
+                snprintf(res.ToCharPtr(), MAX, "(%.3f, %.3f, %.3f, %.3f)", r, g, b, opacity);
                 break;
             default:
-                snprintf(res.ToCharPtr(), MAX, "(%.4f, %.4f, %.4f)", r, g, b, opacity);
+                snprintf(res.ToCharPtr(), MAX, "(%.4f, %.4f, %.4f, %.4f)", r, g, b, opacity);
                 break;
             }
             res.Resize();
             return res;
         }
     };
-
-    typedef mut_colorf* mut_colorf_ptr;
-    typedef mut_colorf& mut_colorf_ref;
-    typedef const mut_colorf colorf;
-    typedef const mut_colorf* colorf_ptr;
-    typedef const mut_colorf& colorf_ref;
 }

@@ -1,3 +1,4 @@
+#pragma once
 #include "rac.hpp"
 #include "rac-tinystr.hpp"
 
