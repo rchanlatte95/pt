@@ -47,5 +47,8 @@
     <ClInclude Include="headers\rac-staticstr.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="headers\rac-mth.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,5 +1,6 @@
 #pragma once
 #include "rac.hpp"
+#include "rac-cachestr.hpp"
 
 namespace rac::color
 {
@@ -92,6 +93,24 @@ namespace rac::color
             opacity = rhs.opacity;
             return *this;
         }
+
+        INLINE static_strings::mut_cachestr ToStr() const noexcept
+        {
+            u64 MAX = static_strings::MAX_CACHESTR_LEN;
+            static_strings::mut_cachestr res;
+            snprintf(res.ToCharPtr(), MAX, "(%3d, %3d, %3d, %3d)", r, g, b, opacity);
+            res.Resize();
+            return res;
+        }
+
+        INLINE static_strings::mut_cachestr ToPpmStr() const noexcept
+        {
+            u64 MAX = static_strings::MAX_CACHESTR_LEN;
+            static_strings::mut_cachestr res;
+            snprintf(res.ToCharPtr(), MAX, "(%3d, %3d, %3d)", r, g, b);
+            res.Resize();
+            return res;
+        }
     };
 
     typedef mut_color* mut_color_ptr;
@@ -174,6 +193,37 @@ namespace rac::color
 
         mut_f32 operator [] (i32 i) const { return *(&r + i); }
         mut_f32ref operator [] (i32 i) { return *(&r + i); }
+
+        INLINE static_strings::mut_cachestr ToStr(u32 decimal_places = 4) const noexcept
+        {
+            u64 MAX = static_strings::MAX_CACHESTR_LEN;
+            static_strings::mut_cachestr res;
+            bool use_exp = (r >= MAX_F32_FOR_FULL_REP || r <= MIN_F32_FOR_FULL_REP) ||
+                            (g >= MAX_F32_FOR_FULL_REP || g <= MIN_F32_FOR_FULL_REP) ||
+                            (b >= MAX_F32_FOR_FULL_REP || b <= MIN_F32_FOR_FULL_REP) ||
+                            (opacity >= MAX_F32_FOR_FULL_REP || opacity <= MIN_F32_FOR_FULL_REP);
+
+            switch (decimal_places)
+            {
+            case 0:
+                snprintf(res.ToCharPtr(), MAX, use_exp ? "(%.0e, %.0e, %.0e)" : "(%.0f, %.0f, %.0f)", r, g, b, opacity);
+                break;
+            case 1:
+                snprintf(res.ToCharPtr(), MAX, use_exp ? "(%.1e, %.1e, %.1e)" : "(%.1f, %.1f, %.1f)", r, g, b, opacity);
+                break;
+            case 2:
+                snprintf(res.ToCharPtr(), MAX, use_exp ? "(%.2e, %.2e, %.2e)" : "(%.2f, %.2f, %.2f)", r, g, b, opacity);
+                break;
+            case 3:
+                snprintf(res.ToCharPtr(), MAX, use_exp ? "(%.3e, %.3e, %.3e)" : "(%.3f, %.3f, %.3f)", r, g, b, opacity);
+                break;
+            default:
+                snprintf(res.ToCharPtr(), MAX, use_exp ? "(%.4e, %.4e, %.4e)" : "(%.4f, %.4f, %.4f)", r, g, b, opacity);
+                break;
+            }
+            res.Resize();
+            return res;
+        }
     };
 
     typedef mut_colorf* mut_colorf_ptr;

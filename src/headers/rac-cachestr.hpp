@@ -1,4 +1,5 @@
 #include "rac.hpp"
+#include "rac-tinystr.hpp"
 
 namespace rac::static_strings
 {
