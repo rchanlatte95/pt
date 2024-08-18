@@ -198,27 +198,23 @@ namespace rac::color
         {
             u64 MAX = static_strings::MAX_CACHESTR_LEN;
             static_strings::mut_cachestr res;
-            bool use_exp = (r >= MAX_F32_FOR_FULL_REP || r <= MIN_F32_FOR_FULL_REP) ||
-                            (g >= MAX_F32_FOR_FULL_REP || g <= MIN_F32_FOR_FULL_REP) ||
-                            (b >= MAX_F32_FOR_FULL_REP || b <= MIN_F32_FOR_FULL_REP) ||
-                            (opacity >= MAX_F32_FOR_FULL_REP || opacity <= MIN_F32_FOR_FULL_REP);
 
             switch (decimal_places)
             {
             case 0:
-                snprintf(res.ToCharPtr(), MAX, use_exp ? "(%.0e, %.0e, %.0e)" : "(%.0f, %.0f, %.0f)", r, g, b, opacity);
+                snprintf(res.ToCharPtr(), MAX, "(%.0f, %.0f, %.0f)", r, g, b, opacity);
                 break;
             case 1:
-                snprintf(res.ToCharPtr(), MAX, use_exp ? "(%.1e, %.1e, %.1e)" : "(%.1f, %.1f, %.1f)", r, g, b, opacity);
+                snprintf(res.ToCharPtr(), MAX, "(%.1f, %.1f, %.1f)", r, g, b, opacity);
                 break;
             case 2:
-                snprintf(res.ToCharPtr(), MAX, use_exp ? "(%.2e, %.2e, %.2e)" : "(%.2f, %.2f, %.2f)", r, g, b, opacity);
+                snprintf(res.ToCharPtr(), MAX, "(%.2f, %.2f, %.2f)", r, g, b, opacity);
                 break;
             case 3:
-                snprintf(res.ToCharPtr(), MAX, use_exp ? "(%.3e, %.3e, %.3e)" : "(%.3f, %.3f, %.3f)", r, g, b, opacity);
+                snprintf(res.ToCharPtr(), MAX, "(%.3f, %.3f, %.3f)", r, g, b, opacity);
                 break;
             default:
-                snprintf(res.ToCharPtr(), MAX, use_exp ? "(%.4e, %.4e, %.4e)" : "(%.4f, %.4f, %.4f)", r, g, b, opacity);
+                snprintf(res.ToCharPtr(), MAX, "(%.4f, %.4f, %.4f)", r, g, b, opacity);
                 break;
             }
             res.Resize();

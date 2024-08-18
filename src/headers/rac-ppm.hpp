@@ -1,11 +1,19 @@
 #pragma once
-#include "rac.hpp"
+#include "rac-color.hpp"
+#include "rac-v2.hpp"
 
 namespace rac::img
 {
+    using namespace rac::color;
+    using namespace rac::mth;
+
     class alignas(WIN_PAGE_SIZE) PortablePixelMap
     {
+    private:
+        mut_f32 aspect_ratio;
+        mut_color pixels[WIN_PAGE_SIZE][WIN_PAGE_SIZE];
 
+    public:
     };
 
     typedef PortablePixelMap mut_ppm;

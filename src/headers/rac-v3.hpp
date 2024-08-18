@@ -1,4 +1,4 @@
-#include "rac.hpp"
+#include "rac-mth.hpp"
 #include "rac-v2.hpp"
 #include "rac-staticstr.hpp"
 #include "rac-cachestr.hpp"
@@ -102,9 +102,9 @@ namespace rac::mth
         {
             u64 MAX = static_strings::MAX_CACHESTR_LEN;
             static_strings::mut_cachestr res;
-            bool use_exp = (x >= MAX_F32_FOR_FULL_REP || x <= MIN_F32_FOR_FULL_REP) ||
-                        (y >= MAX_F32_FOR_FULL_REP || y <= MIN_F32_FOR_FULL_REP) ||
-                        (z >= MAX_F32_FOR_FULL_REP || z <= MIN_F32_FOR_FULL_REP);
+            bool use_exp = Between(x, MAX_F32_FOR_FULL_REP) ||
+                            Between(y, MAX_F32_FOR_FULL_REP) ||
+                            Between(z, MAX_F32_FOR_FULL_REP);
 
             switch (decimal_places)
             {
