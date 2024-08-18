@@ -6,13 +6,17 @@
 using namespace rac;
 using namespace rac::static_strings;
 using namespace rac::mth;
-using namespace rac::color;
+using namespace rac::gfx;
 using namespace rac::img;
 
-static mut_ppm render;
 int main()
 {
-    render.SaveToDesktop("rt_result");
+    mut_ppm_ptr render = new(mut_ppm);
+    u32 DEBUG_CODE = 0xDEADBEEF;
+    u32 ORANGE_CODE = 0xFFA50000;
+    color ORANGE(ORANGE_CODE);
+    render->Fill(ORANGE);
+    render->SaveToDesktop("rt_result");
 
     printf("Completed path trace render.");
     return EXIT_SUCCESS;

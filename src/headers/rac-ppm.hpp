@@ -12,7 +12,7 @@ namespace rac::img
     typedef const PortablePixelMap* ppm_ptr;
     typedef const PortablePixelMap& ppm_ref;
 
-    using namespace rac::color;
+    using namespace rac::gfx;
     using namespace rac::mth;
 
     cstr PPM_EXT = ".ppm";
@@ -23,9 +23,16 @@ namespace rac::img
     public:
         mut_color pixels[HEIGHT][WIDTH];
 
-        PortablePixelMap(u32 color_code = 0)
+        PortablePixelMap() { memset(pixels, 0, sizeof(pixels)); }
+
+        INLINE mut_color_ref operator()(u32 x, u32 y) noexcept
         {
-            memset(pixels, color_code, sizeof(pixels));
+            return pixels[y][x];
+        }
+
+        MAY_INLINE void Fill(color color_code) noexcept
+        {
+            memset(pixels, color_code.GetI32(), sizeof(pixels));
         }
 
         MAY_INLINE bool SaveToDesktop(cstr filename) const noexcept
@@ -42,7 +49,7 @@ namespace rac::img
             fprintf(file, "P3\n%lu %lu\n255\n", WIDTH, HEIGHT);
 
             i32 PENULT_PG_SIZE = WIN_PAGE_SIZE - 1;
-            rac::color::mut_color c;
+            mut_color c;
             mut_u64 scanlines_done = 0;
             for (int y = 0; y < WIN_PAGE_SIZE; ++y)
             {

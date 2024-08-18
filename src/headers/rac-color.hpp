@@ -2,7 +2,7 @@
 #include "rac.hpp"
 #include "rac-cachestr.hpp"
 
-namespace rac::color
+namespace rac::gfx
 {
     class alignas(4) mut_color;
     typedef mut_color* mut_color_ptr;
@@ -31,9 +31,9 @@ namespace rac::color
     {
     public:
 
-        mut_u8 b;
-        mut_u8 g;
         mut_u8 r;
+        mut_u8 g;
+        mut_u8 b;
         mut_u8 opacity;
 
         static u8 BITS_PER_COLOR_COMPONENT = sizeof(r) * BITS_IN_BYTE;
@@ -60,6 +60,13 @@ namespace rac::color
             r = (u8)(_r * 255.999f);
             opacity = (u8)(_a * 255.999f);
         }
+        mut_color(u32 color_code)
+        {
+            r = (u8)(color_code >> 24);
+            g = (u8)((color_code & 0x00FF0000) >> 16);
+            b = (u8)((color_code & 0x0000FF00) >> 8);
+            opacity = (u8)(color_code & 0x000000FF);
+        }
 
         INLINE f32 LinearToGamma(f32 linear_color_component) const noexcept
         {
@@ -81,10 +88,10 @@ namespace rac::color
             return color(new_r, new_g, new_b, opacity);
         }
 
-        INLINE u32 GetU32() const noexcept { return *(u32ptr(&opacity)); }
+        INLINE u32 GetU32() const noexcept { return *(u32ptr(&r)); }
         INLINE operator u32() const noexcept { return GetU32(); }
 
-        INLINE i32 GetI32() const noexcept { return *(i32ptr(&opacity)); }
+        INLINE i32 GetI32() const noexcept { return *(i32ptr(&r)); }
         INLINE operator i32() const noexcept { return GetI32(); }
 
         INLINE color_ref operator=(color_ref rhs) noexcept
