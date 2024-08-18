@@ -29,6 +29,10 @@
 
 #define NOMINMAX 0
 #include <Windows.h>
+#include <shlobj.h>
+#include <objbase.h>
+#pragma comment(lib,"Shell32")
+#pragma comment(lib,"Ole32")
 
 #define MAY_INLINE __inline
 #define INLINE __forceinline
@@ -198,4 +202,15 @@ namespace rac
     u64 F32_STR_CHAR_CT = 9 + SIGN_CHAR_CT + F32_DELIM_CHAR_CT;
     u64 PARENTHESES_ENCAP_LEN = 2;
     u64 COMMA_SPACE_LEN = 2;
+
+
+    MAY_INLINE std::filesystem::path GetDesktopPath()
+    {
+        wchar_t* p;
+        if (S_OK != SHGetKnownFolderPath(FOLDERID_Desktop, 0, NULL, &p)) return "";
+        std::filesystem::path result = p;
+        CoTaskMemFree(p);
+        return result;
+    }
+    MAY_INLINE std::string GetDesktopPathStr() { return GetDesktopPath().string(); }
 }

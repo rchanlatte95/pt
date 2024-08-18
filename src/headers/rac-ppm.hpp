@@ -9,11 +9,13 @@ namespace rac::img
 
     class alignas(WIN_PAGE_SIZE) PortablePixelMap
     {
-    private:
-        mut_f32 aspect_ratio;
+    public:
         mut_color pixels[WIN_PAGE_SIZE][WIN_PAGE_SIZE];
 
-    public:
+        public bool SaveToDesktop()
+        {
+
+        }
     };
 
     typedef PortablePixelMap mut_ppm;
