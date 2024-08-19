@@ -4,7 +4,7 @@
 
 namespace rac::img
 {
-    class alignas(WIN_PAGE_SIZE) PortablePixelMap;
+    class alignas(AVX256_ALIGNMENT_BYTE_SIZE) PortablePixelMap;
     typedef PortablePixelMap mut_ppm;
     typedef PortablePixelMap* mut_ppm_ptr;
     typedef PortablePixelMap& mut_ppm_ref;
@@ -18,7 +18,7 @@ namespace rac::img
     cstr PPM_EXT = ".ppm";
     u32 HEIGHT = 1024;
     u32 WIDTH = HEIGHT;
-    class alignas(WIN_PAGE_SIZE) PortablePixelMap
+    class alignas(AVX256_ALIGNMENT_BYTE_SIZE) PortablePixelMap
     {
     public:
         mut_color pixels[HEIGHT][WIDTH];
@@ -44,6 +44,22 @@ namespace rac::img
             while(--ct > -1)
             {
                 *pxl++ = packed_code;
+            }
+        }
+
+        MAY_INLINE void Fill_AVX2(color color_code) noexcept
+        {
+            u32 code = color_code.GetU32();
+            i32 MASK = 0xFFFFFFFF;
+            const __m256i code_vec = _mm256_set_epi32(code, code, code, code, code, code, code, code);
+            const __m256i MASK_VEC = _mm256_set_epi32(MASK, MASK, MASK, MASK, MASK, MASK, MASK, MASK);
+
+            mut_i32ptr p = (mut_i32ptr)pixels;
+            mut_i64 ct = (HEIGHT * WIDTH) >> 3;
+            while (--ct > -1)
+            {
+                _mm256_maskstore_epi32(p, MASK_VEC, code_vec);
+                p += 8;
             }
         }
 
@@ -78,6 +94,7 @@ namespace rac::img
             return std::filesystem::exists(desk_path);
         }
 
+        INLINE ptr ToPtr() const noexcept { return (ptr)pixels; }
         INLINE color_ptr Begin() const noexcept
         {
             return (color_ptr)pixels;
@@ -95,5 +112,15 @@ namespace rac::img
         {
             return pixels[HEIGHT - 1][WIDTH - 1];
         }
+
     };
+
+    INLINE bool operator==(ppm_ref lhs, ppm_ref rhs)
+    {
+        return memcmp(lhs.pixels, rhs.pixels, sizeof(lhs.pixels)) == 0;
+    }
+    INLINE bool operator!=(ppm_ref lhs, ppm_ref rhs)
+    {
+        return !(lhs==rhs);
+    }
 }

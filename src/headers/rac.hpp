@@ -132,6 +132,10 @@ namespace rac
     u32 TRUE_SHARE_CACHE_SIZE = (u32)std::hardware_constructive_interference_size;
     u32 MAX_THREAD_CT = std::thread::hardware_concurrency();
 
+    u32 SSE128_ALIGNMENT_BYTE_SIZE = 16;
+    u32 AVX256_ALIGNMENT_BYTE_SIZE = 32;
+    u32 AVX512_ALIGNMENT_BYTE_SIZE = 64;
+
     u32 BITS_IN_BYTE = 8;
     u32 KB = 1024;
     u32 WIN_PAGE_SIZE = 4 * KB;

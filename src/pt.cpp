@@ -10,13 +10,16 @@ using namespace rac::gfx;
 using namespace rac::img;
 
 mut_ppm render;
+mut_ppm render_AVX;
 int main()
 {
     u32 ORANGE_CODE = 0xFFA50000;
     color ORANGE(ORANGE_CODE);
+    render_AVX.Fill_AVX2(ORANGE);
     render.Fill(ORANGE);
-    color f = render.First();
-    color l = render.Last();
+    bool equal = render == render_AVX;
+    printf("AVX fill == Looped Fill := %s", (equal ? "true" : "false"));
+
     render.SaveToDesktop("rt_result");
     printf("\nCompleted path trace render.\n");
     return EXIT_SUCCESS;
