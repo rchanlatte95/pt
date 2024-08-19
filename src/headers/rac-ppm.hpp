@@ -36,19 +36,6 @@ namespace rac::img
 
         MAY_INLINE void Fill(color color_code) noexcept
         {
-            u64 code = color_code.GetU32();
-            u64 packed_code = (code << 32) | code;
-
-            mut_u64ptr pxl = (mut_u64ptr)pixels;
-            mut_i64 ct = (HEIGHT * WIDTH) >> 1;
-            while(--ct > -1)
-            {
-                *pxl++ = packed_code;
-            }
-        }
-
-        MAY_INLINE void Fill_AVX2(color color_code) noexcept
-        {
             u32 code = color_code.GetU32();
             i32 MASK = 0xFFFFFFFF;
             const __m256i code_vec = _mm256_set_epi32(code, code, code, code, code, code, code, code);
