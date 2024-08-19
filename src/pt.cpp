@@ -16,9 +16,7 @@ int main()
     color ORANGE(ORANGE_CODE);
     render.Fill(ORANGE);
     color c = render(0, 0);
-    printf("\n%s\n", c.ToStr().ToCstr());
-
-    //render.SaveToDesktop("rt_result");
-    //printf("\nCompleted path trace render.\n");
+    render.SaveToDesktop("rt_result");
+    printf("\nCompleted path trace render.\n");
     return EXIT_SUCCESS;
 }

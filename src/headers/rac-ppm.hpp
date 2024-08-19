@@ -16,7 +16,7 @@ namespace rac::img
     using namespace rac::mth;
 
     cstr PPM_EXT = ".ppm";
-    u32 HEIGHT = WIN_PAGE_SIZE;
+    u32 HEIGHT = 1024;
     u32 WIDTH = HEIGHT;
     class alignas(WIN_PAGE_SIZE) PortablePixelMap
     {
@@ -54,20 +54,20 @@ namespace rac::img
 
             fprintf(file, "P3\n%lu %lu\n255\n", WIDTH, HEIGHT);
 
-            i32 PENULT_PG_SIZE = WIN_PAGE_SIZE - 1;
+            i32 PENULT_WIDTH = WIDTH - 1;
             mut_color c;
             mut_u64 scanlines_done = 0;
-            for (int y = 0; y < WIN_PAGE_SIZE; ++y)
+            for (int y = 0; y < HEIGHT; ++y)
             {
-                for (int x = 0; x < PENULT_PG_SIZE; ++x)
+                for (int x = 0; x < PENULT_WIDTH; ++x)
                 {
                     c = pixels[y][x];
-                    fprintf(file, "(%3u, %3u, %3u) ", c.r, c.g, c.b);
+                    fprintf(file, "%3u, %3u, %3u ", c.r, c.g, c.b);
                 }
-                c = pixels[y][PENULT_PG_SIZE];
-                fprintf(file, "(%3u, %3u, %3u)\n", c.r, c.g, c.b);
+                c = pixels[y][PENULT_WIDTH];
+                fprintf(file, "%3u, %3u, %3u\n", c.r, c.g, c.b);
 
-                printf("%4llu / %4lu      \r", ++scanlines_done, WIN_PAGE_SIZE);
+                printf("%4llu / %4lu      \r", ++scanlines_done, HEIGHT);
             }
             return std::filesystem::exists(desk_path);
         }
