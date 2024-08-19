@@ -32,12 +32,12 @@ namespace rac::img
 
         MAY_INLINE void Fill(color color_code) noexcept
         {
-            for (int y = 0; y < WIN_PAGE_SIZE; ++y)
+            u64 code = color_code.GetU32();
+            u64 packed_code = (code << 32) | code;
+            mut_u64ptr pxl = (mut_u64ptr)pixels;
+            for (mut_u64 i = 0, ct = (HEIGHT * WIDTH) >> 1; i < ct; ++i)
             {
-                for (int x = 0; x < WIN_PAGE_SIZE; ++x)
-                {
-                    pixels[y][x] = color_code;
-                }
+                *pxl++ = packed_code;
             }
         }
 
