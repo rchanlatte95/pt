@@ -25,9 +25,13 @@ namespace rac::img
 
         PortablePixelMap() { memset(pixels, 0, sizeof(pixels)); }
 
-        INLINE mut_color_ref operator()(u32 x, u32 y) noexcept
+        INLINE mut_color_ref operator()(i32 x, i32 y) noexcept
         {
             return pixels[y][x];
+        }
+        INLINE mut_color_ref operator[](i32 index) noexcept
+        {
+            return ((mut_color_ptr)pixels)[index];
         }
 
         MAY_INLINE void Fill(color color_code) noexcept

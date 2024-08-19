@@ -19,6 +19,7 @@
 #include <uchar.h>
 #include <wchar.h>
 #include <wctype.h>
+#include <immintrin.h>
 
 #include <unordered_map>
 #include <vector>

@@ -11,7 +11,6 @@ namespace rac::static_strings
         mut_i32 Length;
         mut_i32 Capacity;
         mut_u8ptr chars;
-        u8 NULL_TERM = NULL_TERMINATOR;
 
     public:
 
