@@ -69,10 +69,10 @@ namespace rac::gfx
         }
         mut_color(i32 color_code)
         {
-            r = (u8)(color_code >> 24);
-            g = (u8)((color_code & 0x00FF0000) >> 16);
-            b = (u8)((color_code & 0x0000FF00) >> 8);
-            opacity = (u8)(color_code & 0x000000FF);
+            opacity = (u8)(color_code >> 24);
+            b = (u8)((color_code & 0x00FF0000) >> 16);
+            g = (u8)((color_code & 0x0000FF00) >> 8);
+            r = (u8)(color_code & 0x000000FF);
         }
 
         INLINE f32 LinearToGamma(f32 linear_color_component) const noexcept
@@ -119,10 +119,10 @@ namespace rac::gfx
         }
         INLINE color_ref operator=(i32 color_code) noexcept
         {
-            r = (u8)(color_code >> 24);
-            g = (u8)((color_code & 0x00FF0000) >> 16);
-            b = (u8)((color_code & 0x0000FF00) >> 8);
-            opacity = (u8)(color_code & 0x000000FF);
+            opacity = (u8)(color_code >> 24);
+            b = (u8)((color_code & 0x00FF0000) >> 16);
+            g = (u8)((color_code & 0x0000FF00) >> 8);
+            r = (u8)(color_code & 0x000000FF);
             return *this;
         }
 
@@ -130,16 +130,15 @@ namespace rac::gfx
         {
             u64 MAX = static_strings::MAX_CACHESTR_LEN;
             static_strings::mut_cachestr res;
-            snprintf(res.ToCharPtr(), MAX, "(%3d, %3d, %3d, %3d)", r, g, b, opacity);
+            snprintf(res.ToCharPtr(), MAX, "(%d, %d, %d, %d)", r, g, b, opacity);
             res.Resize();
             return res;
         }
-
         INLINE static_strings::mut_cachestr ToPpmStr() const noexcept
         {
             u64 MAX = static_strings::MAX_CACHESTR_LEN;
             static_strings::mut_cachestr res;
-            snprintf(res.ToCharPtr(), MAX, "(%3d, %3d, %3d)", r, g, b);
+            snprintf(res.ToCharPtr(), MAX, "(%d, %d, %d)", r, g, b);
             res.Resize();
             return res;
         }

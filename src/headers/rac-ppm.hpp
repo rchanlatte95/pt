@@ -32,7 +32,13 @@ namespace rac::img
 
         MAY_INLINE void Fill(color color_code) noexcept
         {
-            memset(pixels, color_code.GetI32(), sizeof(pixels));
+            for (int y = 0; y < WIN_PAGE_SIZE; ++y)
+            {
+                for (int x = 0; x < WIN_PAGE_SIZE; ++x)
+                {
+                    pixels[y][x] = color_code;
+                }
+            }
         }
 
         MAY_INLINE bool SaveToDesktop(cstr filename) const noexcept

@@ -14,11 +14,11 @@ int main()
 {
     u32 ORANGE_CODE = 0xFFA50000;
     color ORANGE(ORANGE_CODE);
-    u32 CODE = ORANGE.GetU32();
     render.Fill(ORANGE);
     color c = render(0, 0);
-    render.SaveToDesktop("rt_result");
+    printf("\n%s\n", c.ToStr().ToCstr());
 
-    printf("Completed path trace render.");
+    //render.SaveToDesktop("rt_result");
+    //printf("\nCompleted path trace render.\n");
     return EXIT_SUCCESS;
 }
