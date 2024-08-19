@@ -15,7 +15,8 @@ int main()
     u32 ORANGE_CODE = 0xFFA50000;
     color ORANGE(ORANGE_CODE);
     render.Fill(ORANGE);
-    color c = render(0, 0);
+    color f = render.First();
+    color l = render.Last();
     render.SaveToDesktop("rt_result");
     printf("\nCompleted path trace render.\n");
     return EXIT_SUCCESS;

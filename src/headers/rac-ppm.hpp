@@ -38,8 +38,10 @@ namespace rac::img
         {
             u64 code = color_code.GetU32();
             u64 packed_code = (code << 32) | code;
+
             mut_u64ptr pxl = (mut_u64ptr)pixels;
-            for (mut_u64 i = 0, ct = (HEIGHT * WIDTH) >> 1; i < ct; ++i)
+            mut_i64 ct = (HEIGHT * WIDTH) >> 1;
+            while(--ct > -1)
             {
                 *pxl++ = packed_code;
             }
@@ -74,6 +76,24 @@ namespace rac::img
                 printf("%4llu / %4lu      \r", ++scanlines_done, HEIGHT);
             }
             return std::filesystem::exists(desk_path);
+        }
+
+        INLINE color_ptr Begin() const noexcept
+        {
+            return (color_ptr)pixels;
+        }
+        INLINE color_ptr End() const noexcept
+        {
+            u32 offset = (HEIGHT * WIDTH) - 1u;
+            return (color_ptr)(pixels + offset);
+        }
+        INLINE color First() const noexcept
+        {
+            return pixels[0][0];
+        }
+        INLINE color Last() const noexcept
+        {
+            return pixels[HEIGHT - 1][WIDTH - 1];
         }
     };
 }
