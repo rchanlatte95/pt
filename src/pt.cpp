@@ -9,14 +9,15 @@ using namespace rac::mth;
 using namespace rac::gfx;
 using namespace rac::img;
 
+mut_ppm render;
 int main()
 {
-    mut_ppm_ptr render = new(mut_ppm);
-    u32 DEBUG_CODE = 0xDEADBEEF;
     u32 ORANGE_CODE = 0xFFA50000;
     color ORANGE(ORANGE_CODE);
-    render->Fill(ORANGE);
-    render->SaveToDesktop("rt_result");
+    u32 CODE = ORANGE.GetU32();
+    render.Fill(ORANGE);
+    color c = render(0, 0);
+    render.SaveToDesktop("rt_result");
 
     printf("Completed path trace render.");
     return EXIT_SUCCESS;

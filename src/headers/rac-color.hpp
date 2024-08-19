@@ -67,6 +67,13 @@ namespace rac::gfx
             b = (u8)((color_code & 0x0000FF00) >> 8);
             opacity = (u8)(color_code & 0x000000FF);
         }
+        mut_color(i32 color_code)
+        {
+            r = (u8)(color_code >> 24);
+            g = (u8)((color_code & 0x00FF0000) >> 16);
+            b = (u8)((color_code & 0x0000FF00) >> 8);
+            opacity = (u8)(color_code & 0x000000FF);
+        }
 
         INLINE f32 LinearToGamma(f32 linear_color_component) const noexcept
         {
@@ -100,6 +107,22 @@ namespace rac::gfx
             g = rhs.g;
             r = rhs.r;
             opacity = rhs.opacity;
+            return *this;
+        }
+        INLINE color_ref operator=(u32 color_code) noexcept
+        {
+            r = (u8)(color_code >> 24);
+            g = (u8)((color_code & 0x00FF0000) >> 16);
+            b = (u8)((color_code & 0x0000FF00) >> 8);
+            opacity = (u8)(color_code & 0x000000FF);
+            return *this;
+        }
+        INLINE color_ref operator=(i32 color_code) noexcept
+        {
+            r = (u8)(color_code >> 24);
+            g = (u8)((color_code & 0x00FF0000) >> 16);
+            b = (u8)((color_code & 0x0000FF00) >> 8);
+            opacity = (u8)(color_code & 0x000000FF);
             return *this;
         }
 
