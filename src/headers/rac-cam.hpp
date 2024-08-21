@@ -19,8 +19,11 @@ namespace rac::gfx
         mut_f32 focal_len;
         mut_f32 aspect_ratio;
         mut_v2 viewport;
+
         mut_v3 viewport_u;
         mut_v3 viewport_v;
+        mut_v3 pixel_delta_u;
+        mut_v3 pixel_delta_v;
         mut_v3 center;
 
         mut_cam()
@@ -30,16 +33,24 @@ namespace rac::gfx
             viewport = v2::ZERO;
             viewport_u = v3::ZERO;
             viewport_v = v3::ZERO;
+            pixel_delta_u = v3::ZERO;
+            pixel_delta_v = v3::ZERO;
             center = v3::ZERO;
         }
         mut_cam(i32 view_width, i32 view_height)
         {
             focal_len = 1.0f;
-            aspect_ratio = f32(view_width) / f32(view_height);
+            f32 w = f32(view_width);
+            f32 h = f32(view_height);
+
+            aspect_ratio =  w / h;
             viewport = v2(2.0f, 2.0f * aspect_ratio);
             viewport_u = v3(viewport.x, 0.0f, 0.0f);
             viewport_v = v3(0.0f, -viewport.y, 0.0f);
             center = v3::ZERO;
+
+            pixel_delta_u = viewport_u / w;
+            pixel_delta_v = viewport_v / h;
         }
 
     };
