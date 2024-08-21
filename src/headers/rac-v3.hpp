@@ -17,6 +17,18 @@ namespace rac::mth
         static u64 COMPONENT_CT = 3;
         static u64 MAX_STR_LEN = COMPONENT_CT * (F32_STR_CHAR_CT + COMMA_SPACE_LEN) + NULL_TERMINATOR_LEN;
 
+        static v3 ZERO;
+
+        static v3 ONE;
+        static v3 SIGN_ONE;
+
+        static v3 RIGHT;
+        static v3 UP;
+        static v3 FORWARD;
+        static v3 LEFT;
+        static v3 DOWN;
+        static v3 BACKWARD;
+
         mut_f32 x;
         mut_f32 y;
         mut_f32 z;
@@ -167,15 +179,15 @@ namespace rac::mth
                     u.x * v.y - u.y * v.x);
     }
 
-    v3 ZERO = v3(0.0f);
+    v3 mut_v3::ZERO = v3(0.0f);
 
-    v3 ONE = v3(1.0f);
-    v3 SIGN_ONE = -ONE;
+    v3 mut_v3::ONE = v3(1.0f);
+    v3 mut_v3::SIGN_ONE = -ONE;
 
-    v3 RIGHT =      v3(1.0f, 0.0f, 0.0f);
-    v3 UP =         v3(0.0f, 1.0f, 0.0f);
-    v3 FORWARD =    v3(0.0f, 0.0f, 1.0f);
-    v3 LEFT = -RIGHT;
-    v3 DOWN = -UP;
-    v3 BACKWARD = -FORWARD;
+    v3 mut_v3::RIGHT =      v3(1.0f, 0.0f, 0.0f);
+    v3 mut_v3::UP =         v3(0.0f, 1.0f, 0.0f);
+    v3 mut_v3::FORWARD =    v3(0.0f, 0.0f, 1.0f);
+    v3 mut_v3::LEFT = -RIGHT;
+    v3 mut_v3::DOWN = -UP;
+    v3 mut_v3::BACKWARD = -FORWARD;
 }

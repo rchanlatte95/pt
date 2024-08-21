@@ -3,11 +3,28 @@
 
 namespace rac::mth
 {
+    class alignas(8) mut_v2;
+    typedef mut_v2* mut_v2_ptr;
+    typedef mut_v2& mut_v2_ref;
+    typedef const mut_v2 v2;
+    typedef const mut_v2* v2_ptr;
+    typedef const mut_v2& v2_ref;
+
     class alignas(8) mut_v2
     {
     public:
         static u64 COMPONENT_CT = 2;
         static u64 MAX_STR_LEN = COMPONENT_CT * (F32_STR_CHAR_CT + COMMA_SPACE_LEN);
+
+        static v2 ZERO;
+
+        static v2 ONE;
+        static v2 SIGN_ONE;
+
+        static v2 RIGHT;
+        static v2 UP;
+        static v2 LEFT;
+        static v2 DOWN;
 
         mut_f32 x;
         mut_f32 y;
@@ -72,12 +89,6 @@ namespace rac::mth
         }
     };
 
-    typedef mut_v2* mut_v2_ptr;
-    typedef mut_v2& mut_v2_ref;
-    typedef const mut_v2 v2;
-    typedef const mut_v2* v2_ptr;
-    typedef const mut_v2& v2_ref;
-
     INLINE v2 operator*(v2_ref u, f32 v) { return u * v; }
     INLINE v2 operator/(v2_ref u, f32 v) { return u * (1.0f / v); }
 
@@ -103,4 +114,14 @@ namespace rac::mth
     {
         return u.x * v.x + u.y * v.y;
     }
+
+    v2 mut_v2::ZERO = v2(0.0f);
+
+    v2 mut_v2::ONE = v2(1.0f);
+    v2 mut_v2::SIGN_ONE = -ONE;
+
+    v2 mut_v2::RIGHT = v2(1.0f, 0.0f);
+    v2 mut_v2::UP = v2(0.0f, 1.0f);
+    v2 mut_v2::LEFT = -RIGHT;
+    v2 mut_v2::DOWN = -UP;
 }
