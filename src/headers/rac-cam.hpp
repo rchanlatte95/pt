@@ -26,6 +26,9 @@ namespace rac::gfx
         mut_v3 pixel_delta_v;
         mut_v3 center;
 
+        mut_v3 topLeft_viewport;
+        mut_v3 pixel00_pos;
+
         mut_cam()
         {
             focal_len = 0.0f;
@@ -36,6 +39,8 @@ namespace rac::gfx
             pixel_delta_u = v3::ZERO;
             pixel_delta_v = v3::ZERO;
             center = v3::ZERO;
+            topLeft_viewport = v3::ZERO;
+            pixel00_pos = v3::ZERO;
         }
         mut_cam(i32 view_width, i32 view_height)
         {
@@ -51,6 +56,12 @@ namespace rac::gfx
 
             pixel_delta_u = viewport_u / w;
             pixel_delta_v = viewport_v / h;
+
+            v3 half_view_u = viewport_u * 0.5f;
+            v3 half_view_v = viewport_v * 0.5f;
+
+            topLeft_viewport = center - v3(0.0f, 0.0f, focal_len) - half_view_u - half_view_v;
+            pixel00_pos = topLeft_viewport + 0.5 * (pixel_delta_u + pixel_delta_v);
         }
 
     };
