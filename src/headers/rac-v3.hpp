@@ -5,6 +5,12 @@
 
 namespace rac::mth
 {
+    class mut_v3;
+    typedef mut_v3* mut_v3_ptr;
+    typedef mut_v3& mut_v3_ref;
+    typedef const mut_v3 v3;
+    typedef const mut_v3* v3_ptr;
+    typedef const mut_v3& v3_ref;
     class mut_v3
     {
     public:
@@ -129,12 +135,6 @@ namespace rac::mth
         }
     };
 
-    typedef mut_v3* mut_v3_ptr;
-    typedef mut_v3& mut_v3_ref;
-    typedef const mut_v3 v3;
-    typedef const mut_v3* v3_ptr;
-    typedef const mut_v3& v3_ref;
-
     INLINE v3 operator*(v3_ref u, f32 v) { return u * v; }
     INLINE v3 operator/(v3_ref u, f32 v) { return u * (1.0f / v); }
 
@@ -166,4 +166,16 @@ namespace rac::mth
                     u.z * v.x - u.x * v.z,
                     u.x * v.y - u.y * v.x);
     }
+
+    v3 ZERO = v3(0.0f);
+
+    v3 ONE = v3(1.0f);
+    v3 SIGN_ONE = -ONE;
+
+    v3 RIGHT =      v3(1.0f, 0.0f, 0.0f);
+    v3 UP =         v3(0.0f, 1.0f, 0.0f);
+    v3 FORWARD =    v3(0.0f, 0.0f, 1.0f);
+    v3 LEFT = -RIGHT;
+    v3 DOWN = -UP;
+    v3 BACKWARD = -FORWARD;
 }
