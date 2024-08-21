@@ -64,5 +64,9 @@ namespace rac::gfx
             pixel00_pos = topLeft_viewport + 0.5 * (pixel_delta_u + pixel_delta_v);
         }
 
+        MAY_INLINE v3 GetPixelPos(i32 x, i32 y)const noexcept
+        {
+            return pixel00_pos + (x * pixel_delta_u) + (y * pixel_delta_v);
+        }
     };
 }
