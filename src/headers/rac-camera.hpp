@@ -6,14 +6,14 @@ namespace rac::gfx
 {
     using namespace mth;
 
-    class mut_cam;
-    typedef mut_cam* mut_cam_ptr;
-    typedef mut_cam& mut_cam_ref;
-    typedef const mut_cam cam;
-    typedef const mut_cam* cam_ptr;
-    typedef const mut_cam& cam_ref;
+    class mut_camera;
+    typedef mut_camera* mut_camera_ptr;
+    typedef mut_camera& mut_camera_ref;
+    typedef const mut_camera camera;
+    typedef const mut_camera* camera_ptr;
+    typedef const mut_camera& camera_ref;
 
-    class mut_cam
+    class mut_camera
     {
     public:
         mut_f32 focal_len;
@@ -29,7 +29,7 @@ namespace rac::gfx
         mut_v3 topLeft_viewport;
         mut_v3 pixel00_pos;
 
-        mut_cam()
+        mut_camera()
         {
             focal_len = 0.0f;
             aspect_ratio = 0.0f;
@@ -42,7 +42,7 @@ namespace rac::gfx
             topLeft_viewport = v3::ZERO;
             pixel00_pos = v3::ZERO;
         }
-        mut_cam(u32 view_width, u32 view_height)
+        mut_camera(u32 view_width, u32 view_height)
         {
             focal_len = 1.0f;
             f32 w = f32(view_width);

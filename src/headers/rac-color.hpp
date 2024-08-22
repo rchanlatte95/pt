@@ -139,15 +139,23 @@ namespace rac::gfx
         }
 
         // Linearly interpolate from one color to another based on a
-        MAY_INLINE static color Mix(color from, color to, f32 a)
+        MAY_INLINE static color Mix(color from, color to, f32 f)
         {
-            f32 one_minus_a = 1.0f - a;
-            f32 from_rf = from.r; f32 from_gf = from.b; f32 from_bf = from.b;
-            f32 to_rf = to.r; f32 to_gf = to.b; f32 to_bf = to.b;
-            u8 new_r = (u8)((from_rf * one_minus_a + to_rf * a) * 255.999f);
-            u8 new_g = (u8)((from_gf * one_minus_a + to_gf * a) * 255.999f);
-            u8 new_b = (u8)((from_bf * one_minus_a + to_bf * a) * 255.999f);
-            u8 new_a = (u8)((from_bf * one_minus_a + to_bf * a) * 255.999f);
+            f32 from_rf = from.r;
+            f32 from_gf = from.b;
+            f32 from_bf = from.b;
+            f32 from_a = from.opacity;
+
+            f32 to_rf = to.r;
+            f32 to_gf = to.b;
+            f32 to_bf = to.b;
+            f32 to_a = to.opacity;
+
+            f32 one_minus_a = 1.0f - f;
+            u8 new_r = (u8)(from_rf * one_minus_a + to_rf * f);
+            u8 new_g = (u8)(from_gf * one_minus_a + to_gf * f);
+            u8 new_b = (u8)(from_bf * one_minus_a + to_bf * f);
+            u8 new_a = (u8)(from_a * one_minus_a + to_a * f);
             return color(new_r, new_g, new_b, new_a);
         }
 
