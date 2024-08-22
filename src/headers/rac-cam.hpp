@@ -1,4 +1,4 @@
-#include "rac-mth.hpp"
+#pragma once
 #include "rac-v2.hpp"
 #include "rac-v3.hpp"
 
@@ -42,7 +42,7 @@ namespace rac::gfx
             topLeft_viewport = v3::ZERO;
             pixel00_pos = v3::ZERO;
         }
-        mut_cam(i32 view_width, i32 view_height)
+        mut_cam(u32 view_width, u32 view_height)
         {
             focal_len = 1.0f;
             f32 w = f32(view_width);
@@ -66,7 +66,7 @@ namespace rac::gfx
 
         MAY_INLINE v3 GetPixelPos(i32 x, i32 y) const noexcept
         {
-            return pixel00_pos + (x * pixel_delta_u) + (y * pixel_delta_v);
+            return pixel00_pos + ((f32)x * pixel_delta_u) + ((f32)y * pixel_delta_v);
         }
     };
 }

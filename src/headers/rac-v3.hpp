@@ -1,3 +1,4 @@
+#pragma once
 #include "rac-mth.hpp"
 #include "rac-v2.hpp"
 #include "rac-staticstr.hpp"
@@ -147,7 +148,7 @@ namespace rac::mth
         }
     };
 
-    INLINE v3 operator*(v3_ref u, f32 v) { return u * v; }
+    INLINE v3 operator*(v3_ref u, f32 v) { return v3(u.x * v, u.y * v, u.z * v); }
     INLINE v3 operator/(v3_ref u, f32 v) { return u * (1.0f / v); }
 
     INLINE v3 operator+(v3_ref u, v3_ref v)
@@ -179,15 +180,15 @@ namespace rac::mth
                     u.x * v.y - u.y * v.x);
     }
 
-    v3 mut_v3::ZERO = v3(0.0f);
+    v3 v3::ZERO = v3(0.0f);
 
-    v3 mut_v3::ONE = v3(1.0f);
-    v3 mut_v3::SIGN_ONE = -ONE;
+    v3 v3::ONE = v3(1.0f);
+    v3 v3::SIGN_ONE = -ONE;
 
-    v3 mut_v3::RIGHT =      v3(1.0f, 0.0f, 0.0f);
-    v3 mut_v3::UP =         v3(0.0f, 1.0f, 0.0f);
-    v3 mut_v3::FORWARD =    v3(0.0f, 0.0f, 1.0f);
-    v3 mut_v3::LEFT = -RIGHT;
-    v3 mut_v3::DOWN = -UP;
-    v3 mut_v3::BACKWARD = -FORWARD;
+    v3 v3::RIGHT =      v3(1.0f, 0.0f, 0.0f);
+    v3 v3::UP =         v3(0.0f, 1.0f, 0.0f);
+    v3 v3::FORWARD =    v3(0.0f, 0.0f, 1.0f);
+    v3 v3::LEFT = -RIGHT;
+    v3 v3::DOWN = -UP;
+    v3 v3::BACKWARD = -FORWARD;
 }

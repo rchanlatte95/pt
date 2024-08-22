@@ -15,13 +15,16 @@ namespace rac::img
     using namespace rac::gfx;
     using namespace rac::mth;
 
-    cstr PPM_EXT = ".ppm";
-    u32 HEIGHT = 1024;
-    u32 WIDTH = HEIGHT;
+    static u32 _HEIGHT = 1024;
+    static u32 _WIDTH = _HEIGHT;
     class alignas(AVX256_ALIGNMENT_BYTE_SIZE) PortablePixelMap
     {
     public:
-        mut_color pixels[HEIGHT][WIDTH];
+        static cstr PPM_EXT;
+        static u32 HEIGHT;
+        static u32 WIDTH;
+
+        mut_color pixels[_HEIGHT][_WIDTH];
 
         PortablePixelMap(u8 color_component_value = 0)
         {
@@ -35,7 +38,7 @@ namespace rac::img
             const __m256i MASK_VEC = _mm256_set_epi32(MASK, MASK, MASK, MASK, MASK, MASK, MASK, MASK);
 
             mut_i32ptr p = (mut_i32ptr)pixels;
-            mut_i64 ct = (HEIGHT * WIDTH) >> 3;
+            mut_i64 ct = (i64)(HEIGHT * WIDTH) >> 3;
             while (--ct > -1)
             {
                 _mm256_maskstore_epi32(p, MASK_VEC, code_vec);
@@ -54,7 +57,7 @@ namespace rac::img
             return ((mut_color_ptr)pixels)[index];
         }
 
-        MAY_INLINE void Fill(color color_code) noexcept
+        MAY_INLINE void Fill(color color_code) const noexcept
         {
             u32 code = color_code.GetU32();
             i32 MASK = 0xFFFFFFFF;
@@ -62,7 +65,7 @@ namespace rac::img
             const __m256i MASK_VEC = _mm256_set_epi32(MASK, MASK, MASK, MASK, MASK, MASK, MASK, MASK);
 
             mut_i32ptr p = (mut_i32ptr)pixels;
-            mut_i64 ct = (HEIGHT * WIDTH) >> 3;
+            mut_i64 ct = (i64)(HEIGHT * WIDTH) >> 3;
             while (--ct > -1)
             {
                 _mm256_maskstore_epi32(p, MASK_VEC, code_vec);
@@ -83,12 +86,12 @@ namespace rac::img
 
             fprintf(file, "P3\n%lu %lu\n255\n", WIDTH, HEIGHT);
 
-            i32 PENULT_WIDTH = WIDTH - 1;
+            u32 PENULT_WIDTH = WIDTH - 1;
             mut_color c;
             mut_u64 scanlines_done = 0;
-            for (int y = 0; y < HEIGHT; ++y)
+            for (mut_u32 y = 0; y < HEIGHT; ++y)
             {
-                for (int x = 0; x < PENULT_WIDTH; ++x)
+                for (mut_u32 x = 0; x < PENULT_WIDTH; ++x)
                 {
                     c = pixels[y][x];
                     fprintf(file, "%3u, %3u, %3u ", c.r, c.g, c.b);
@@ -130,4 +133,8 @@ namespace rac::img
     {
         return !(lhs==rhs);
     }
+
+    cstr PortablePixelMap::PPM_EXT = ".ppm";
+    u32 PortablePixelMap::HEIGHT = 1024;
+    u32 PortablePixelMap::WIDTH = HEIGHT;
 }

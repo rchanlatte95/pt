@@ -1,5 +1,4 @@
 #pragma once
-#include "rac-mth.hpp"
 
 namespace rac::mth
 {
@@ -115,13 +114,13 @@ namespace rac::mth
         return u.x * v.x + u.y * v.y;
     }
 
-    v2 mut_v2::ZERO = v2(0.0f);
+    v2 v2::ZERO = v2(0.0f);
 
-    v2 mut_v2::ONE = v2(1.0f);
-    v2 mut_v2::SIGN_ONE = -ONE;
+    v2 v2::ONE = v2(1.0f);
+    v2 v2::SIGN_ONE = -ONE;
 
-    v2 mut_v2::RIGHT = v2(1.0f, 0.0f);
-    v2 mut_v2::UP = v2(0.0f, 1.0f);
-    v2 mut_v2::LEFT = -RIGHT;
-    v2 mut_v2::DOWN = -UP;
+    v2 v2::RIGHT = v2(1.0f, 0.0f);
+    v2 v2::UP = v2(0.0f, 1.0f);
+    v2 v2::LEFT = -RIGHT;
+    v2 v2::DOWN = -UP;
 }
