@@ -12,14 +12,12 @@ using namespace rac::img;
 mut_ppm render;
 int main()
 {
-    u32 ORANGE_CODE = 0xFFA50000;
-    color ORANGE(ORANGE_CODE);
-    render.Fill(ORANGE);
+    render.Fill(color::ORANGE);
 
     mut_color c;
     for (mut_u32 i = HEIGHT; i < render.PixelCount(); ++i)
     {
-        render[i] = color(0.0f, 0.0f, 0.0f);
+        render[i] = color::BLUE;
     }
 
     render.SaveToDesktop("rt_result");

@@ -266,16 +266,16 @@ namespace rac::gfx
         }
     };
 
-    color mut_color::BLACK;
-    color mut_color::GRAY;
-    color mut_color::WHITE;
+    color mut_color::BLACK = color(0, 0, 0);
+    color mut_color::GRAY = color(127, 127, 127);
+    color mut_color::WHITE = color(255, 255, 255);
 
-    color mut_color::RED;
-    color mut_color::GREEN;
-    color mut_color::BLUE;
-    color mut_color::CYAN;
-    color mut_color::MAGENTA;
-    color mut_color::YELLOW;
+    color mut_color::RED =  color(255, 0, 0);
+    color mut_color::GREEN =color(0, 255, 0);
+    color mut_color::BLUE = color(0, 0, 255);
+    color mut_color::CYAN = color(0, 255, 255);
+    color mut_color::MAGENTA = color(255, 0, 255);
+    color mut_color::YELLOW = color(255, 255, 0);
 
-    color mut_color::ORANGE;
+    color mut_color::ORANGE = color(255, 165, 00);
 }
