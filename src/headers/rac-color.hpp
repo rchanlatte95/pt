@@ -58,6 +58,41 @@ namespace rac::gfx
         static color CHARTREUSE;
         static color SALMON;
         static color BROWN;
+        static color RUST;
+        static color TEAL;
+        static color COBALT;
+        static color EGGPLANT;
+        static color PINK;
+        static color KEY_LIME;
+
+        static color LILAC;
+        static color MAROON;
+        static color BEIGE;
+        static color TAN;
+        static color PEACH;
+        static color LEMON;
+        static color LIME;
+        static color NAVY_BLUE;
+
+        static color GOLD;
+        static color SILVER;
+        static color RUBY;
+        static color SAPPHIRE;
+        static color EMERALD;
+        static color DIAMOND;
+        static color PEARL;
+        static color PLATINUM;
+        static color CELADON;
+        static color FUCHSIA;
+        static color SAFFRON;
+        static color CERULEAN;
+        static color INDIGO;
+        static color PEWTER;
+        static color VIRIDIAN;
+        static color GOLDENROD;
+        static color MAHOGANY;
+        static color VIOLET;
+        static color CINNABAR;
 
         mut_u8 r;
         mut_u8 g;
@@ -305,12 +340,9 @@ namespace rac::gfx
         }
     };
 
+    // primary colors
     color mut_color::BLACK = color(0, 0, 0);
-    color mut_color::DARK_GRAY = color(0x262626);
-    color mut_color::GRAY = color(127, 127, 127);
-    color mut_color::LIGHT_GRAY = color(0xd9d9d9);
     color mut_color::WHITE = color(255, 255, 255);
-
     color mut_color::RED =  color(255, 0, 0);
     color mut_color::GREEN =color(0, 255, 0);
     color mut_color::BLUE = color(0, 0, 255);
@@ -318,6 +350,13 @@ namespace rac::gfx
     color mut_color::MAGENTA = color(255, 0, 255);
     color mut_color::YELLOW = color(255, 255, 0);
 
+    // very common colors according to:
+    //      https://www.color-hex.com/color-names.html ,
+    //      https://simple.wikipedia.org/wiki/Colour ,
+    //      and random colors I liked
+    color mut_color::DARK_GRAY = color(0x262626);
+    color mut_color::GRAY = color(127, 127, 127);
+    color mut_color::LIGHT_GRAY = color(0xd9d9d9);
     color mut_color::ORANGE = color(255, 165, 00);
     color mut_color::PURPLE = color(0xa020f0);
     color mut_color::LAVENDER = color(0xb57edc);
@@ -332,4 +371,40 @@ namespace rac::gfx
     color mut_color::CHARTREUSE = color(0x76ee00);
     color mut_color::SALMON = color(0xfa8072);
     color mut_color::BROWN = color(0x654321);
+    color mut_color::RUST = color(0xb7410e);
+    color mut_color::TEAL = color(0x008080);
+    color mut_color::COBALT = color(0x0047ab);
+    color mut_color::EGGPLANT = color(0x614051);
+    color mut_color::PINK = color(0xfc8eac);
+    color mut_color::KEY_LIME = color(0xe8f48c);
+
+    color mut_color::LILAC = color(0xc8a2c8);
+    color mut_color::MAROON = color(0xb03060);
+    color mut_color::BEIGE = color(0xf5f5dc);
+    color mut_color::TAN = color(0xd2b48c);
+    color mut_color::PEACH = color(0xffe5b4);
+    color mut_color::LEMON = color(0xfff700);
+    color mut_color::LIME = color(0x32cd32);
+    color mut_color::NAVY_BLUE = color(0x1974d2);
+
+    // Pokemon Colors
+    color mut_color::GOLD = color(0xffd700);
+    color mut_color::SILVER = color(0xc0c0c0);
+    color mut_color::RUBY = color(0xe0115f);
+    color mut_color::SAPPHIRE = color(0x0f52ba);
+    color mut_color::EMERALD = color(0x50c878);
+    color mut_color::DIAMOND = color(0xB9F2FF);
+    color mut_color::PEARL = color(0xFF5733);
+    color mut_color::PLATINUM = color(0xe5e4e2);
+    color mut_color::CELADON = color(0xace1af);
+    color mut_color::FUCHSIA = color(0xfe4164);
+    color mut_color::SAFFRON = color(0xf4c430);
+    color mut_color::CERULEAN = color(0x007ba7);
+    color mut_color::INDIGO = color(0x4b0082);
+    color mut_color::PEWTER = color(0x8ba8b7);
+    color mut_color::VIRIDIAN = color(0x40826d);
+    color mut_color::GOLDENROD = color(0xdaa520);
+    color mut_color::MAHOGANY = color(0xc04000);
+    color mut_color::VIOLET = color(0xee82ee);
+    color mut_color::CINNABAR = color(0xe34234);
 }
