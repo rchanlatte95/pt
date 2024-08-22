@@ -23,7 +23,10 @@ namespace rac::img
     public:
         mut_color pixels[HEIGHT][WIDTH];
 
-        PortablePixelMap() { memset(pixels, 0, sizeof(pixels)); }
+        PortablePixelMap(u8 color_component_value = 0)
+        {
+            memset(pixels, color_component_value, sizeof(pixels));
+        }
         PortablePixelMap(color color_code)
         {
             u32 code = color_code.GetU32();
