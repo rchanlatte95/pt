@@ -19,8 +19,7 @@ int main()
     mut_color c;
     for (mut_u32 i = HEIGHT; i < render.PixelCount(); ++i)
     {
-        c = render[i];
-        printf("%d -> %s\n", i, c.ToStr().ToCstr());
+        render[i] = color(0.0f, 0.0f, 0.0f);
     }
 
     render.SaveToDesktop("rt_result");

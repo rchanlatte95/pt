@@ -31,6 +31,19 @@ namespace rac::gfx
     {
     public:
 
+        static color BLACK;
+        static color GRAY;
+        static color WHITE;
+
+        static color RED;
+        static color GREEN;
+        static color BLUE;
+        static color CYAN;
+        static color MAGENTA;
+        static color YELLOW;
+
+        static color ORANGE;
+
         mut_u8 r;
         mut_u8 g;
         mut_u8 b;
@@ -252,4 +265,17 @@ namespace rac::gfx
             return res;
         }
     };
+
+    color mut_color::BLACK;
+    color mut_color::GRAY;
+    color mut_color::WHITE;
+
+    color mut_color::RED;
+    color mut_color::GREEN;
+    color mut_color::BLUE;
+    color mut_color::CYAN;
+    color mut_color::MAGENTA;
+    color mut_color::YELLOW;
+
+    color mut_color::ORANGE;
 }
