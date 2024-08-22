@@ -9,11 +9,9 @@ using namespace rac::mth;
 using namespace rac::gfx;
 using namespace rac::img;
 
-mut_ppm render;
+mut_ppm render(color::ORANGE);
 int main()
 {
-    render.Fill(color::ORANGE);
-
     mut_color c;
     for (mut_u32 i = HEIGHT; i < render.PixelCount(); ++i)
     {

@@ -24,6 +24,21 @@ namespace rac::img
         mut_color pixels[HEIGHT][WIDTH];
 
         PortablePixelMap() { memset(pixels, 0, sizeof(pixels)); }
+        PortablePixelMap(color color_code)
+        {
+            u32 code = color_code.GetU32();
+            i32 MASK = 0xFFFFFFFF;
+            const __m256i code_vec = _mm256_set_epi32(code, code, code, code, code, code, code, code);
+            const __m256i MASK_VEC = _mm256_set_epi32(MASK, MASK, MASK, MASK, MASK, MASK, MASK, MASK);
+
+            mut_i32ptr p = (mut_i32ptr)pixels;
+            mut_i64 ct = (HEIGHT * WIDTH) >> 3;
+            while (--ct > -1)
+            {
+                _mm256_maskstore_epi32(p, MASK_VEC, code_vec);
+                p += 8;
+            }
+        }
 
         INLINE u32 ByteCount() const noexcept { return sizeof(pixels); }
         INLINE u32 PixelCount() const noexcept { return HEIGHT * WIDTH; }
