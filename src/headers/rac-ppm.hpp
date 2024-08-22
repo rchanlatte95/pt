@@ -75,10 +75,11 @@ namespace rac::img
 
         MAY_INLINE bool SaveToDesktop(cstr filename) const noexcept
         {
-            std::string desk_path = rac::GetDesktopPathStr() + '/' + filename + PPM_EXT;
+            std::string desk_path = rac::GetDesktopPathStr() + '\\' + filename + PPM_EXT;
 
             mut_FileHandle file;
-            errno_t open_result = fopen_s(&file, desk_path.c_str(), "w+");
+            cstr desk_path_cstr = desk_path.c_str();
+            errno_t open_result = fopen_s(&file, desk_path_cstr, "w+");
             if (open_result == EINVAL || file == nullptr)
             {
                 return false;
@@ -89,6 +90,7 @@ namespace rac::img
             u32 PENULT_WIDTH = WIDTH - 1;
             mut_color c;
             mut_u64 scanlines_done = 0;
+            f32 invScanlineCt = 100.0f / (f32)HEIGHT;
             for (mut_u32 y = 0; y < HEIGHT; ++y)
             {
                 for (mut_u32 x = 0; x < PENULT_WIDTH; ++x)
@@ -99,9 +101,21 @@ namespace rac::img
                 c = pixels[y][PENULT_WIDTH];
                 fprintf(file, "%3u, %3u, %3u\n", c.r, c.g, c.b);
 
-                printf("%4llu / %4lu      \r", ++scanlines_done, HEIGHT);
+                f32 pct_done = (f32)(++scanlines_done) * invScanlineCt;
+                printf("\r\t%4llu written to PPM out of %4lu (%.2f%% DONE).          ", scanlines_done, HEIGHT, pct_done);
             }
-            return std::filesystem::exists(desk_path);
+
+            bool saved_successfully = std::filesystem::exists(desk_path);
+            if (saved_successfully)
+            {
+                printf("\r\n\tPath tracer result saved to: %s\r\n\r\n", desk_path_cstr);
+            }
+            else
+            {
+                printf("\r\n\tPath tracer result unable to save to: %s\r\n\r\n", desk_path_cstr);
+            }
+
+            return saved_successfully;
         }
 
         INLINE ptr ToPtr() const noexcept { return (ptr)pixels; }

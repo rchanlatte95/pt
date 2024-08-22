@@ -15,6 +15,9 @@ mut_ppm render;
 mut_camera cam(ppm::WIDTH, ppm::HEIGHT);
 int main()
 {
+    f32 invScanlineCt = 100.0f / (f32)ppm::HEIGHT;
+    mut_f32 scanlinesDone = 0.0f;
+    printf("Casting rays into scene...\r\n\r\n");
     for (mut_u32 y = 0; y < ppm::HEIGHT; ++y)
     {
         for (mut_u32 x = 0; x < ppm::WIDTH; ++x)
@@ -27,9 +30,13 @@ int main()
             color mixed = color::Mix(color::WHITE, color::SKY_BLUE, factor);
             render(x, y) = mixed;
         }
+
+        scanlinesDone += 1.0f;
+        f32 pct_done = scanlinesDone * invScanlineCt;
+        printf("\r\t%4d rendered out of %4d (%.2f%% DONE).          ", (i32)scanlinesDone, ppm::HEIGHT, pct_done);
     }
+    printf("\r\n");
 
     render.SaveToDesktop("rt_result");
-    printf("\nCompleted path trace render.\n");
     return EXIT_SUCCESS;
 }
