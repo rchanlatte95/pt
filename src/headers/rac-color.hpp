@@ -74,6 +74,9 @@ namespace rac::gfx
         static color LIME;
         static color NAVY_BLUE;
 
+        // https://colornames.org/color/80c0ff
+        static color MISALI;
+
         static color GOLD;
         static color SILVER;
         static color RUBY;
@@ -393,6 +396,7 @@ namespace rac::gfx
     color color::LEMON = color(0xfff700ff);
     color color::LIME = color(0x32cd32ff);
     color color::NAVY_BLUE = color(0x1974d2ff);
+    color color::MISALI = color(0x80c0ffff);
 
     // Pokemon Colors
     color color::GOLD = color(0xffd700ff);

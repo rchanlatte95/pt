@@ -27,13 +27,13 @@ int main()
             ray r(cam.center, ray_direction);
 
             f32 factor = 0.5f * (ray_direction.Norm().y + 1.0f);
-            color mixed = color::Mix(color::WHITE, color::SKY_BLUE, factor);
+            color mixed = color::Mix(color::WHITE, color::MISALI, factor);
             render(x, y) = mixed;
         }
 
         scanlinesDone += 1.0f;
         f32 pct_done = scanlinesDone * invScanlineCt;
-        printf("\r\t%4d rendered out of %4d (%.2f%% DONE).          ", (i32)scanlinesDone, ppm::HEIGHT, pct_done);
+        printf("\r\tPROCESSING:\t%4d / %4d scanlines (%.2f%% RENDERED).          ", (i32)scanlinesDone, ppm::HEIGHT, pct_done);
     }
     printf("\r\n");
 

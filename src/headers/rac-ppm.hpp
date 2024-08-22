@@ -102,7 +102,7 @@ namespace rac::img
                 fprintf(file, "%3u, %3u, %3u\n", c.r, c.g, c.b);
 
                 f32 pct_done = (f32)(++scanlines_done) * invScanlineCt;
-                printf("\r\t%4llu written to PPM out of %4lu (%.2f%% DONE).          ", scanlines_done, HEIGHT, pct_done);
+                printf("\r\tSERIALIZING:\t%4llu / %4lu scanlines (%.2f%% SERIALIZED).          ", scanlines_done, HEIGHT, pct_done);
             }
 
             bool saved_successfully = std::filesystem::exists(desk_path);
