@@ -132,10 +132,10 @@ namespace rac::gfx
         }
         mut_color(i32 color_code)
         {
-            opacity = (u8)(color_code >> 24);
-            b = (u8)((color_code & 0x00FF0000) >> 16);
-            g = (u8)((color_code & 0x0000FF00) >> 8);
-            r = (u8)(color_code & 0x000000FF);
+            r = (u8)(color_code >> 24);
+            g = (u8)((color_code & 0x00FF0000) >> 16);
+            b = (u8)((color_code & 0x0000FF00) >> 8);
+            opacity = (u8)(color_code & 0x000000FF);
         }
 
         // Linearly interpolate from one color to another based on a
@@ -341,70 +341,69 @@ namespace rac::gfx
     };
 
     // primary colors
-    color mut_color::BLACK = color(0, 0, 0);
-    color mut_color::WHITE = color(255, 255, 255);
-    color mut_color::RED =  color(255, 0, 0);
-    color mut_color::GREEN =color(0, 255, 0);
-    color mut_color::BLUE = color(0, 0, 255);
-    color mut_color::CYAN = color(0, 255, 255);
-    color mut_color::MAGENTA = color(255, 0, 255);
-    color mut_color::YELLOW = color(255, 255, 0);
+    color mut_color::BLACK = color(0x000000ff);
+    color mut_color::WHITE = color(0xffffffff);
+    color mut_color::RED =   color(0xff0000ff);
+    color mut_color::GREEN = color(0x00ff00ff);
+    color mut_color::BLUE =  color(0x0000ffff);
+    color mut_color::CYAN =  color(0x00ffffff);
+    color mut_color::MAGENTA =color(0xff00ffff);
+    color mut_color::YELLOW = color(0xffff00ff);
 
     // very common colors according to:
     //      https://www.color-hex.com/color-names.html ,
     //      https://simple.wikipedia.org/wiki/Colour ,
     //      and random colors I liked
-    color mut_color::DARK_GRAY = color(0x262626);
-    color mut_color::GRAY = color(127, 127, 127);
-    color mut_color::LIGHT_GRAY = color(0xd9d9d9);
-    color mut_color::ORANGE = color(255, 165, 00);
-    color mut_color::PURPLE = color(0xa020f0);
-    color mut_color::LAVENDER = color(0xb57edc);
-    color mut_color::IVORY = color(0xfffff0);
-    color mut_color::BURGUNDY = color(0x800020);
-    color mut_color::SKY_BLUE = color(0x00ccff);
-    color mut_color::OLIVE = color(0x808000);
-    color mut_color::FOREST_GREEN = color(0x228b22);
-    color mut_color::OXBLOOD = color(0x4a0000);
-    color mut_color::OXFORD_BLUE = color(0x002147);
-    color mut_color::TURQUOISE = color(0x40e0d0);
-    color mut_color::CHARTREUSE = color(0x76ee00);
-    color mut_color::SALMON = color(0xfa8072);
-    color mut_color::BROWN = color(0x654321);
-    color mut_color::RUST = color(0xb7410e);
-    color mut_color::TEAL = color(0x008080);
-    color mut_color::COBALT = color(0x0047ab);
-    color mut_color::EGGPLANT = color(0x614051);
-    color mut_color::PINK = color(0xfc8eac);
-    color mut_color::KEY_LIME = color(0xe8f48c);
-
-    color mut_color::LILAC = color(0xc8a2c8);
-    color mut_color::MAROON = color(0xb03060);
-    color mut_color::BEIGE = color(0xf5f5dc);
-    color mut_color::TAN = color(0xd2b48c);
-    color mut_color::PEACH = color(0xffe5b4);
-    color mut_color::LEMON = color(0xfff700);
-    color mut_color::LIME = color(0x32cd32);
-    color mut_color::NAVY_BLUE = color(0x1974d2);
+    color mut_color::DARK_GRAY = color(0x262626ff);
+    color mut_color::GRAY = color(0x7f7f7fff);
+    color mut_color::LIGHT_GRAY = color(0xd9d9d9ff);
+    color mut_color::ORANGE = color(0xffa500ff);
+    color mut_color::PURPLE = color(0xa020f0ff);
+    color mut_color::LAVENDER = color(0xb57edcff);
+    color mut_color::IVORY = color(0xfffff0ff);
+    color mut_color::BURGUNDY = color(0x800020ff);
+    color mut_color::SKY_BLUE = color(0x00ccffff);
+    color mut_color::OLIVE = color(0x808000ff);
+    color mut_color::FOREST_GREEN = color(0x228b22ff);
+    color mut_color::OXBLOOD = color(0x4a0000ff);
+    color mut_color::OXFORD_BLUE = color(0x002147ff);
+    color mut_color::TURQUOISE = color(0x40e0d0ff);
+    color mut_color::CHARTREUSE = color(0x76ee00ff);
+    color mut_color::SALMON = color(0xfa8072ff);
+    color mut_color::BROWN = color(0x654321ff);
+    color mut_color::RUST = color(0xb7410eff);
+    color mut_color::TEAL = color(0x008080ff);
+    color mut_color::COBALT = color(0x0047abff);
+    color mut_color::EGGPLANT = color(0x614051ff);
+    color mut_color::PINK = color(0xfc8eacff);
+    color mut_color::KEY_LIME = color(0xe8f48cff);
+    color mut_color::LILAC = color(0xc8a2c8ff);
+    color mut_color::MAROON = color(0xb03060ff);
+    color mut_color::BEIGE = color(0xf5f5dcff);
+    color mut_color::TAN = color(0xd2b48cff);
+    color mut_color::PEACH = color(0xffe5b4ff);
+    color mut_color::LEMON = color(0xfff700ff);
+    color mut_color::LIME = color(0x32cd32ff);
+    color mut_color::NAVY_BLUE = color(0x1974d2ff);
 
     // Pokemon Colors
-    color mut_color::GOLD = color(0xffd700);
-    color mut_color::SILVER = color(0xc0c0c0);
-    color mut_color::RUBY = color(0xe0115f);
-    color mut_color::SAPPHIRE = color(0x0f52ba);
-    color mut_color::EMERALD = color(0x50c878);
-    color mut_color::DIAMOND = color(0xB9F2FF);
-    color mut_color::PEARL = color(0xFF5733);
-    color mut_color::PLATINUM = color(0xe5e4e2);
-    color mut_color::CELADON = color(0xace1af);
-    color mut_color::FUCHSIA = color(0xfe4164);
-    color mut_color::SAFFRON = color(0xf4c430);
-    color mut_color::CERULEAN = color(0x007ba7);
-    color mut_color::INDIGO = color(0x4b0082);
-    color mut_color::PEWTER = color(0x8ba8b7);
-    color mut_color::VIRIDIAN = color(0x40826d);
-    color mut_color::GOLDENROD = color(0xdaa520);
-    color mut_color::MAHOGANY = color(0xc04000);
-    color mut_color::VIOLET = color(0xee82ee);
-    color mut_color::CINNABAR = color(0xe34234);
+    color mut_color::GOLD = color(0xffd700ff);
+    color mut_color::SILVER = color(0xc0c0c0ff);
+    color mut_color::RUBY = color(0xe0115fff);
+    color mut_color::SAPPHIRE = color(0x0f52baff);
+    color mut_color::EMERALD = color(0x50c878ff);
+    color mut_color::DIAMOND = color(0xb9f2ffff);
+    color mut_color::PEARL = color(0xff5733ff);
+    color mut_color::PLATINUM = color(0xe5e4e2ff);
+    color mut_color::CELADON = color(0xace1afff);
+    color mut_color::FUCHSIA = color(0xfe4164ff);
+    color mut_color::SAFFRON = color(0xf4c430ff);
+    color mut_color::CERULEAN = color(0x007ba7ff);
+    color mut_color::INDIGO = color(0x4b0082ff);
+    color mut_color::PEWTER = color(0x8ba8b7ff);
+    color mut_color::VIRIDIAN = color(0x40826dff);
+    color mut_color::GOLDENROD = color(0xdaa520ff);
+    color mut_color::MAHOGANY = color(0xc04000ff);
+    color mut_color::VIOLET = color(0xee82eeff);
+    color mut_color::CINNABAR = color(0xe34234ff);
 }

@@ -9,15 +9,17 @@ using namespace rac::mth;
 using namespace rac::gfx;
 using namespace rac::img;
 
-mut_ppm render(color::ORANGE);
+mut_ppm render(color::SKY_BLUE);
 int main()
 {
     mut_color c;
+
+    /*
     for (mut_u32 i = HEIGHT; i < render.PixelCount(); ++i)
     {
         render[i] = color::BLUE;
     }
-
+    */
     render.SaveToDesktop("rt_result");
     printf("\nCompleted path trace render.\n");
     return EXIT_SUCCESS;
