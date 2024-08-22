@@ -32,7 +32,9 @@ namespace rac::gfx
     public:
 
         static color BLACK;
+        static color LIGHT_GRAY;
         static color GRAY;
+        static color DARK_GRAY;
         static color WHITE;
 
         static color RED;
@@ -43,6 +45,19 @@ namespace rac::gfx
         static color YELLOW;
 
         static color ORANGE;
+        static color PURPLE;
+        static color LAVENDER;
+        static color IVORY;
+        static color BURGUNDY;
+        static color SKY_BLUE;
+        static color OLIVE;
+        static color FOREST_GREEN;
+        static color OXBLOOD;
+        static color OXFORD_BLUE;
+        static color TURQUOISE;
+        static color CHARTREUSE;
+        static color SALMON;
+        static color BROWN;
 
         mut_u8 r;
         mut_u8 g;
@@ -97,7 +112,8 @@ namespace rac::gfx
             u8 new_r = (u8)((from_rf * one_minus_a + to_rf * a) * 255.999f);
             u8 new_g = (u8)((from_gf * one_minus_a + to_gf * a) * 255.999f);
             u8 new_b = (u8)((from_bf * one_minus_a + to_bf * a) * 255.999f);
-            return color(new_r, new_g, new_b);
+            u8 new_a = (u8)((from_bf * one_minus_a + to_bf * a) * 255.999f);
+            return color(new_r, new_g, new_b, new_a);
         }
 
         INLINE f32 LinearToGamma(f32 linear_color_component) const noexcept
@@ -188,14 +204,14 @@ namespace rac::gfx
             b = 0.0f;
             opacity = 1.0f;
         }
-        mut_colorf(u8 _r, u8 _g, u8 _b, u8 _a = 255)
+        mut_colorf(u8 _r, u8 _g, u8 _b, u8 _a)
         {
             r = _r * INV_U8_MAX;
             g = _g * INV_U8_MAX;
             b = _b * INV_U8_MAX;
             opacity = _a * INV_U8_MAX;
         }
-        mut_colorf(f32 _r, f32 _g, f32 _b, f32 _a)
+        mut_colorf(f32 _r, f32 _g, f32 _b, f32 _a = 1.0f)
         {
             r = _r;
             g = _g;
@@ -208,6 +224,17 @@ namespace rac::gfx
             g = c.g * INV_U8_MAX;
             b = c.b * INV_U8_MAX;
             opacity = c.opacity * INV_U8_MAX;
+        }
+
+        // Linearly interpolate from one color to another based on a
+        MAY_INLINE static colorf Mix(colorf from, colorf to, f32 a)
+        {
+            f32 one_minus_a = 1.0f - a;
+            f32 new_r = from.r * one_minus_a + to.r * a;
+            f32 new_g = from.g * one_minus_a + to.g * a;
+            f32 new_b = from.b * one_minus_a + to.b * a;
+            f32 new_a = from.opacity * one_minus_a + to.opacity * a;
+            return colorf(new_r, new_g, new_b, new_a);
         }
 
         INLINE f32 LinearToGamma(f32 linear_color_component) const noexcept
@@ -279,7 +306,9 @@ namespace rac::gfx
     };
 
     color mut_color::BLACK = color(0, 0, 0);
+    color mut_color::DARK_GRAY = color(0x262626);
     color mut_color::GRAY = color(127, 127, 127);
+    color mut_color::LIGHT_GRAY = color(0xd9d9d9);
     color mut_color::WHITE = color(255, 255, 255);
 
     color mut_color::RED =  color(255, 0, 0);
@@ -290,4 +319,17 @@ namespace rac::gfx
     color mut_color::YELLOW = color(255, 255, 0);
 
     color mut_color::ORANGE = color(255, 165, 00);
+    color mut_color::PURPLE = color(0xa020f0);
+    color mut_color::LAVENDER = color(0xb57edc);
+    color mut_color::IVORY = color(0xfffff0);
+    color mut_color::BURGUNDY = color(0x800020);
+    color mut_color::SKY_BLUE = color(0x00ccff);
+    color mut_color::OLIVE = color(0x808000);
+    color mut_color::FOREST_GREEN = color(0x228b22);
+    color mut_color::OXBLOOD = color(0x4a0000);
+    color mut_color::OXFORD_BLUE = color(0x002147);
+    color mut_color::TURQUOISE = color(0x40e0d0);
+    color mut_color::CHARTREUSE = color(0x76ee00);
+    color mut_color::SALMON = color(0xfa8072);
+    color mut_color::BROWN = color(0x654321);
 }
