@@ -16,6 +16,13 @@ int main()
     color ORANGE(ORANGE_CODE);
     render.Fill(ORANGE);
 
+    mut_color c;
+    for (mut_u32 i = HEIGHT; i < render.PixelCount(); ++i)
+    {
+        c = render[i];
+        printf("%d -> %s\n", i, c.ToStr().ToCstr());
+    }
+
     render.SaveToDesktop("rt_result");
     printf("\nCompleted path trace render.\n");
     return EXIT_SUCCESS;

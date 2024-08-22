@@ -25,6 +25,8 @@ namespace rac::img
 
         PortablePixelMap() { memset(pixels, 0, sizeof(pixels)); }
 
+        INLINE u32 ByteCount() const noexcept { return sizeof(pixels); }
+        INLINE u32 PixelCount() const noexcept { return HEIGHT * WIDTH; }
         INLINE mut_color_ref operator()(i32 x, i32 y) noexcept
         {
             return pixels[y][x];
