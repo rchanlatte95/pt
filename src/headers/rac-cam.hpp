@@ -66,7 +66,7 @@ namespace rac::gfx
 
         MAY_INLINE v3 GetPixelPos(i32 x, i32 y) const noexcept
         {
-            return pixel00_pos + ((f32)x * pixel_delta_u) + ((f32)y * pixel_delta_v);
+            return pixel00_pos + (pixel_delta_u * x) + (pixel_delta_v * y);
         }
     };
 }

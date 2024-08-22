@@ -150,6 +150,8 @@ namespace rac::mth
 
     INLINE v3 operator*(v3_ref u, f32 v) { return v3(u.x * v, u.y * v, u.z * v); }
     INLINE v3 operator/(v3_ref u, f32 v) { return u * (1.0f / v); }
+    INLINE v3 operator*(v3_ref u, i32 v) { return v3(u.x * (f32)v, u.y * (f32)v, u.z * (f32)v); }
+    INLINE v3 operator/(v3_ref u, i32 v) { return u * (f32)(1.0f / (f32)v); }
 
     INLINE v3 operator+(v3_ref u, v3_ref v)
     {
