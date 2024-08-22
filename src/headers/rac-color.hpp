@@ -88,6 +88,18 @@ namespace rac::gfx
             r = (u8)(color_code & 0x000000FF);
         }
 
+        // Linearly interpolate from one color to another based on a
+        MAY_INLINE static color Mix(color from, color to, f32 a)
+        {
+            f32 one_minus_a = 1.0f - a;
+            f32 from_rf = from.r; f32 from_gf = from.b; f32 from_bf = from.b;
+            f32 to_rf = to.r; f32 to_gf = to.b; f32 to_bf = to.b;
+            u8 new_r = (u8)((from_rf * one_minus_a + to_rf * a) * 255.999f);
+            u8 new_g = (u8)((from_gf * one_minus_a + to_gf * a) * 255.999f);
+            u8 new_b = (u8)((from_bf * one_minus_a + to_bf * a) * 255.999f);
+            return color(new_r, new_g, new_b);
+        }
+
         INLINE f32 LinearToGamma(f32 linear_color_component) const noexcept
         {
             return powf((f32)linear_color_component * INV_U8_MAX, INV_GAMMA);
