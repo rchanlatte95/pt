@@ -36,7 +36,7 @@ namespace rac::gfx::primitives
 
         INLINE bool Inside(v3_ref pt_to_test) const noexcept
         {
-            return false;
+            return Dot(pt_to_test, pt_to_test) < radius;
         }
 
         INLINE bool Outside(v3_ref pt_to_test) const noexcept
