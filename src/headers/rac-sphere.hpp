@@ -16,9 +16,9 @@ namespace rac::gfx::primitives
     class mut_sphere
     {
     public:
+        mut_color color;
         mut_f32 radius;
         mut_v3 center;
-        mut_color color;
 
         mut_sphere()
         {
@@ -31,7 +31,7 @@ namespace rac::gfx::primitives
             radius = 1.0f;
         }
 
-        MAY_INLINE bool RayHit(v3_ref testedPt, ray_ref raycast) const noexcept
+        MAY_INLINE bool RayHit(ray_ref raycast) const noexcept
         {
             v3 oc = center - raycast.origin;
             f32 a = Dot(raycast.direction, raycast.direction);
