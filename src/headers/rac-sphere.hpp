@@ -38,7 +38,7 @@ namespace rac::gfx::primitives
             center = center_pos;
         }
 
-        MAY_INLINE bool RayHit(ray_ref raycast) const noexcept
+        MAY_INLINE bool Hit(ray_ref raycast) const noexcept
         {
             v3 oc = center - raycast.origin;
             f32 a = Dot(raycast.direction, raycast.direction);

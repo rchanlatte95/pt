@@ -20,7 +20,8 @@ int main()
     f32 invScanlineCt = 100.0f / (f32)ppm::HEIGHT;
     mut_f32 scanlinesDone = 0.0f;
     printf("Casting rays into scene...\r\n\r\n");
-    primitives::sphere test_sphere(v3(0.0f, 0.0f, -1.0f), 1.0f);
+    primitives::sphere test_sphere(v3(0.0f, 0.0f, -1.0f), 0.5f);
+    mut_v3 hit_point = v3::ZERO;
     for (mut_u32 y = 0; y < ppm::HEIGHT; ++y)
     {
         f32 factor = (f32)y / (f32)ppm::HEIGHT;
@@ -30,8 +31,14 @@ int main()
             v3 ray_direction = pixel_pos - cam.center;
             ray r(cam.center, ray_direction);
 
-            Color mixed = Color::Mix(Color::MISALI, Color::WHITE, factor);
-            render(x, y) = mixed;
+            if (test_sphere.Hit(r))
+            {
+                render(x, y) = Color::BURGUNDY;
+            }
+            else
+            {
+                render(x, y) = Color::Mix(Color::MISALI, Color::WHITE, factor);
+            }
         }
 
         scanlinesDone += 1.0f;
