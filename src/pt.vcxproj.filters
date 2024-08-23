@@ -56,5 +56,8 @@
     <ClInclude Include="headers\rac-camera.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="headers\rac-sphere.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

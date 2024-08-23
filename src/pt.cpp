@@ -13,6 +13,7 @@ using namespace rac::img;
 
 mut_ppm render;
 mut_camera cam(ppm::WIDTH, ppm::HEIGHT);
+
 int main()
 {
     f32 invScanlineCt = 100.0f / (f32)ppm::HEIGHT;
