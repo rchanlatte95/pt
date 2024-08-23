@@ -96,10 +96,10 @@ namespace rac::img
                 for (mut_u32 x = 0; x < PENULT_WIDTH; ++x)
                 {
                     c = pixels[y][x];
-                    fprintf(file, "%3u, %3u, %3u ", c.r, c.g, c.b);
+                    fprintf(file, "%u, %u, %u ", c.r, c.g, c.b);
                 }
                 c = pixels[y][PENULT_WIDTH];
-                fprintf(file, "%3u, %3u, %3u\n", c.r, c.g, c.b);
+                fprintf(file, "%u, %u, %u\n", c.r, c.g, c.b);
 
                 f32 pct_done = (f32)(++scanlines_done) * invScanlineCt;
                 printf("\r\tSERIALIZING:\t%4llu / %4lu scanlines (%.2f%% SERIALIZED).          ", scanlines_done, HEIGHT, pct_done);
