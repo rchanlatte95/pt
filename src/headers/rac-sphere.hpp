@@ -1,5 +1,6 @@
 #pragma once
 #include "rac-v3.hpp"
+#include "rac-ray.hpp"
 
 namespace rac::gfx::primitives
 {
@@ -26,6 +27,26 @@ namespace rac::gfx::primitives
         {
             center = pos;
             radius = 1.0f;
+        }
+
+        MAY_INLINE bool RayHit(v3_ref testedPt, ray_ref raycast) const noexcept
+        {
+            return false;
+        }
+
+        INLINE bool Inside(v3_ref pt_to_test) const noexcept
+        {
+            return false;
+        }
+
+        INLINE bool Outside(v3_ref pt_to_test) const noexcept
+        {
+            return !Inside(pt_to_test);
+        }
+
+        INLINE bool OnSurface(v3_ref pt_to_test) const noexcept
+        {
+            return false;
         }
     };
 }
