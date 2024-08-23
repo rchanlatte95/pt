@@ -31,12 +31,16 @@ namespace rac::gfx::primitives
 
         MAY_INLINE bool RayHit(v3_ref testedPt, ray_ref raycast) const noexcept
         {
-            return false;
+            v3 oc = center - raycast.origin;
+            f32 a = Dot(raycast.direction, raycast.direction);
+            f32 b = -2.0f * Dot(raycast.direction, oc);
+            f32 c = Dot(oc, oc) - radius * radius;
+            return (b * b - 4.0f * a * c) >= F32_EPSILON;
         }
 
         INLINE bool Inside(v3_ref pt_to_test) const noexcept
         {
-            return Dot(pt_to_test, pt_to_test) < radius;
+            return Dot(pt_to_test, pt_to_test) < F32_EPSILON;
         }
 
         INLINE bool Outside(v3_ref pt_to_test) const noexcept
