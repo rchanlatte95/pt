@@ -23,6 +23,9 @@ namespace rac::img
         static cstr PPM_EXT;
         static u32 HEIGHT;
         static u32 WIDTH;
+        static f32 INV_HEIGHT;
+        static f32 INV_WIDTH;
+        static f32 ASPECT_RATIO;
 
         mut_color pixels[_HEIGHT][_WIDTH];
 
@@ -151,4 +154,7 @@ namespace rac::img
     cstr PortablePixelMap::PPM_EXT = ".ppm";
     u32 PortablePixelMap::HEIGHT = 1024;
     u32 PortablePixelMap::WIDTH = HEIGHT;
+    f32 PortablePixelMap::INV_HEIGHT = 1.0f / (f32)HEIGHT;
+    f32 PortablePixelMap::INV_WIDTH = 1.0f / (f32)WIDTH;
+    f32 PortablePixelMap::ASPECT_RATIO = (f32)WIDTH / (f32)HEIGHT;
 }

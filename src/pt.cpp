@@ -20,14 +20,14 @@ int main()
     printf("Casting rays into scene...\r\n\r\n");
     for (mut_u32 y = 0; y < ppm::HEIGHT; ++y)
     {
+        f32 factor = (f32)y / (f32)ppm::HEIGHT;
         for (mut_u32 x = 0; x < ppm::WIDTH; ++x)
         {
             v3 pixel_pos = cam.GetPixelPos(x, y);
             v3 ray_direction = pixel_pos - cam.center;
             ray r(cam.center, ray_direction);
 
-            f32 factor = 0.5f * (ray_direction.Norm().y + 1.0f);
-            color mixed = color::Mix(color::WHITE, color::MISALI, factor);
+            color mixed = color::Mix(color::MISALI, color::WHITE, factor);
             render(x, y) = mixed;
         }
 
