@@ -46,7 +46,7 @@ namespace rac::gfx::primitives
 
         INLINE bool OnSurface(v3_ref pt_to_test) const noexcept
         {
-            return false;
+            return Dot(pt_to_test, pt_to_test) == radius;
         }
     };
 }
