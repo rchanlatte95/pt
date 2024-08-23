@@ -22,13 +22,21 @@ namespace rac::gfx::primitives
 
         mut_sphere()
         {
-            center = v3::ZERO;
+            color = color::PINK;
             radius = 1.0f;
+            center = v3::ZERO;
         }
         mut_sphere(v3 pos, f32 radius_ = 1.0f)
         {
+            color = color::PINK;
+            radius = radius_;
             center = pos;
-            radius = 1.0f;
+        }
+        mut_sphere(v3 pos, const mut_color sphere_color, f32 radius_ = 1.0f)
+        {
+            color = sphere_color;
+            radius = radius_;
+            center = pos;
         }
 
         MAY_INLINE bool RayHit(ray_ref raycast) const noexcept

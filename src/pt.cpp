@@ -4,6 +4,7 @@
 #include "headers\rac-ppm.hpp"
 #include "headers\rac-camera.hpp"
 #include "headers\rac-ray.hpp"
+#include "headers\rac-sphere.hpp"
 
 using namespace rac;
 using namespace rac::static_strings;
@@ -19,6 +20,7 @@ int main()
     f32 invScanlineCt = 100.0f / (f32)ppm::HEIGHT;
     mut_f32 scanlinesDone = 0.0f;
     printf("Casting rays into scene...\r\n\r\n");
+    primitives::sphere test_sphere(v3(0.0f, 0.0f, -1.0f), 1.0f);
     for (mut_u32 y = 0; y < ppm::HEIGHT; ++y)
     {
         f32 factor = (f32)y / (f32)ppm::HEIGHT;
