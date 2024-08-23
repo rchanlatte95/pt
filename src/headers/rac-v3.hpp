@@ -77,22 +77,25 @@ namespace rac::mth
             x += v.x;
             y += v.y;
             z += v.z;
+            return *this;
         }
         INLINE const mut_v3& operator-=(const mut_v3 v) noexcept
         {
             x -= v.x;
             y -= v.y;
             z -= v.z;
+            return *this;
         }
         INLINE const mut_v3& operator*=(f32 v) noexcept
         {
             x *= v;
             y *= v;
             z *= v;
+            return *this;
         }
         INLINE const mut_v3& operator/=(f32 v) noexcept
         {
-            *this *= 1.0f / v;
+            return *this *= 1.0f / v;
         }
 
         INLINE f32 SqrMag() const noexcept

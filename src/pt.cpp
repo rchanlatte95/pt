@@ -31,9 +31,10 @@ int main()
             v3 ray_direction = pixel_pos - cam.center;
             ray r(cam.center, ray_direction);
 
-            if (test_sphere.Hit(r))
+            if (test_sphere.Hit(r, hit_point))
             {
-                render(x, y) = Color::BURGUNDY;
+                v3 sphere_normal = test_sphere.Normal(hit_point);
+                render(x, y) = test_sphere.NormalColor(sphere_normal);
             }
             else
             {

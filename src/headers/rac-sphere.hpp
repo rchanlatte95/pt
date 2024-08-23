@@ -47,6 +47,33 @@ namespace rac::gfx::primitives
             return (b * b - 4.0f * a * c) >= F32_EPSILON;
         }
 
+        MAY_INLINE bool Hit(ray_ref raycast, mut_v3_ref hit_pt) const noexcept
+        {
+            v3 oc = center - raycast.origin;
+            f32 a = Dot(raycast.direction, raycast.direction);
+            f32 b = -2.0f * Dot(raycast.direction, oc);
+            f32 c = Dot(oc, oc) - radius * radius;
+
+            f32 discrim = (b * b - 4.0f * a * c);
+            bool hit = discrim >= F32_EPSILON;
+            if (hit)
+            {
+                hit_pt = raycast.at((-b - std::sqrtf(discrim)) / (2.0f * a));
+            }
+            return hit;
+        }
+
+        INLINE Color NormalColor(v3_ref normal) const noexcept
+        {
+            v3 offset_normal = (normal + v3::ONE) * 0.5f;
+            return Color(offset_normal.x, offset_normal.y, offset_normal.z, 1.0f);
+        }
+
+        INLINE v3 Normal(v3_ref pt_on_sphere) const noexcept
+        {
+            return (pt_on_sphere - center).Norm();
+        }
+
         INLINE bool Inside(v3_ref pt_to_test) const noexcept
         {
             return Dot(pt_to_test, pt_to_test) < F32_EPSILON;
