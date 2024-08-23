@@ -1,5 +1,6 @@
 #pragma once
 #include "rac-v3.hpp"
+#include "rac-color.hpp"
 #include "rac-ray.hpp"
 
 namespace rac::gfx::primitives
@@ -17,6 +18,7 @@ namespace rac::gfx::primitives
     public:
         mut_f32 radius;
         mut_v3 center;
+        mut_color color;
 
         mut_sphere()
         {
