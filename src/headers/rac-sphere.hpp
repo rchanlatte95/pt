@@ -1,7 +1,6 @@
 #pragma once
 #include "rac-v3.hpp"
 #include "rac-color.hpp"
-#include "rac-ray.hpp"
 
 namespace rac::gfx::primitives
 {
@@ -16,27 +15,27 @@ namespace rac::gfx::primitives
     class mut_sphere
     {
     public:
-        mut_color color;
+        mut_Color color;
         mut_f32 radius;
         mut_v3 center;
 
         mut_sphere()
         {
-            color = color::PINK;
+            color = Color::PINK;
             radius = 1.0f;
             center = v3::ZERO;
         }
-        mut_sphere(v3 pos, f32 radius_ = 1.0f)
+        mut_sphere(v3 center_pos, f32 radius_ = 1.0f)
         {
-            color = color::PINK;
+            color = Color::PINK;
             radius = radius_;
-            center = pos;
+            center = center_pos;
         }
-        mut_sphere(v3 pos, const mut_color sphere_color, f32 radius_ = 1.0f)
+        mut_sphere(v3 center_pos, Color sphere_color, f32 r = 1.0f)
         {
             color = sphere_color;
-            radius = radius_;
-            center = pos;
+            radius = r;
+            center = center_pos;
         }
 
         MAY_INLINE bool RayHit(ray_ref raycast) const noexcept

@@ -27,13 +27,13 @@ namespace rac::img
         static f32 INV_WIDTH;
         static f32 ASPECT_RATIO;
 
-        mut_color pixels[_HEIGHT][_WIDTH];
+        mut_Color pixels[_HEIGHT][_WIDTH];
 
         PortablePixelMap(u8 color_component_value = 0)
         {
             memset(pixels, color_component_value, sizeof(pixels));
         }
-        PortablePixelMap(color color_code)
+        PortablePixelMap(Color color_code)
         {
             u32 code = color_code.GetU32();
             i32 MASK = 0xFFFFFFFF;
@@ -51,16 +51,16 @@ namespace rac::img
 
         INLINE u32 ByteCount() const noexcept { return sizeof(pixels); }
         INLINE u32 PixelCount() const noexcept { return HEIGHT * WIDTH; }
-        INLINE mut_color_ref operator()(i32 x, i32 y) noexcept
+        INLINE mut_Color_ref operator()(i32 x, i32 y) noexcept
         {
             return pixels[y][x];
         }
-        INLINE mut_color_ref operator[](i32 index) noexcept
+        INLINE mut_Color_ref operator[](i32 index) noexcept
         {
-            return ((mut_color_ptr)pixels)[index];
+            return ((mut_Color_ptr)pixels)[index];
         }
 
-        MAY_INLINE void Fill(color color_code) const noexcept
+        MAY_INLINE void Fill(Color color_code) const noexcept
         {
             u32 code = color_code.GetU32();
             i32 MASK = 0xFFFFFFFF;
@@ -91,7 +91,7 @@ namespace rac::img
             fprintf(file, "P3\n%lu %lu\n255\n", WIDTH, HEIGHT);
 
             u32 PENULT_WIDTH = WIDTH - 1;
-            mut_color c;
+            mut_Color c;
             mut_u64 scanlines_done = 0;
             f32 invScanlineCt = 100.0f / (f32)HEIGHT;
             for (mut_u32 y = 0; y < HEIGHT; ++y)
@@ -122,20 +122,20 @@ namespace rac::img
         }
 
         INLINE ptr ToPtr() const noexcept { return (ptr)pixels; }
-        INLINE color_ptr Begin() const noexcept
+        INLINE Color_ptr Begin() const noexcept
         {
-            return (color_ptr)pixels;
+            return (Color_ptr)pixels;
         }
-        INLINE color_ptr End() const noexcept
+        INLINE Color_ptr End() const noexcept
         {
             u32 offset = (HEIGHT * WIDTH) - 1u;
-            return (color_ptr)(pixels + offset);
+            return (Color_ptr)(pixels + offset);
         }
-        INLINE color First() const noexcept
+        INLINE Color First() const noexcept
         {
             return pixels[0][0];
         }
-        INLINE color Last() const noexcept
+        INLINE Color Last() const noexcept
         {
             return pixels[HEIGHT - 1][WIDTH - 1];
         }

@@ -4,19 +4,19 @@
 
 namespace rac::gfx
 {
-    class alignas(4) mut_color;
-    typedef mut_color* mut_color_ptr;
-    typedef mut_color& mut_color_ref;
-    typedef const mut_color color;
-    typedef const mut_color* color_ptr;
-    typedef const mut_color& color_ref;
+    class alignas(4) mut_Color;
+    typedef mut_Color* mut_Color_ptr;
+    typedef mut_Color& mut_Color_ref;
+    typedef const mut_Color Color;
+    typedef const mut_Color* Color_ptr;
+    typedef const mut_Color& Color_ref;
 
-    class mut_colorf;
-    typedef mut_colorf* mut_colorf_ptr;
-    typedef mut_colorf& mut_colorf_ref;
-    typedef const mut_colorf colorf;
-    typedef const mut_colorf* colorf_ptr;
-    typedef const mut_colorf& colorf_ref;
+    class mut_Colorf;
+    typedef mut_Colorf* mut_Colorf_ptr;
+    typedef mut_Colorf& mut_Colorf_ref;
+    typedef const mut_Colorf Colorf;
+    typedef const mut_Colorf* Colorf_ptr;
+    typedef const mut_Colorf& Colorf_ref;
 
     // these factors are grabbed from: https://en.wikipedia.org/wiki/Luma_(video)
     // under the section: Rec. 601 luma versus Rec. 709 luma coefficients
@@ -27,75 +27,75 @@ namespace rac::gfx
     f32 GAMMA = 2.2222222f;
     f32 INV_GAMMA = 1.0f / GAMMA;
 
-    class alignas(4) mut_color
+    class alignas(4) mut_Color
     {
     public:
 
-        static color BLACK;
-        static color LIGHT_GRAY;
-        static color GRAY;
-        static color DARK_GRAY;
-        static color WHITE;
+        static Color BLACK;
+        static Color LIGHT_GRAY;
+        static Color GRAY;
+        static Color DARK_GRAY;
+        static Color WHITE;
 
-        static color RED;
-        static color GREEN;
-        static color BLUE;
-        static color CYAN;
-        static color MAGENTA;
-        static color YELLOW;
+        static Color RED;
+        static Color GREEN;
+        static Color BLUE;
+        static Color CYAN;
+        static Color MAGENTA;
+        static Color YELLOW;
 
-        static color ORANGE;
-        static color PURPLE;
-        static color LAVENDER;
-        static color IVORY;
-        static color BURGUNDY;
-        static color SKY_BLUE;
-        static color OLIVE;
-        static color FOREST_GREEN;
-        static color OXBLOOD;
-        static color OXFORD_BLUE;
-        static color TURQUOISE;
-        static color CHARTREUSE;
-        static color SALMON;
-        static color BROWN;
-        static color RUST;
-        static color TEAL;
-        static color COBALT;
-        static color EGGPLANT;
-        static color PINK;
-        static color KEY_LIME;
+        static Color ORANGE;
+        static Color PURPLE;
+        static Color LAVENDER;
+        static Color IVORY;
+        static Color BURGUNDY;
+        static Color SKY_BLUE;
+        static Color OLIVE;
+        static Color FOREST_GREEN;
+        static Color OXBLOOD;
+        static Color OXFORD_BLUE;
+        static Color TURQUOISE;
+        static Color CHARTREUSE;
+        static Color SALMON;
+        static Color BROWN;
+        static Color RUST;
+        static Color TEAL;
+        static Color COBALT;
+        static Color EGGPLANT;
+        static Color PINK;
+        static Color KEY_LIME;
 
-        static color LILAC;
-        static color MAROON;
-        static color BEIGE;
-        static color TAN;
-        static color PEACH;
-        static color LEMON;
-        static color LIME;
-        static color NAVY_BLUE;
+        static Color LILAC;
+        static Color MAROON;
+        static Color BEIGE;
+        static Color TAN;
+        static Color PEACH;
+        static Color LEMON;
+        static Color LIME;
+        static Color NAVY_BLUE;
 
         // https://colornames.org/color/80c0ff
-        static color MISALI;
+        static Color MISALI;
 
-        static color GOLD;
-        static color SILVER;
-        static color RUBY;
-        static color SAPPHIRE;
-        static color EMERALD;
-        static color DIAMOND;
-        static color PEARL;
-        static color PLATINUM;
-        static color CELADON;
-        static color FUCHSIA;
-        static color SAFFRON;
-        static color CERULEAN;
-        static color INDIGO;
-        static color PEWTER;
-        static color VIRIDIAN;
-        static color GOLDENROD;
-        static color MAHOGANY;
-        static color VIOLET;
-        static color CINNABAR;
+        static Color GOLD;
+        static Color SILVER;
+        static Color RUBY;
+        static Color SAPPHIRE;
+        static Color EMERALD;
+        static Color DIAMOND;
+        static Color PEARL;
+        static Color PLATINUM;
+        static Color CELADON;
+        static Color FUCHSIA;
+        static Color SAFFRON;
+        static Color CERULEAN;
+        static Color INDIGO;
+        static Color PEWTER;
+        static Color VIRIDIAN;
+        static Color GOLDENROD;
+        static Color MAHOGANY;
+        static Color VIOLET;
+        static Color CINNABAR;
 
         mut_u8 r;
         mut_u8 g;
@@ -105,35 +105,35 @@ namespace rac::gfx
         static u8 BITS_PER_COLOR_COMPONENT = sizeof(r) * BITS_IN_BYTE;
         static u8 BITS_PER_PIXEL = BITS_PER_COLOR_COMPONENT * 4;
 
-        mut_color()
+        mut_Color()
         {
             b = 0;
             g = 0;
             r = 0;
             opacity = 255;
         }
-        mut_color(u8 _r, u8 _g, u8 _b, u8 _a = 255)
+        mut_Color(u8 _r, u8 _g, u8 _b, u8 _a = 255)
         {
             b = _b;
             g = _g;
             r = _r;
             opacity = _a;
         }
-        mut_color(f32 _r, f32 _g, f32 _b, f32 _a)
+        mut_Color(f32 _r, f32 _g, f32 _b, f32 _a)
         {
             b = (u8)(_b * 255.999f);
             g = (u8)(_g * 255.999f);
             r = (u8)(_r * 255.999f);
             opacity = (u8)(_a * 255.999f);
         }
-        mut_color(u32 color_code)
+        mut_Color(u32 color_code)
         {
             r = (u8)(color_code >> 24);
             g = (u8)((color_code & 0x00FF0000) >> 16);
             b = (u8)((color_code & 0x0000FF00) >> 8);
             opacity = (u8)(color_code & 0x000000FF);
         }
-        mut_color(i32 color_code)
+        mut_Color(i32 color_code)
         {
             r = (u8)(color_code >> 24);
             g = (u8)((color_code & 0x00FF0000) >> 16);
@@ -142,7 +142,7 @@ namespace rac::gfx
         }
 
         // Linearly interpolate from one color to another based on a
-        MAY_INLINE static color Mix(color from, color to, f32 f)
+        MAY_INLINE static Color Mix(Color from, Color to, f32 f)
         {
             f32 from_rf = from.r;
             f32 from_gf = from.b;
@@ -159,7 +159,7 @@ namespace rac::gfx
             u8 new_g = (u8)(from_gf * one_minus_a + to_gf * f);
             u8 new_b = (u8)(from_bf * one_minus_a + to_bf * f);
             u8 new_a = (u8)(from_a * one_minus_a + to_a * f);
-            return color(new_r, new_g, new_b, new_a);
+            return Color(new_r, new_g, new_b, new_a);
         }
 
         INLINE f32 LinearToGamma(f32 linear_color_component) const noexcept
@@ -171,7 +171,7 @@ namespace rac::gfx
             return powf((f32)gamma_color_component * INV_U8_MAX, GAMMA);
         }
 
-        INLINE color Luminance() const noexcept
+        INLINE Color Luminance() const noexcept
         {
             f32 rY = LUMA_REC709_R * LinearToGamma(r);
             f32 gY = LUMA_REC709_G * LinearToGamma(g);
@@ -179,7 +179,7 @@ namespace rac::gfx
             u8 new_r = (u8)(rY * 255.999f);
             u8 new_g = (u8)(gY * 255.999f);
             u8 new_b = (u8)(bY * 255.999f);
-            return color(new_r, new_g, new_b, opacity);
+            return Color(new_r, new_g, new_b, opacity);
         }
 
         INLINE u32 GetU32() const noexcept { return *(u32ptr(&r)); }
@@ -188,7 +188,7 @@ namespace rac::gfx
         INLINE i32 GetI32() const noexcept { return *(i32ptr(&r)); }
         INLINE operator i32() const noexcept { return GetI32(); }
 
-        INLINE color_ref operator=(color_ref rhs) noexcept
+        INLINE Color_ref operator=(Color_ref rhs) noexcept
         {
             b = rhs.b;
             g = rhs.g;
@@ -196,7 +196,7 @@ namespace rac::gfx
             opacity = rhs.opacity;
             return *this;
         }
-        INLINE color_ref operator=(u32 color_code) noexcept
+        INLINE Color_ref operator=(u32 color_code) noexcept
         {
             r = (u8)(color_code >> 24);
             g = (u8)((color_code & 0x00FF0000) >> 16);
@@ -204,7 +204,7 @@ namespace rac::gfx
             opacity = (u8)(color_code & 0x000000FF);
             return *this;
         }
-        INLINE color_ref operator=(i32 color_code) noexcept
+        INLINE Color_ref operator=(i32 color_code) noexcept
         {
             opacity = (u8)(color_code >> 24);
             b = (u8)((color_code & 0x00FF0000) >> 16);
@@ -231,7 +231,7 @@ namespace rac::gfx
         }
     };
 
-    class mut_colorf
+    class mut_Colorf
     {
     public:
 
@@ -243,28 +243,28 @@ namespace rac::gfx
         static u8 BITS_PER_COLOR_COMPONENT = sizeof(r) * BITS_IN_BYTE;
         static u8 BITS_PER_PIXEL = BITS_PER_COLOR_COMPONENT * 4;
 
-        mut_colorf()
+        mut_Colorf()
         {
             r = 0.0f;
             g = 0.0f;
             b = 0.0f;
             opacity = 1.0f;
         }
-        mut_colorf(u8 _r, u8 _g, u8 _b, u8 _a)
+        mut_Colorf(u8 _r, u8 _g, u8 _b, u8 _a)
         {
             r = _r * INV_U8_MAX;
             g = _g * INV_U8_MAX;
             b = _b * INV_U8_MAX;
             opacity = _a * INV_U8_MAX;
         }
-        mut_colorf(f32 _r, f32 _g, f32 _b, f32 _a = 1.0f)
+        mut_Colorf(f32 _r, f32 _g, f32 _b, f32 _a = 1.0f)
         {
             r = _r;
             g = _g;
             b = _b;
             opacity = _a;
         }
-        mut_colorf(color_ref c)
+        mut_Colorf(Color_ref c)
         {
             r = c.r * INV_U8_MAX;
             g = c.g * INV_U8_MAX;
@@ -273,14 +273,14 @@ namespace rac::gfx
         }
 
         // Linearly interpolate from one color to another based on a
-        MAY_INLINE static colorf Mix(colorf from, colorf to, f32 a)
+        MAY_INLINE static Colorf Mix(Colorf from, Colorf to, f32 a)
         {
             f32 one_minus_a = 1.0f - a;
             f32 new_r = from.r * one_minus_a + to.r * a;
             f32 new_g = from.g * one_minus_a + to.g * a;
             f32 new_b = from.b * one_minus_a + to.b * a;
             f32 new_a = from.opacity * one_minus_a + to.opacity * a;
-            return colorf(new_r, new_g, new_b, new_a);
+            return Colorf(new_r, new_g, new_b, new_a);
         }
 
         INLINE f32 LinearToGamma(f32 linear_color_component) const noexcept
@@ -291,27 +291,27 @@ namespace rac::gfx
         {
             return powf(gamma_color_component, GAMMA);
         }
-        INLINE colorf ToLinear() const noexcept
+        INLINE Colorf ToLinear() const noexcept
         {
-            return colorf(LinearToGamma(r), LinearToGamma(g), LinearToGamma(b), opacity);
+            return Colorf(LinearToGamma(r), LinearToGamma(g), LinearToGamma(b), opacity);
         }
-        INLINE colorf ToGamma() const noexcept
+        INLINE Colorf ToGamma() const noexcept
         {
-            return colorf(GammaToLinear(r), GammaToLinear(g), GammaToLinear(b), opacity);
+            return Colorf(GammaToLinear(r), GammaToLinear(g), GammaToLinear(b), opacity);
         }
 
-        INLINE colorf Luminance() const noexcept
+        INLINE Colorf Luminance() const noexcept
         {
             f32 rY = LUMA_REC709_R * LinearToGamma(r);
             f32 gY = LUMA_REC709_G * LinearToGamma(g);
             f32 bY = LUMA_REC709_B * LinearToGamma(b);
-            return colorf(rY, gY, bY, opacity);
+            return Colorf(rY, gY, bY, opacity);
         }
 
-        INLINE color ToColor() const noexcept { return color(*this); }
-        INLINE operator color() const noexcept { return ToColor(); }
+        INLINE Color ToColor() const noexcept { return Color(*this); }
+        INLINE operator Color() const noexcept { return ToColor(); }
 
-        INLINE colorf_ref operator=(colorf_ref rhs) noexcept
+        INLINE Colorf_ref operator=(Colorf_ref rhs) noexcept
         {
             b = rhs.b;
             g = rhs.g;
@@ -352,70 +352,70 @@ namespace rac::gfx
     };
 
     // primary colors
-    color color::BLACK = color(0x000000ff);
-    color color::WHITE = color(0xffffffff);
-    color color::RED =   color(0xff0000ff);
-    color color::GREEN = color(0x00ff00ff);
-    color color::BLUE =  color(0x0000ffff);
-    color color::CYAN =  color(0x00ffffff);
-    color color::MAGENTA =color(0xff00ffff);
-    color color::YELLOW = color(0xffff00ff);
+    Color Color::BLACK = Color(0x000000ff);
+    Color Color::WHITE = Color(0xffffffff);
+    Color Color::RED =   Color(0xff0000ff);
+    Color Color::GREEN = Color(0x00ff00ff);
+    Color Color::BLUE =  Color(0x0000ffff);
+    Color Color::CYAN =  Color(0x00ffffff);
+    Color Color::MAGENTA =Color(0xff00ffff);
+    Color Color::YELLOW = Color(0xffff00ff);
 
     // very common colors according to:
     //      https://www.color-hex.com/color-names.html ,
     //      https://simple.wikipedia.org/wiki/Colour ,
     //      and random colors I liked
-    color color::DARK_GRAY = color(0x262626ff);
-    color color::GRAY = color(0x7f7f7fff);
-    color color::LIGHT_GRAY = color(0xd9d9d9ff);
-    color color::ORANGE = color(0xffa500ff);
-    color color::PURPLE = color(0xa020f0ff);
-    color color::LAVENDER = color(0xb57edcff);
-    color color::IVORY = color(0xfffff0ff);
-    color color::BURGUNDY = color(0x800020ff);
-    color color::SKY_BLUE = color(0x00ccffff);
-    color color::OLIVE = color(0x808000ff);
-    color color::FOREST_GREEN = color(0x228b22ff);
-    color color::OXBLOOD = color(0x4a0000ff);
-    color color::OXFORD_BLUE = color(0x002147ff);
-    color color::TURQUOISE = color(0x40e0d0ff);
-    color color::CHARTREUSE = color(0x76ee00ff);
-    color color::SALMON = color(0xfa8072ff);
-    color color::BROWN = color(0x654321ff);
-    color color::RUST = color(0xb7410eff);
-    color color::TEAL = color(0x008080ff);
-    color color::COBALT = color(0x0047abff);
-    color color::EGGPLANT = color(0x614051ff);
-    color color::PINK = color(0xfc8eacff);
-    color color::KEY_LIME = color(0xe8f48cff);
-    color color::LILAC = color(0xc8a2c8ff);
-    color color::MAROON = color(0xb03060ff);
-    color color::BEIGE = color(0xf5f5dcff);
-    color color::TAN = color(0xd2b48cff);
-    color color::PEACH = color(0xffe5b4ff);
-    color color::LEMON = color(0xfff700ff);
-    color color::LIME = color(0x32cd32ff);
-    color color::NAVY_BLUE = color(0x1974d2ff);
-    color color::MISALI = color(0x80c0ffff);
+    Color Color::DARK_GRAY = Color(0x262626ff);
+    Color Color::GRAY = Color(0x7f7f7fff);
+    Color Color::LIGHT_GRAY = Color(0xd9d9d9ff);
+    Color Color::ORANGE = Color(0xffa500ff);
+    Color Color::PURPLE = Color(0xa020f0ff);
+    Color Color::LAVENDER = Color(0xb57edcff);
+    Color Color::IVORY = Color(0xfffff0ff);
+    Color Color::BURGUNDY = Color(0x800020ff);
+    Color Color::SKY_BLUE = Color(0x00ccffff);
+    Color Color::OLIVE = Color(0x808000ff);
+    Color Color::FOREST_GREEN = Color(0x228b22ff);
+    Color Color::OXBLOOD = Color(0x4a0000ff);
+    Color Color::OXFORD_BLUE = Color(0x002147ff);
+    Color Color::TURQUOISE = Color(0x40e0d0ff);
+    Color Color::CHARTREUSE = Color(0x76ee00ff);
+    Color Color::SALMON = Color(0xfa8072ff);
+    Color Color::BROWN = Color(0x654321ff);
+    Color Color::RUST = Color(0xb7410eff);
+    Color Color::TEAL = Color(0x008080ff);
+    Color Color::COBALT = Color(0x0047abff);
+    Color Color::EGGPLANT = Color(0x614051ff);
+    Color Color::PINK = Color(0xfc8eacff);
+    Color Color::KEY_LIME = Color(0xe8f48cff);
+    Color Color::LILAC = Color(0xc8a2c8ff);
+    Color Color::MAROON = Color(0xb03060ff);
+    Color Color::BEIGE = Color(0xf5f5dcff);
+    Color Color::TAN = Color(0xd2b48cff);
+    Color Color::PEACH = Color(0xffe5b4ff);
+    Color Color::LEMON = Color(0xfff700ff);
+    Color Color::LIME = Color(0x32cd32ff);
+    Color Color::NAVY_BLUE = Color(0x1974d2ff);
+    Color Color::MISALI = Color(0x80c0ffff);
 
     // Pokemon Colors
-    color color::GOLD = color(0xffd700ff);
-    color color::SILVER = color(0xc0c0c0ff);
-    color color::RUBY = color(0xe0115fff);
-    color color::SAPPHIRE = color(0x0f52baff);
-    color color::EMERALD = color(0x50c878ff);
-    color color::DIAMOND = color(0xb9f2ffff);
-    color color::PEARL = color(0xff5733ff);
-    color color::PLATINUM = color(0xe5e4e2ff);
-    color color::CELADON = color(0xace1afff);
-    color color::FUCHSIA = color(0xfe4164ff);
-    color color::SAFFRON = color(0xf4c430ff);
-    color color::CERULEAN = color(0x007ba7ff);
-    color color::INDIGO = color(0x4b0082ff);
-    color color::PEWTER = color(0x8ba8b7ff);
-    color color::VIRIDIAN = color(0x40826dff);
-    color color::GOLDENROD = color(0xdaa520ff);
-    color color::MAHOGANY = color(0xc04000ff);
-    color color::VIOLET = color(0xee82eeff);
-    color color::CINNABAR = color(0xe34234ff);
+    Color Color::GOLD = Color(0xffd700ff);
+    Color Color::SILVER = Color(0xc0c0c0ff);
+    Color Color::RUBY = Color(0xe0115fff);
+    Color Color::SAPPHIRE = Color(0x0f52baff);
+    Color Color::EMERALD = Color(0x50c878ff);
+    Color Color::DIAMOND = Color(0xb9f2ffff);
+    Color Color::PEARL = Color(0xff5733ff);
+    Color Color::PLATINUM = Color(0xe5e4e2ff);
+    Color Color::CELADON = Color(0xace1afff);
+    Color Color::FUCHSIA = Color(0xfe4164ff);
+    Color Color::SAFFRON = Color(0xf4c430ff);
+    Color Color::CERULEAN = Color(0x007ba7ff);
+    Color Color::INDIGO = Color(0x4b0082ff);
+    Color Color::PEWTER = Color(0x8ba8b7ff);
+    Color Color::VIRIDIAN = Color(0x40826dff);
+    Color Color::GOLDENROD = Color(0xdaa520ff);
+    Color Color::MAHOGANY = Color(0xc04000ff);
+    Color Color::VIOLET = Color(0xee82eeff);
+    Color Color::CINNABAR = Color(0xe34234ff);
 }

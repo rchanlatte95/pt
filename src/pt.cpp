@@ -30,7 +30,7 @@ int main()
             v3 ray_direction = pixel_pos - cam.center;
             ray r(cam.center, ray_direction);
 
-            color mixed = color::Mix(color::MISALI, color::WHITE, factor);
+            Color mixed = Color::Mix(Color::MISALI, Color::WHITE, factor);
             render(x, y) = mixed;
         }
 
