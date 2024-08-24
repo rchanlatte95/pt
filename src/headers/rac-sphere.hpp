@@ -38,6 +38,24 @@ namespace rac::gfx::primitives
             center = center_pos;
         }
 
+        INLINE v3 Normal(v3_ref pt_on_sphere) const noexcept
+        {
+            return (pt_on_sphere - center) / radius;
+        }
+
+        INLINE bool Inside(v3_ref pt_to_test) const noexcept
+        {
+            return Dot(pt_to_test, pt_to_test) < F32_EPSILON;
+        }
+        INLINE bool Outside(v3_ref pt_to_test) const noexcept
+        {
+            return !Inside(pt_to_test);
+        }
+        INLINE bool OnSurface(v3_ref pt_to_test) const noexcept
+        {
+            return Dot(pt_to_test, pt_to_test) == radius;
+        }
+
         MAY_INLINE bool Hit(ray_ref raycast) const noexcept
         {
             v3 oc = center - raycast.origin;
@@ -48,7 +66,7 @@ namespace rac::gfx::primitives
             return discrim >= F32_EPSILON;
         }
 
-        MAY_INLINE bool Hit(ray_ref raycast, mut_v3_ref hit_pt) const noexcept
+        MAY_INLINE bool Hit(ray_ref raycast, mut_rayhit_ref hit_info) const noexcept
         {
             v3 oc = center - raycast.origin;
             f32 a = raycast.direction.SqrMag();
@@ -56,32 +74,19 @@ namespace rac::gfx::primitives
             f32 c = oc.SqrMag() - radius * radius;
 
             f32 discrim = h * h - a * c;
-            bool hit = discrim >= F32_EPSILON;
-            if (hit)
+            bool missed = discrim < F32_EPSILON;
+            if (missed)
             {
-                hit_pt = raycast.At((h - std::sqrtf(discrim)) / a);
+                return false;
             }
-            return hit;
-        }
 
-        INLINE v3 Normal(v3_ref pt_on_sphere) const noexcept
-        {
-            return (pt_on_sphere - center).Norm();
-        }
+            f32 sqrt_discrim = std::sqrtf(discrim);
+            f32 root_1 = (h - sqrt_discrim) / a;
+            if (root_1 <= 0.0f || root_1 )
+            hit_info.pos = raycast.At((h - std::sqrtf(discrim)) / a);
+            hit_info.normal = Normal(hit_info.pos);
 
-        INLINE bool Inside(v3_ref pt_to_test) const noexcept
-        {
-            return Dot(pt_to_test, pt_to_test) < F32_EPSILON;
-        }
-
-        INLINE bool Outside(v3_ref pt_to_test) const noexcept
-        {
-            return !Inside(pt_to_test);
-        }
-
-        INLINE bool OnSurface(v3_ref pt_to_test) const noexcept
-        {
-            return Dot(pt_to_test, pt_to_test) == radius;
+            return true;
         }
     };
 }

@@ -21,7 +21,7 @@ int main()
     mut_f32 scanlinesDone = 0.0f;
     printf("Casting rays into scene...\r\n\r\n");
     primitives::sphere test_sphere(v3(0.0f, 0.0f, -1.0f), 0.5f);
-    mut_v3 hit_point = v3::ZERO;
+    mut_rayhit hit_info;
     for (mut_u32 y = 0; y < ppm::HEIGHT; ++y)
     {
         f32 factor = (f32)y / (f32)ppm::HEIGHT;
@@ -31,10 +31,9 @@ int main()
             v3 ray_direction = pixel_pos - cam.center;
             ray r(cam.center, ray_direction);
 
-            if (test_sphere.Hit(r, hit_point))
+            if (test_sphere.Hit(r, hit_info))
             {
-                v3 sphere_normal = test_sphere.Normal(hit_point);
-                render(x, y) = Color(sphere_normal);
+                render(x, y) = Color(hit_info.normal);
             }
             else
             {
