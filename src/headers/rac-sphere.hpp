@@ -41,24 +41,25 @@ namespace rac::gfx::primitives
         MAY_INLINE bool Hit(ray_ref raycast) const noexcept
         {
             v3 oc = center - raycast.origin;
-            f32 a = Dot(raycast.direction, raycast.direction);
-            f32 b = -2.0f * Dot(raycast.direction, oc);
-            f32 c = Dot(oc, oc) - radius * radius;
-            return (b * b - 4.0f * a * c) >= F32_EPSILON;
+            f32 a = raycast.direction.SqrMag();
+            f32 h = Dot(raycast.direction, oc);
+            f32 c = oc.SqrMag() - radius * radius;
+            f32 discrim = h * h - a * c;
+            return discrim >= F32_EPSILON;
         }
 
         MAY_INLINE bool Hit(ray_ref raycast, mut_v3_ref hit_pt) const noexcept
         {
             v3 oc = center - raycast.origin;
-            f32 a = Dot(raycast.direction, raycast.direction);
-            f32 b = -2.0f * Dot(raycast.direction, oc);
-            f32 c = Dot(oc, oc) - radius * radius;
+            f32 a = raycast.direction.SqrMag();
+            f32 h = Dot(raycast.direction, oc);
+            f32 c = oc.SqrMag() - radius * radius;
 
-            f32 discrim = (b * b - 4.0f * a * c);
+            f32 discrim = h * h - a * c;
             bool hit = discrim >= F32_EPSILON;
             if (hit)
             {
-                hit_pt = raycast.at((-b - std::sqrtf(discrim)) / (2.0f * a));
+                hit_pt = raycast.At((h - std::sqrtf(discrim)) / a);
             }
             return hit;
         }

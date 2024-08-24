@@ -27,6 +27,6 @@ namespace rac::mth
             direction = direction_;
         }
 
-        INLINE v3 at(f32 t) const noexcept { return origin + t * direction; }
+        INLINE v3 At(f32 t) const noexcept { return origin + t * direction; }
     };
 }
