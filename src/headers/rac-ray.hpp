@@ -10,6 +10,13 @@ namespace rac::mth
     typedef const mut_ray* ray_ptr;
     typedef const mut_ray& ray_ref;
 
+    class mut_rayhit;
+    typedef mut_rayhit* mut_rayhit_ptr;
+    typedef mut_rayhit& mut_rayhit_ref;
+    typedef const mut_rayhit rayhit;
+    typedef const mut_rayhit* rayhit_ptr;
+    typedef const mut_rayhit& rayhit_ref;
+
     class mut_ray
     {
     public:
@@ -28,5 +35,20 @@ namespace rac::mth
         }
 
         INLINE v3 At(f32 t) const noexcept { return origin + t * direction; }
+    };
+
+    class mut_rayhit
+    {
+    public:
+        mut_v3 pos;
+        mut_v3 normal;
+        mut_f32 t;
+
+        mut_rayhit()
+        {
+            pos = v3::ZERO;
+            normal = v3::ZERO;
+            t = 0.0f;
+        }
     };
 }
