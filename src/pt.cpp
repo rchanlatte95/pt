@@ -5,19 +5,21 @@
 #include "headers\rac-camera.hpp"
 #include "headers\rac-ray.hpp"
 #include "headers\rac-sphere.hpp"
+#include "headers\rac-chronology.hpp"
 
 using namespace rac;
 using namespace rac::static_strings;
 using namespace rac::mth;
 using namespace rac::gfx;
 using namespace rac::img;
+using namespace rac::chronology;
 
 mut_ppm render;
 mut_camera cam(ppm::WIDTH, ppm::HEIGHT);
 
 static f64 RenderScene()
 {
-    std::chrono::steady_clock::time_point start_time = StartTimer();
+    TimeStamp start = Timer::Now();
 
     f32 invScanlineCt = 100.0f / (f32)ppm::HEIGHT;
     mut_f32 scanlinesDone = 0.0f;
@@ -48,7 +50,7 @@ static f64 RenderScene()
     }
     printf("\r\n");
 
-    return DurationInMS(start_time);
+    return Timer::DurationInMS(start);
 }
 
 int main()
@@ -59,11 +61,11 @@ int main()
 
     printf("\r\nWriting to disk...\r\n");
 
-    std::chrono::steady_clock::time_point write_start_time = StartTimer();
+    TimeStamp write_start = Timer::Now();
     bool save_successful = render.SaveToDesktop("rt_result");
     if (save_successful == false) { return EXIT_FAILURE; }
 
-    printf("\tCompleted write to disk in %.3fms\r\n", DurationInMS(write_start_time));
+    printf("\tCompleted write to disk in %.3fms\r\n", Timer::DurationInMS(write_start));
 
     return EXIT_SUCCESS;
 }

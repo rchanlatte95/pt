@@ -220,19 +220,4 @@ namespace rac
         return result;
     }
     MAY_INLINE std::string GetDesktopPathStr() { return GetDesktopPath().string(); }
-
-    INLINE std::chrono::steady_clock::time_point StartTimer()
-    {
-        return std::chrono::high_resolution_clock::now();
-    }
-    INLINE f64 DurationInMS(const std::chrono::steady_clock::time_point& start)
-    {
-        std::chrono::steady_clock::time_point now = std::chrono::high_resolution_clock::now();
-        const std::chrono::steady_clock::duration diff = now - start;
-        return (f64)std::chrono::duration_cast<std::chrono::milliseconds>(diff).count();
-    }
-    INLINE f64 DurationInSecs(const std::chrono::steady_clock::time_point& start)
-    {
-        return DurationInMS(start) * MS_TO_SECS;
-    }
 }
