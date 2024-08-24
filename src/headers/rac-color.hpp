@@ -141,6 +141,14 @@ namespace rac::gfx
             b = (u8)((color_code & 0x0000FF00) >> 8);
             opacity = (u8)(color_code & 0x000000FF);
         }
+        mut_Color(v3_ref v, u8 _a = 255)
+        {
+            v3 norm_v = (v.Norm() + v3::ONE) * 0.5f;
+            r = (u8)(norm_v.x * 255.999f);
+            g = (u8)(norm_v.y * 255.999f);
+            b = (u8)(norm_v.z * 255.999f);
+            opacity = _a;
+        }
 
         // Linearly interpolate from one color to another based on a
         MAY_INLINE static Color Mix(Color from, Color to, f32 f)
