@@ -208,6 +208,8 @@ namespace rac
     u64 PARENTHESES_ENCAP_LEN = 2;
     u64 COMMA_SPACE_LEN = 2;
 
+    f64 MS_IN_SECS = 1000.0;
+    f64 MS_TO_SECS = 1.0 / 1000.0;
 
     MAY_INLINE std::filesystem::path GetDesktopPath()
     {
@@ -218,4 +220,19 @@ namespace rac
         return result;
     }
     MAY_INLINE std::string GetDesktopPathStr() { return GetDesktopPath().string(); }
+
+    INLINE std::chrono::steady_clock::time_point StartTimer()
+    {
+        return std::chrono::high_resolution_clock::now();
+    }
+    INLINE f64 DurationInMS(const std::chrono::steady_clock::time_point& start)
+    {
+        std::chrono::steady_clock::time_point now = std::chrono::high_resolution_clock::now();
+        const std::chrono::steady_clock::duration diff = now - start;
+        return (f64)std::chrono::duration_cast<std::chrono::milliseconds>(diff).count();
+    }
+    INLINE f64 DurationInSecs(const std::chrono::steady_clock::time_point& start)
+    {
+        return DurationInMS(start) * MS_TO_SECS;
+    }
 }

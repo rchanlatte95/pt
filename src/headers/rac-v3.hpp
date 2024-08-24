@@ -65,35 +65,40 @@ namespace rac::mth
             z = z_;
         }
 
-        INLINE const mut_v3 operator-() const noexcept
-        {
-            return mut_v3(-x, -y, -z);
-        }
+        INLINE v3 operator-() const noexcept { return v3(-x, -y, -z); }
         INLINE f32 operator[](i32 i) const noexcept { return *(&x + i); }
         INLINE mut_f32ref operator[](i32 i) { return *(&x + i); }
 
-        INLINE const mut_v3& operator+=(const mut_v3 v) noexcept
+        INLINE mut_v3_ref operator=(v3_ref v_ref) noexcept
+        {
+            x = v_ref.x;
+            y = v_ref.y;
+            z = v_ref.z;
+            return *this;
+        }
+
+        INLINE mut_v3_ref operator+=(v3_ref v) noexcept
         {
             x += v.x;
             y += v.y;
             z += v.z;
             return *this;
         }
-        INLINE const mut_v3& operator-=(const mut_v3 v) noexcept
+        INLINE mut_v3_ref operator-=(v3_ref v) noexcept
         {
             x -= v.x;
             y -= v.y;
             z -= v.z;
             return *this;
         }
-        INLINE const mut_v3& operator*=(f32 v) noexcept
+        INLINE mut_v3_ref operator*=(f32 v) noexcept
         {
             x *= v;
             y *= v;
             z *= v;
             return *this;
         }
-        INLINE const mut_v3& operator/=(f32 v) noexcept
+        INLINE mut_v3_ref operator/=(f32 v) noexcept
         {
             return *this *= 1.0f / v;
         }
@@ -114,10 +119,10 @@ namespace rac::mth
         {
             return 1.0f / sqrtf(this->SqrMag());
         }
-        INLINE const mut_v3 Norm() const noexcept
+        INLINE v3 Norm() const noexcept
         {
             f32 invMag = this->InvMag();
-            return mut_v3(x * invMag, y * invMag, z * invMag);
+            return v3(x * invMag, y * invMag, z * invMag);
         }
 
         INLINE static_strings::mut_cachestr ToStr(u32 decimal_places = 4) const noexcept

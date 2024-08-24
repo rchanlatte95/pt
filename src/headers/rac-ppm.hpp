@@ -111,11 +111,11 @@ namespace rac::img
             bool saved_successfully = std::filesystem::exists(desk_path);
             if (saved_successfully)
             {
-                printf("\r\n\tPath tracer result saved to: %s\r\n\r\n", desk_path_cstr);
+                printf("\r\n\tPath tracer result saved to: %s\r\n", desk_path_cstr);
             }
             else
             {
-                printf("\r\n\tPath tracer result unable to save to: %s\r\n\r\n", desk_path_cstr);
+                printf("\r\n\tPath tracer result unable to save to: %s\r\n", desk_path_cstr);
             }
 
             return saved_successfully;

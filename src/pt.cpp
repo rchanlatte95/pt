@@ -15,11 +15,12 @@ using namespace rac::img;
 mut_ppm render;
 mut_camera cam(ppm::WIDTH, ppm::HEIGHT);
 
-int main()
+static f64 RenderScene()
 {
+    std::chrono::steady_clock::time_point start_time = StartTimer();
+
     f32 invScanlineCt = 100.0f / (f32)ppm::HEIGHT;
     mut_f32 scanlinesDone = 0.0f;
-    printf("Casting rays into scene...\r\n\r\n");
     primitives::sphere test_sphere(v3(0.0f, 0.0f, -1.0f), 0.5f);
     mut_rayhit hit_info;
     for (mut_u32 y = 0; y < ppm::HEIGHT; ++y)
@@ -43,10 +44,26 @@ int main()
 
         scanlinesDone += 1.0f;
         f32 pct_done = scanlinesDone * invScanlineCt;
-        printf("\r\tPROCESSING:\t%4d / %4d scanlines (%.2f%% RENDERED).          ", (i32)scanlinesDone, ppm::HEIGHT, pct_done);
+        printf("\r\tPROCESSING:\t%4d / %4d scanlines (%.2f%% RENDERED).", (i32)scanlinesDone, ppm::HEIGHT, pct_done);
     }
     printf("\r\n");
 
-    render.SaveToDesktop("rt_result");
+    return DurationInMS(start_time);
+}
+
+int main()
+{
+    printf("Casting rays into scene...\r\n\r\n");
+    f64 render_duration_MS = RenderScene();
+    printf("\tCompleted render in %.3fms\r\n", render_duration_MS);
+
+    printf("\r\nWriting to disk...\r\n");
+
+    std::chrono::steady_clock::time_point write_start_time = StartTimer();
+    bool save_successful = render.SaveToDesktop("rt_result");
+    if (save_successful == false) { return EXIT_FAILURE; }
+
+    printf("\tCompleted write to disk in %.3fms\r\n", DurationInMS(write_start_time));
+
     return EXIT_SUCCESS;
 }

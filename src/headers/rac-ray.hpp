@@ -50,5 +50,11 @@ namespace rac::mth
             normal = v3::ZERO;
             t = 0.0f;
         }
+
+        INLINE void SetNormal(ray_ref raycast, v3_ref face_normal)
+        {
+            const bool front_face = Dot(raycast.direction, normal) < F32_EPSILON;
+            normal = front_face ? face_normal : -face_normal;
+        }
     };
 }
