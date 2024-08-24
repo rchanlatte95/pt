@@ -17,6 +17,9 @@ namespace rac::chronology
     typedef const std::chrono::steady_clock::duration* TimeSpan_ptr;
     typedef const std::chrono::steady_clock::duration& TimeSpan_ref;
 
+    f64 MS_IN_SECS = 1000.0;
+    f64 MS_TO_SECS = 1.0 / 1000.0;
+
     class Timer
     {
     public:
@@ -26,8 +29,7 @@ namespace rac::chronology
         }
         static INLINE f64 DurationInMS(TimeStamp_ref start)
         {
-            TimeStamp now = Timer::Now();
-            const std::chrono::steady_clock::duration diff = now - start;
+            TimeSpan diff = Timer::Now() - start;
             return (f64)std::chrono::duration_cast<std::chrono::milliseconds>(diff).count();
         }
         static INLINE f64 DurationInSecs(TimeStamp_ref start)

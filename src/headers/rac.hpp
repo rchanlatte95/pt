@@ -28,6 +28,12 @@
 #include <algorithm>
 #include <filesystem>
 
+#ifdef _MSC_VER
+# include <intrin.h>
+#else
+# include <x86intrin.h>
+#endif
+
 #define NOMINMAX 0
 #include <Windows.h>
 #include <shlobj.h>
@@ -207,9 +213,6 @@ namespace rac
     u64 F32_STR_CHAR_CT = 9 + SIGN_CHAR_CT + F32_DELIM_CHAR_CT;
     u64 PARENTHESES_ENCAP_LEN = 2;
     u64 COMMA_SPACE_LEN = 2;
-
-    f64 MS_IN_SECS = 1000.0;
-    f64 MS_TO_SECS = 1.0 / 1000.0;
 
     MAY_INLINE std::filesystem::path GetDesktopPath()
     {
