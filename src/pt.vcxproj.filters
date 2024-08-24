@@ -59,7 +59,7 @@
     <ClInclude Include="headers\rac-sphere.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\rac-chronology.hpp">
+    <ClInclude Include="headers\rac-timer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
