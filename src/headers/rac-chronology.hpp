@@ -23,6 +23,11 @@ namespace rac::chronology
     class Timer
     {
     public:
+        static INLINE i64 Cycles()
+        {
+            return (i64)__rdtsc();
+        }
+
         static INLINE TimeStamp Now()
         {
             return std::chrono::high_resolution_clock::now();
