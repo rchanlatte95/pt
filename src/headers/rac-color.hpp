@@ -1,9 +1,10 @@
 #pragma once
-#include "rac.hpp"
-#include "rac-cachestr.hpp"
+#include "rac-v3.hpp"
 
 namespace rac::gfx
 {
+    using namespace mth;
+
     class alignas(4) mut_Color;
     typedef mut_Color* mut_Color_ptr;
     typedef mut_Color& mut_Color_ref;
@@ -270,6 +271,14 @@ namespace rac::gfx
             g = c.g * INV_U8_MAX;
             b = c.b * INV_U8_MAX;
             opacity = c.opacity * INV_U8_MAX;
+        }
+        mut_Colorf(v3_ref v, f32 _a = 1.0f)
+        {
+            v3 norm_v = (v.Norm() + v3::ONE) * 0.5f;
+            r = norm_v.x;
+            g = norm_v.y;
+            b = norm_v.z;
+            opacity = _a;
         }
 
         // Linearly interpolate from one color to another based on a
