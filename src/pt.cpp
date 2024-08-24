@@ -50,7 +50,7 @@ static f64 RenderScene()
     }
     printf("\r\n");
 
-    return Timer::DurationInMS(start);
+    return Timer::DurationInMilisecs(start);
 }
 
 int main()
@@ -65,7 +65,7 @@ int main()
     bool save_successful = render.SaveToDesktop("rt_result");
     if (save_successful == false) { return EXIT_FAILURE; }
 
-    printf("\tCompleted write to disk in %.3fms\r\n", Timer::DurationInMS(write_start));
+    printf("\tCompleted write to disk in %.3fms\r\n", Timer::DurationInMilisecs(write_start));
 
     return EXIT_SUCCESS;
 }
