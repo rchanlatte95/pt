@@ -63,12 +63,6 @@ namespace rac::gfx::primitives
             return hit;
         }
 
-        INLINE Color NormalColor(v3_ref normal) const noexcept
-        {
-            v3 offset_normal = (normal + v3::ONE) * 0.5f;
-            return Color(offset_normal.x, offset_normal.y, offset_normal.z, 1.0f);
-        }
-
         INLINE v3 Normal(v3_ref pt_on_sphere) const noexcept
         {
             return (pt_on_sphere - center).Norm();

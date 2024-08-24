@@ -34,7 +34,7 @@ int main()
             if (test_sphere.Hit(r, hit_point))
             {
                 v3 sphere_normal = test_sphere.Normal(hit_point);
-                render(x, y) = test_sphere.NormalColor(sphere_normal);
+                render(x, y) = Color(sphere_normal);
             }
             else
             {
