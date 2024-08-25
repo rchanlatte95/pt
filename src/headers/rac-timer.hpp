@@ -30,20 +30,6 @@ namespace rac::chronology
     {
     public:
 
-        //  rdpmc_actual_cycles uses a "fixed-function" performance counter to return the count of actual CPU core cycles
-        //  executed by the current core.  Core cycles are not accumulated while the processor is in the "HALT" state,
-        //  which is used when the operating system has no task(s) to run on a processor core.
-        static INLINE u64 Cycles()
-        {
-            u64 ctr_flag = (1ull << 30ull) + 1ull;
-            return __readpmc(ctr_flag);
-        }
-
-        static INLINE u64 RefCycles()
-        {
-            return (i64)__rdtsc();
-        }
-
         static INLINE TimeStamp Now()
         {
             return std::chrono::high_resolution_clock::now();
