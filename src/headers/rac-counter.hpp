@@ -183,23 +183,23 @@ namespace rac::chronology
     typedef const mut_CountStamp* CountStamp_ptr;
     typedef const mut_CountStamp& CountStamp_ref;
 
+    class mut_CountStamp
+    {
+    public:
+        mut_u64 Cycles;
+
+        mut_CountStamp() { Cycles = 0; }
+        mut_CountStamp(u64 c) { Cycles = c; }
+    };
+
     class Counter
     {
     public:
-        // rdpmc_actual_cycles uses a "fixed-function" performance counter to
-        // return the count of actual CPU core cycles executed by the current
-        // core. Core cycles are not accumulated while the processor is in the
-        // "HALT" state, which is used when the operating system has no task(s)
-        //  to run on a processor core.
-        static INLINE u64 Cycles()
-        {
-            u64 ctr_flag = (1ull << 30ull) + 1ull;
-            return __readpmc(ctr_flag);
-        }
 
-        static INLINE u64 RefCycles()
+        static INLINE CountStamp Now() { return CountStamp(__rdtsc()); }
+        static INLINE CountStamp Duration(CountStamp_ref start)
         {
-            return (i64)__rdtsc();
+            return CountStamp(__rdtsc() - start.Cycles);
         }
     };
 }
