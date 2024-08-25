@@ -91,18 +91,27 @@ namespace rac::img
             fprintf(file, "P3\n%lu %lu\n255\n", WIDTH, HEIGHT);
 
             u32 PENULT_WIDTH = WIDTH - 1;
-            mut_Color c;
             mut_u64 scanlines_done = 0;
             f32 invScanlineCt = 100.0f / (f32)HEIGHT;
+
+            // int snprintf(char* restrict buffer, size_t bufsz, const char* restrict format, ... );
+            // int fprintf_s(FILE* stream, const char* format[,argument_list]);
+            u64 FMT_STR_LEN = 12;
+            u64 SCANLINE_BUFFER_MAX = 16 * (u64)_WIDTH;
+            char SCANLINE_BUFFER[SCANLINE_BUFFER_MAX];
             for (mut_u32 y = 0; y < HEIGHT; ++y)
             {
                 for (mut_u32 x = 0; x < PENULT_WIDTH; ++x)
                 {
-                    c = pixels[y][x];
-                    fprintf(file, "%u, %u, %u ", c.r, c.g, c.b);
+                    u64 offset = (FMT_STR_LEN * x);
+                    mut_cstr BUFFER_HEAD = SCANLINE_BUFFER + offset;
+                    u64 MAX = SCANLINE_BUFFER_MAX - offset;
+                    snprintf(BUFFER_HEAD, MAX, "%u, %u, %u ",
+                                                pixels[y][x].r,
+                                                pixels[y][x].g,
+                                                pixels[y][x].b);
                 }
-                c = pixels[y][PENULT_WIDTH];
-                fprintf(file, "%u, %u, %u\n", c.r, c.g, c.b);
+                //fprintf(file, "%u, %u, %u\n", pixels[y][PENULT_WIDTH].r, pixels[y][PENULT_WIDTH].g, pixels[y][PENULT_WIDTH].b);
 
                 f32 pct_done = (f32)(++scanlines_done) * invScanlineCt;
                 printf("\r\tSERIALIZING:\t%4llu / %4lu scanlines (%.2f%% SERIALIZED).          ", scanlines_done, HEIGHT, pct_done);
