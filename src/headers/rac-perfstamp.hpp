@@ -21,18 +21,18 @@ namespace rac::chronology
     class mut_PerfSampleResult
     {
     public:
-        mut_CycleSpan cycle_duration;
-        mut_TimeSpan time_duration;
+        mut_CycleSpan cycles_elapsed;
+        mut_TimeSpan time_elapsed;
 
         mut_PerfSampleResult()
         {
-            cycle_duration = CycleSpan((u64)0);
-            time_duration = TimeSpan();
+            cycles_elapsed = CycleSpan((u64)0);
+            time_elapsed = TimeSpan();
         }
         mut_PerfSampleResult(TimeStamp_ref start_time, TimeStamp_ref end_time, CycleStamp start_cycle, CycleStamp end_cycle)
         {
-            cycle_duration = end_cycle - start_cycle;
-            time_duration = end_time - start_time;
+            cycles_elapsed = end_cycle - start_cycle;
+            time_elapsed = end_time - start_time;
         }
     };
 
@@ -67,12 +67,9 @@ namespace rac::chronology
         {
             if (active)
             {
-
+                return PerfSampleResult(start_time, Timer::Now(), start_cycles, Counter::Now());
             }
-            else
-            {
-
-            }
+            return PerfSampleResult(start_time, end_time, start_cycles, end_cycles);
         }
     };
 }
