@@ -176,46 +176,46 @@ namespace rac::chronology
         TopdownSlots = (1 << 7)
     };
 
-    class mut_CountStamp;
-    typedef mut_CountStamp* mut_CountStamp_ptr;
-    typedef mut_CountStamp& mut_CountStamp_ref;
-    typedef const mut_CountStamp CountStamp;
-    typedef const mut_CountStamp* CountStamp_ptr;
-    typedef const mut_CountStamp& CountStamp_ref;
+    class mut_CycleStamp;
+    typedef mut_CycleStamp* mut_CycleStamp_ptr;
+    typedef mut_CycleStamp& mut_CycleStamp_ref;
+    typedef const mut_CycleStamp CycleStamp;
+    typedef const mut_CycleStamp* CycleStamp_ptr;
+    typedef const mut_CycleStamp& CycleStamp_ref;
 
-    class mut_CountSpan;
-    typedef mut_CountSpan* mut_CountSpan_ptr;
-    typedef mut_CountSpan& mut_CountSpan_ref;
-    typedef const mut_CountSpan CountSpan;
-    typedef const mut_CountSpan* CountSpan_ptr;
-    typedef const mut_CountSpan& CountSpan_ref;
+    class mut_CycleSpan;
+    typedef mut_CycleSpan* mut_CycleSpan_ptr;
+    typedef mut_CycleSpan& mut_CycleSpan_ref;
+    typedef const mut_CycleSpan CycleSpan;
+    typedef const mut_CycleSpan* CycleSpan_ptr;
+    typedef const mut_CycleSpan& CycleSpan_ref;
 
-    class mut_CountStamp
+    class mut_CycleStamp
     {
     public:
         mut_u64 Cycles;
 
-        mut_CountStamp() { Cycles = 0; }
-        mut_CountStamp(u64 c) { Cycles = c; }
+        mut_CycleStamp() { Cycles = 0; }
+        mut_CycleStamp(u64 c) { Cycles = c; }
     };
 
     class Counter
     {
     public:
 
-        static INLINE CountStamp Now() { return CountStamp(__rdtsc()); }
-        static INLINE CountSpan Duration(CountStamp_ref start)
+        static INLINE CycleStamp Now() { return CycleStamp(__rdtsc()); }
+        static INLINE CycleSpan Duration(CycleStamp_ref start)
         {
-            return CountSpan(__rdtsc() - start.Cycles);
+            return CycleSpan(__rdtsc() - start.Cycles);
         }
     };
 
-    class mut_CountSpan
+    class mut_CycleSpan
     {
     public:
         mut_u64 cycle_duration;
 
-        mut_CountSpan() { cycle_duration = 0; }
-        mut_CountSpan(u64 c) { cycle_duration = c; }
+        mut_CycleSpan() { cycle_duration = 0; }
+        mut_CycleSpan(u64 c) { cycle_duration = c; }
     };
 }

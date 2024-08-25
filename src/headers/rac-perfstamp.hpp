@@ -41,11 +41,11 @@ namespace rac::chronology
 
             active = true;
             start_time = TimeStamp(Timer::Now());
-            start_cycles = CountStamp(Counter::Now());
+            start_cycles = CycleStamp(Counter::Now());
         }
         INLINE void End() noexcept
         {
-            end_cycles = CountStamp(Counter::Now());
+            end_cycles = CycleStamp(Counter::Now());
             end_time = TimeStamp(Timer::Now());
             active = false;
         }
