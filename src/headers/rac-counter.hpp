@@ -3,12 +3,24 @@
 
 namespace rac::chronology
 {
-    class mut_CycleStamp;
-    typedef mut_CycleStamp* mut_CycleStamp_ptr;
-    typedef mut_CycleStamp& mut_CycleStamp_ref;
-    typedef const mut_CycleStamp CycleStamp;
-    typedef const mut_CycleStamp* CycleStamp_ptr;
-    typedef const mut_CycleStamp& CycleStamp_ref;
+    enum CounterType : u64
+    {
+        UnhaltedCoreCycles = 0,
+        InstructionsRetired = (1 << 1),
+        UnhaltedReferenceCycles = (1 << 2),
+        LastLevelCacheReference = (1 << 3),
+        LastLevelCacheMisses = (1 << 4),
+        BranchInstructionRetired = (1 << 5),
+        BranchMissesRetired = (1 << 6),
+        TopdownSlots = (1 << 7)
+    };
+
+    class mut_CountStamp;
+    typedef mut_CountStamp* mut_CountStamp_ptr;
+    typedef mut_CountStamp& mut_CountStamp_ref;
+    typedef const mut_CountStamp CountStamp;
+    typedef const mut_CountStamp* CountStamp_ptr;
+    typedef const mut_CountStamp& CountStamp_ref;
 
     class Counter
     {
