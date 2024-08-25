@@ -44,7 +44,18 @@ namespace rac::chronology
         mut_CycleStamp start_cycles;
         mut_CycleStamp end_cycles;
 
+        mut_PerfSampleResult result;
+
     public:
+
+        MAY_INLINE PerfSampleResult GetResult() const noexcept
+        {
+            if (active)
+            {
+                return PerfSampleResult(start_time, Timer::Now(), start_cycles, Counter::Now());
+            }
+            return result;
+        }
 
         INLINE void Start() noexcept
         {
@@ -61,15 +72,7 @@ namespace rac::chronology
             end_cycles = CycleStamp(Counter::Now());
             end_time = TimeStamp(Timer::Now());
             active = false;
-        }
-
-        MAY_INLINE PerfSampleResult GetResult() const noexcept
-        {
-            if (active)
-            {
-                return PerfSampleResult(start_time, Timer::Now(), start_cycles, Counter::Now());
-            }
-            return PerfSampleResult(start_time, end_time, start_cycles, end_cycles);
+            result = PerfSampleResult(start_time, end_time, start_cycles, end_cycles);
         }
     };
 }

@@ -3,6 +3,7 @@
 
 namespace rac::chronology
 {
+    /*
     enum FixedCounterType : u64
     {
         // Event Mask Mnemonic -> INST_RETIRED.ANY
@@ -68,7 +69,6 @@ namespace rac::chronology
         //
         TopdownSlot = InstructionsRetired + (u64)3,
     };
-
     enum PerformanceEventType : u64
     {
         // This event counts core clock cycles when the clock signal on
@@ -175,6 +175,7 @@ namespace rac::chronology
         //
         TopdownSlots = (1 << 7)
     };
+    */
 
     class mut_CycleStamp;
     typedef mut_CycleStamp* mut_CycleStamp_ptr;

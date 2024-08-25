@@ -5,7 +5,7 @@
 #include "headers\rac-camera.hpp"
 #include "headers\rac-ray.hpp"
 #include "headers\rac-sphere.hpp"
-#include "headers\rac-timer.hpp"
+#include "headers\rac-perfstamp.hpp"
 
 using namespace rac;
 using namespace rac::static_strings;
@@ -16,10 +16,11 @@ using namespace rac::chronology;
 
 mut_ppm render;
 mut_camera cam(ppm::WIDTH, ppm::HEIGHT);
+mut_PerfSample perf;
 
-static f64 RenderScene()
+static void RenderScene()
 {
-    TimeStamp start = Timer::Now();
+    printf("\tCasting rays into scene...\r\n\r\n");
 
     f32 invScanlineCt = 100.0f / (f32)ppm::HEIGHT;
     mut_f32 scanlinesDone = 0.0f;
@@ -49,15 +50,16 @@ static f64 RenderScene()
         printf("\r\tPROCESSING:\t%4d / %4d scanlines (%.2f%% RENDERED).", (i32)scanlinesDone, ppm::HEIGHT, pct_done);
     }
     printf("\r\n");
-
-    return Timer::DurationInMilisecs(start);
 }
 
 int main()
 {
-    printf("Casting rays into scene...\r\n\r\n");
-    f64 render_duration_MS = RenderScene();
-    printf("\tCompleted render in %.3fms\r\n", render_duration_MS);
+    perf.Start();
+    RenderScene();
+    perf.End();
+
+    f64 render_duration_MS = 0.0;
+    printf("\tCompleted render in %.3fms (%ull Cycles)\r\n", render_duration_MS, 0);
 
     printf("\r\nWriting to disk...\r\n");
 
