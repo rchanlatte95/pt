@@ -11,6 +11,20 @@ namespace rac::chronology
     typedef const mut_PerfSample* PerfSample_ptr;
     typedef const mut_PerfSample& PerfSample_ref;
 
+    class mut_PerfSampleResult;
+    typedef mut_PerfSampleResult* mut_PerfSampleResult_ptr;
+    typedef mut_PerfSampleResult& mut_PerfSampleResult_ref;
+    typedef const mut_PerfSampleResult PerfSampleResult;
+    typedef const mut_PerfSampleResult* PerfSampleResult_ptr;
+    typedef const mut_PerfSampleResult& PerfSampleResult_ref;
+
+    class mut_PerfSampleResult
+    {
+    public:
+        mut_CycleSpan cycle_duration;
+        mut_TimeSpan time_duration;
+    };
+
     class mut_PerfSample
     {
         bool active;
@@ -21,7 +35,7 @@ namespace rac::chronology
 
     public:
 
-        INLINE void Start()
+        INLINE void Start() noexcept
         {
             if (active) { return; }
 
@@ -29,11 +43,23 @@ namespace rac::chronology
             start_time = TimeStamp(Timer::Now());
             start_cycles = CountStamp(Counter::Now());
         }
-        INLINE void End()
+        INLINE void End() noexcept
         {
             end_cycles = CountStamp(Counter::Now());
             end_time = TimeStamp(Timer::Now());
             active = false;
+        }
+
+        MAY_INLINE PerfSampleResult GetResult() const noexcept
+        {
+            if (active)
+            {
+
+            }
+            else
+            {
+
+            }
         }
     };
 }

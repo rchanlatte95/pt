@@ -183,6 +183,13 @@ namespace rac::chronology
     typedef const mut_CountStamp* CountStamp_ptr;
     typedef const mut_CountStamp& CountStamp_ref;
 
+    class mut_CountSpan;
+    typedef mut_CountSpan* mut_CountSpan_ptr;
+    typedef mut_CountSpan& mut_CountSpan_ref;
+    typedef const mut_CountSpan CountSpan;
+    typedef const mut_CountSpan* CountSpan_ptr;
+    typedef const mut_CountSpan& CountSpan_ref;
+
     class mut_CountStamp
     {
     public:
@@ -197,9 +204,18 @@ namespace rac::chronology
     public:
 
         static INLINE CountStamp Now() { return CountStamp(__rdtsc()); }
-        static INLINE CountStamp Duration(CountStamp_ref start)
+        static INLINE CountSpan Duration(CountStamp_ref start)
         {
-            return CountStamp(__rdtsc() - start.Cycles);
+            return CountSpan(__rdtsc() - start.Cycles);
         }
+    };
+
+    class mut_CountSpan
+    {
+    public:
+        mut_u64 cycle_duration;
+
+        mut_CountSpan() { cycle_duration = 0; }
+        mut_CountSpan(u64 c) { cycle_duration = c; }
     };
 }
