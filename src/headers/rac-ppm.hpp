@@ -88,6 +88,12 @@ namespace rac::img
                 return false;
             }
 
+            errno_t resize_result = _chsize_s(_fileno(file), 1024 * 1024);
+            if (resize_result == EINVAL)
+            {
+                return false;
+            }
+
             fprintf(file, "P3\n%lu %lu\n255\n", WIDTH, HEIGHT);
 
             u32 PENULT_WIDTH = WIDTH - 1;

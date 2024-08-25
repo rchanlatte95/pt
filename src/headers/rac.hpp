@@ -1,4 +1,5 @@
 #pragma once
+// C Headers
 #include <assert.h>
 #include <complex.h>
 #include <ctype.h>
@@ -21,6 +22,7 @@
 #include <wctype.h>
 #include <immintrin.h>
 
+// C++ Headers
 #include <unordered_map>
 #include <vector>
 #include <new>
@@ -29,17 +31,18 @@
 #include <filesystem>
 
 #ifdef _MSC_VER
-# include <intrin.h>
-#else
-# include <x86intrin.h>
-#endif
-
 #define NOMINMAX 0
+
+#include <io.h>
+#include <intrin.h>
 #include <Windows.h>
 #include <shlobj.h>
 #include <objbase.h>
 #pragma comment(lib,"Shell32")
 #pragma comment(lib,"Ole32")
+#else
+#include <x86intrin.h>
+#endif
 
 #define MAY_INLINE __inline
 #define INLINE __forceinline
