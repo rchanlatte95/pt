@@ -94,24 +94,26 @@ namespace rac::img
             mut_u64 scanlines_done = 0;
             f32 invScanlineCt = 100.0f / (f32)HEIGHT;
 
-            // int snprintf(char* restrict buffer, size_t bufsz, const char* restrict format, ... );
-            // int fprintf_s(FILE* stream, const char* format[,argument_list]);
-            u64 FMT_STR_LEN = 12;
-            u64 SCANLINE_BUFFER_MAX = 16 * (u64)_WIDTH;
+            u64 FMT_STR_LEN = sizeof("xxx, xxx, xxx ");
+            u64 SCANLINE_BUFFER_MAX = (FMT_STR_LEN * (u64)_WIDTH) + 1;
+            mut_cstr BUFFER_HEAD;
             char SCANLINE_BUFFER[SCANLINE_BUFFER_MAX];
             for (mut_u32 y = 0; y < HEIGHT; ++y)
             {
+                BUFFER_HEAD = SCANLINE_BUFFER;
                 for (mut_u32 x = 0; x < PENULT_WIDTH; ++x)
                 {
-                    u64 offset = (FMT_STR_LEN * x);
-                    mut_cstr BUFFER_HEAD = SCANLINE_BUFFER + offset;
-                    u64 MAX = SCANLINE_BUFFER_MAX - offset;
-                    snprintf(BUFFER_HEAD, MAX, "%u, %u, %u ",
-                                                pixels[y][x].r,
-                                                pixels[y][x].g,
-                                                pixels[y][x].b);
+                    BUFFER_HEAD += snprintf(BUFFER_HEAD, FMT_STR_LEN, "%u, %u, %u ",
+                                                                        pixels[y][x].r,
+                                                                        pixels[y][x].g,
+                                                                        pixels[y][x].b);
                 }
-                //fprintf(file, "%u, %u, %u\n", pixels[y][PENULT_WIDTH].r, pixels[y][PENULT_WIDTH].g, pixels[y][PENULT_WIDTH].b);
+                BUFFER_HEAD += snprintf(BUFFER_HEAD, FMT_STR_LEN, "%u, %u, %u\n",
+                                                                    pixels[y][PENULT_WIDTH].r,
+                                                                    pixels[y][PENULT_WIDTH].g,
+                                                                    pixels[y][PENULT_WIDTH].b);
+                *BUFFER_HEAD = NULL_TERMINATOR;
+                fprintf(file, "%s", SCANLINE_BUFFER);
 
                 f32 pct_done = (f32)(++scanlines_done) * invScanlineCt;
                 printf("\r\tSERIALIZING:\t%4llu / %4lu scanlines (%.2f%% SERIALIZED).          ", scanlines_done, HEIGHT, pct_done);
