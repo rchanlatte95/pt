@@ -65,8 +65,8 @@ int main()
 
     perf_tracker.Start();
 
-    bool save_successful = render.SaveToDesktop("rt_result");
-    if (save_successful == false) { return EXIT_FAILURE; }
+    bool write_failed = render.SaveToDesktop("rt_result") == false;
+    if (write_failed) { return EXIT_FAILURE; }
 
     PerfSampleResult write_perf = perf_tracker.End();
 
