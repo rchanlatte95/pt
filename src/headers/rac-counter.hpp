@@ -191,6 +191,14 @@ namespace rac::chronology
     typedef const mut_CycleSpan* CycleSpan_ptr;
     typedef const mut_CycleSpan& CycleSpan_ref;
 
+    u64 CYCLES_PER_KILOCYCLE = 1000;
+    u64 CYCLES_PER_MILICYCLE = CYCLES_PER_KILOCYCLE * 1000;
+    u64 CYCLES_PER_GIGACYCLE = CYCLES_PER_MILICYCLE * 1000;
+
+    f64 CYCLES_TO_KILOCYCLES = 1.0 / (f64)CYCLES_PER_KILOCYCLE;
+    f64 CYCLES_TO_MILICYCLES = 1.0 / (f64)CYCLES_PER_MILICYCLE;
+    f64 CYCLES_TO_GIGACYCLES = 1.0 / (f64)CYCLES_PER_GIGACYCLE;
+
     class mut_CycleSpan
     {
     public:
@@ -200,6 +208,19 @@ namespace rac::chronology
         mut_CycleSpan(u64 c) { cycle_duration = c; }
 
         INLINE operator u64() const noexcept { return cycle_duration; }
+
+        INLINE f64 Kilocycles() const noexcept
+        {
+            return (f64)cycle_duration * CYCLES_TO_KILOCYCLES;
+        }
+        INLINE f64 Milicycles() const noexcept
+        {
+            return (f64)cycle_duration * CYCLES_TO_MILICYCLES;
+        }
+        INLINE f64 Gigacycles() const noexcept
+        {
+            return (f64)cycle_duration * CYCLES_TO_GIGACYCLES;
+        }
     };
 
     class mut_CycleStamp
