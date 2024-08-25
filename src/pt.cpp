@@ -20,8 +20,6 @@ mut_PerfSample perf_tracker;
 
 static void RenderScene()
 {
-    printf("\tCasting rays into scene...\r\n\r\n");
-
     f32 invScanlineCt = 100.0f / (f32)ppm::HEIGHT;
     mut_f32 scanlinesDone = 0.0f;
     primitives::sphere test_sphere(v3(0.0f, 0.0f, -1.0f), 0.5f);
@@ -54,13 +52,15 @@ static void RenderScene()
 
 int main()
 {
+    printf("Casting rays into scene...\r\n\r\n");
+
     perf_tracker.Start();
 
     RenderScene();
 
     PerfSampleResult render_perf = perf_tracker.End();
 
-    printf("\tCompleted render in %.3fms (%llu Cycles)\r\n", Timer::DurationInMilisecs(render_perf.time_elapsed), (u64)render_perf.cycles_elapsed);
+    printf("\tCompleted render in %.3fms (%.3f MiliCycles)\r\n", render_perf.Miliseconds(), render_perf.cycles_elapsed.Milicycles());
     printf("\r\nWriting to disk...\r\n");
 
     perf_tracker.Start();
@@ -70,7 +70,7 @@ int main()
 
     PerfSampleResult write_perf = perf_tracker.End();
 
-    printf("\tCompleted write to disk in %.3fms (%llu Cycles)\r\n", Timer::DurationInMilisecs(write_perf.time_elapsed), (u64)write_perf.cycles_elapsed);
+    printf("\tCompleted write to disk in %.3fms (%.3f MiliCycles)\r\n", write_perf.Miliseconds(), write_perf.cycles_elapsed.Milicycles());
 
     return EXIT_SUCCESS;
 }

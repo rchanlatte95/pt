@@ -34,22 +34,41 @@ namespace rac::chronology
         {
             return std::chrono::high_resolution_clock::now();
         }
-        static INLINE f64 DurationInMilisecs(TimeSpan_ref span)
+        static INLINE f64 DurationNanoseconds(TimeSpan_ref span)
+        {
+            return (f64)std::chrono::duration_cast<std::chrono::nanoseconds>(span).count();
+        }
+        static INLINE f64 DurationMicroseconds(TimeSpan_ref span)
+        {
+            return (f64)std::chrono::duration_cast<std::chrono::microseconds>(span).count();
+        }
+        static INLINE f64 Duration(TimeSpan_ref span)
         {
             return (f64)std::chrono::duration_cast<std::chrono::milliseconds>(span).count();
         }
-        static INLINE f64 DurationInSecs(TimeSpan_ref span)
+        static INLINE f64 DurationSeconds(TimeSpan_ref span)
         {
-            return DurationInMilisecs(span) * MILISECS_TO_SECS;
+            return Duration(span) * MILISECS_TO_SECS;
         }
-        static INLINE f64 DurationInMilisecs(TimeStamp_ref start)
+
+        static INLINE f64 DurationNanoseconds(TimeStamp_ref start)
+        {
+            TimeSpan diff = Timer::Now() - start;
+            return (f64)std::chrono::duration_cast<std::chrono::nanoseconds>(diff).count();
+        }
+        static INLINE f64 DurationMicroseconds(TimeStamp_ref start)
+        {
+            TimeSpan diff = Timer::Now() - start;
+            return (f64)std::chrono::duration_cast<std::chrono::microseconds>(diff).count();
+        }
+        static INLINE f64 Duration(TimeStamp_ref start)
         {
             TimeSpan diff = Timer::Now() - start;
             return (f64)std::chrono::duration_cast<std::chrono::milliseconds>(diff).count();
         }
-        static INLINE f64 DurationInSecs(TimeStamp_ref start)
+        static INLINE f64 DurationSeconds(TimeStamp_ref start)
         {
-            return DurationInMilisecs(start) * MILISECS_TO_SECS;
+            return Duration(start) * MILISECS_TO_SECS;
         }
     };
 }

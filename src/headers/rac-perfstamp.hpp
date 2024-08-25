@@ -34,6 +34,23 @@ namespace rac::chronology
             cycles_elapsed = end_cycle - start_cycle;
             time_elapsed = end_time - start_time;
         }
+
+        INLINE f64 Seconds() const noexcept
+        {
+            return Timer::DurationSeconds(time_elapsed);
+        }
+        INLINE f64 Miliseconds() const noexcept
+        {
+            return Timer::Duration(time_elapsed);
+        }
+        INLINE f64 Microseconds() const noexcept
+        {
+            return Timer::DurationMicroseconds(time_elapsed);
+        }
+        INLINE f64 Nanoseconds() const noexcept
+        {
+            return Timer::DurationNanoseconds(time_elapsed);
+        }
     };
 
     class mut_PerfSample

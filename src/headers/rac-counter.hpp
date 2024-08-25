@@ -209,6 +209,10 @@ namespace rac::chronology
 
         INLINE operator u64() const noexcept { return cycle_duration; }
 
+        INLINE u64 Cycles() const noexcept
+        {
+            return cycle_duration;
+        }
         INLINE f64 Kilocycles() const noexcept
         {
             return (f64)cycle_duration * CYCLES_TO_KILOCYCLES;
