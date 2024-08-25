@@ -60,7 +60,7 @@ int main()
 
     PerfSampleResult render_perf = perf_tracker.End();
 
-    printf("\tCompleted render in %.3fms (%.3f MiliCycles)\r\n", render_perf.Miliseconds(), render_perf.cycles_elapsed.Milicycles());
+    printf("\tCompleted render in %.3fms (%.3f MiliCycles)\r\n", render_perf.Miliseconds(), render_perf.Milicycles());
     printf("\r\nWriting to disk...\r\n");
 
     perf_tracker.Start();
@@ -70,7 +70,7 @@ int main()
 
     PerfSampleResult write_perf = perf_tracker.End();
 
-    printf("\tCompleted write to disk in %.3fms (%.3f MiliCycles)\r\n", write_perf.Miliseconds(), write_perf.cycles_elapsed.Milicycles());
+    printf("\tCompleted write to disk in %.3fms (%.3f MiliCycles)\r\n", write_perf.Miliseconds(), write_perf.Milicycles());
 
     return EXIT_SUCCESS;
 }

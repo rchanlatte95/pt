@@ -35,6 +35,23 @@ namespace rac::chronology
             time_elapsed = end_time - start_time;
         }
 
+        INLINE u64 Cycles() const noexcept
+        {
+            return cycles_elapsed.Cycles();
+        }
+        INLINE f64 Kilocycles() const noexcept
+        {
+            return cycles_elapsed.Kilocycles();
+        }
+        INLINE f64 Milicycles() const noexcept
+        {
+            return cycles_elapsed.Milicycles();
+        }
+        INLINE f64 Gigacycles() const noexcept
+        {
+            return cycles_elapsed.Gigacycles();
+        }
+
         INLINE f64 Seconds() const noexcept
         {
             return Timer::DurationSeconds(time_elapsed);
