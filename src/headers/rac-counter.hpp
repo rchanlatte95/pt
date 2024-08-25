@@ -190,6 +190,15 @@ namespace rac::chronology
     typedef const mut_CycleSpan* CycleSpan_ptr;
     typedef const mut_CycleSpan& CycleSpan_ref;
 
+    class mut_CycleSpan
+    {
+    public:
+        mut_u64 cycle_duration;
+
+        mut_CycleSpan() { cycle_duration = 0; }
+        mut_CycleSpan(u64 c) { cycle_duration = c; }
+    };
+
     class mut_CycleStamp
     {
     public:
@@ -198,6 +207,11 @@ namespace rac::chronology
         mut_CycleStamp() { Cycles = 0; }
         mut_CycleStamp(u64 c) { Cycles = c; }
     };
+
+    INLINE CycleSpan operator-(CycleStamp_ref lhs, CycleStamp_ref rhs)
+    {
+        return CycleSpan(lhs.Cycles - rhs.Cycles);
+    }
 
     class Counter
     {
@@ -208,14 +222,5 @@ namespace rac::chronology
         {
             return CycleSpan(__rdtsc() - start.Cycles);
         }
-    };
-
-    class mut_CycleSpan
-    {
-    public:
-        mut_u64 cycle_duration;
-
-        mut_CycleSpan() { cycle_duration = 0; }
-        mut_CycleSpan(u64 c) { cycle_duration = c; }
     };
 }

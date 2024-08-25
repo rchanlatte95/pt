@@ -23,6 +23,17 @@ namespace rac::chronology
     public:
         mut_CycleSpan cycle_duration;
         mut_TimeSpan time_duration;
+
+        mut_PerfSampleResult()
+        {
+            cycle_duration = CycleSpan((u64)0);
+            time_duration = TimeSpan();
+        }
+        mut_PerfSampleResult(TimeStamp_ref start_time, TimeStamp_ref end_time, CycleStamp start_cycle, CycleStamp end_cycle)
+        {
+            cycle_duration = end_cycle - start_cycle;
+            time_duration = end_time - start_time;
+        }
     };
 
     class mut_PerfSample
@@ -30,8 +41,8 @@ namespace rac::chronology
         bool active;
         mut_TimeStamp start_time;
         mut_TimeStamp end_time;
-        mut_CountStamp start_cycles;
-        mut_CountStamp end_cycles;
+        mut_CycleStamp start_cycles;
+        mut_CycleStamp end_cycles;
 
     public:
 
@@ -45,6 +56,8 @@ namespace rac::chronology
         }
         INLINE void End() noexcept
         {
+            if (!active) { return; }
+
             end_cycles = CycleStamp(Counter::Now());
             end_time = TimeStamp(Timer::Now());
             active = false;
