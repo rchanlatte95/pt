@@ -15,8 +15,11 @@ namespace rac::img
     using namespace rac::gfx;
     using namespace rac::mth;
 
+    static u32 PPM_FMT_STR_LEN = sizeof("xxx, xxx, xxx ");
     static u32 _HEIGHT = 1024;
     static u32 _WIDTH = _HEIGHT;
+    static u32 _AREA = _WIDTH * _HEIGHT;
+    static u32 PPM_FILE_SZ = _AREA * (PPM_FMT_STR_LEN + 1);
     class alignas(AVX256_ALIGNMENT_BYTE_SIZE) PortablePixelMap
     {
     public:
@@ -82,14 +85,15 @@ namespace rac::img
 
             mut_FileHandle file;
             cstr desk_path_cstr = desk_path.c_str();
-            errno_t open_result = fopen_s(&file, desk_path_cstr, "w+");
-            if (open_result == EINVAL || file == nullptr)
+            errno_t open_res = fopen_s(&file, desk_path_cstr, "w+");
+            if (WIN_FAILED(open_res) || file == nullptr)
             {
                 return false;
             }
 
-            errno_t resize_result = _chsize_s(_fileno(file), 1024 * 1024);
-            if (resize_result == EINVAL)
+            // ensures result is of the right byte size before mmap
+            errno_t resize_res = _chsize_s(_fileno(file), PPM_FILE_SZ);
+            if (WIN_FAILED(resize_res))
             {
                 return false;
             }
@@ -100,8 +104,7 @@ namespace rac::img
             mut_u64 scanlines_done = 0;
             f32 invScanlineCt = 100.0f / (f32)HEIGHT;
 
-            u64 FMT_STR_LEN = sizeof("xxx, xxx, xxx ");
-            u64 SCANLINE_BUFFER_MAX = (FMT_STR_LEN * (u64)_WIDTH) + 1;
+            u64 SCANLINE_BUFFER_MAX = (PPM_FMT_STR_LEN * (u64)_WIDTH) + 1;
             mut_cstr BUFFER_HEAD;
             char SCANLINE_BUFFER[SCANLINE_BUFFER_MAX];
             for (mut_u32 y = 0; y < HEIGHT; ++y)
@@ -109,12 +112,12 @@ namespace rac::img
                 BUFFER_HEAD = SCANLINE_BUFFER;
                 for (mut_u32 x = 0; x < PENULT_WIDTH; ++x)
                 {
-                    BUFFER_HEAD += snprintf(BUFFER_HEAD, FMT_STR_LEN, "%u, %u, %u ",
+                    BUFFER_HEAD += snprintf(BUFFER_HEAD, PPM_FMT_STR_LEN, "%u, %u, %u ",
                                                                         pixels[y][x].r,
                                                                         pixels[y][x].g,
                                                                         pixels[y][x].b);
                 }
-                BUFFER_HEAD += snprintf(BUFFER_HEAD, FMT_STR_LEN, "%u, %u, %u\n",
+                BUFFER_HEAD += snprintf(BUFFER_HEAD, PPM_FMT_STR_LEN, "%u, %u, %u\n",
                                                                     pixels[y][PENULT_WIDTH].r,
                                                                     pixels[y][PENULT_WIDTH].g,
                                                                     pixels[y][PENULT_WIDTH].b);

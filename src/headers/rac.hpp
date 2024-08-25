@@ -40,6 +40,10 @@
 #include <objbase.h>
 #pragma comment(lib,"Shell32")
 #pragma comment(lib,"Ole32")
+
+#define WIN_FAILED(x) (x != 0)
+#define WIN_SUCCESS(x) (x == 0)
+
 #else
 #include <x86intrin.h>
 #endif
