@@ -43,7 +43,6 @@ namespace rac::chronology
         mut_TimeStamp end_time;
         mut_CycleStamp start_cycles;
         mut_CycleStamp end_cycles;
-
         mut_PerfSampleResult result;
 
     public:
@@ -65,14 +64,15 @@ namespace rac::chronology
             start_time = TimeStamp(Timer::Now());
             start_cycles = CycleStamp(Counter::Now());
         }
-        INLINE void End() noexcept
+        INLINE PerfSampleResult End() noexcept
         {
-            if (!active) { return; }
+            if (!active) { return PerfSampleResult(); }
 
             end_cycles = CycleStamp(Counter::Now());
             end_time = TimeStamp(Timer::Now());
             active = false;
             result = PerfSampleResult(start_time, end_time, start_cycles, end_cycles);
+            return result;
         }
     };
 }

@@ -16,7 +16,7 @@ using namespace rac::chronology;
 
 mut_ppm render;
 mut_camera cam(ppm::WIDTH, ppm::HEIGHT);
-mut_PerfSample perf;
+mut_PerfSample perf_tracker;
 
 static void RenderScene()
 {
@@ -54,20 +54,23 @@ static void RenderScene()
 
 int main()
 {
-    perf.Start();
+    perf_tracker.Start();
+
     RenderScene();
-    perf.End();
 
-    f64 render_duration_MS = 0.0;
-    printf("\tCompleted render in %.3fms (%ull Cycles)\r\n", render_duration_MS, 0);
+    PerfSampleResult render_perf = perf_tracker.End();
 
+    printf("\tCompleted render in %.3fms (%llu Cycles)\r\n", Timer::DurationInMilisecs(render_perf.time_elapsed), (u64)render_perf.cycles_elapsed);
     printf("\r\nWriting to disk...\r\n");
 
-    TimeStamp write_start = Timer::Now();
+    perf_tracker.Start();
+
     bool save_successful = render.SaveToDesktop("rt_result");
     if (save_successful == false) { return EXIT_FAILURE; }
 
-    printf("\tCompleted write to disk in %.3fms\r\n", Timer::DurationInMilisecs(write_start));
+    PerfSampleResult write_perf = perf_tracker.End();
+
+    printf("\tCompleted write to disk in %.3fms (%llu Cycles)\r\n", Timer::DurationInMilisecs(write_perf.time_elapsed), (u64)write_perf.cycles_elapsed);
 
     return EXIT_SUCCESS;
 }

@@ -198,6 +198,8 @@ namespace rac::chronology
 
         mut_CycleSpan() { cycle_duration = 0; }
         mut_CycleSpan(u64 c) { cycle_duration = c; }
+
+        INLINE operator u64() const noexcept { return cycle_duration; }
     };
 
     class mut_CycleStamp
