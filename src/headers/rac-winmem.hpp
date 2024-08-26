@@ -133,6 +133,31 @@ namespace rac::mem::windows
 
 	u64 PAGE_BYTE_SIZE = 4 * KB;
 
+	INLINE i32 GetFileDescriptor(mut_FileHandle file)
+	{
+		return _fileno(file);
+	}
+
+	INLINE errno_t SetFileSize(i32 file_descriptor, u64 len)
+	{
+		return _chsize_s(file_descriptor, len);
+	}
+
+	INLINE errno_t SetFileSize(mut_FileHandle file, u64 len)
+	{
+		return _chsize_s(GetFileDescriptor(file), len);
+	}
+
+	INLINE errno_t ftruncate(mut_FileHandle file, u64 len)
+	{
+		return _chsize_s(GetFileDescriptor(file), len);
+	}
+
+	INLINE errno_t ftruncate(i32 file_descriptor, u64 len)
+	{
+		return _chsize_s(file_descriptor, len);
+	}
+
 	INLINE ptr AlignPow2(ptr memory_handle, u64 pow2_alignment)
 	{
 		if (memory_handle == nullptr) { return nullptr; }
@@ -205,10 +230,5 @@ namespace rac::mem::windows
 		}
 
 		return false;
-	}
-
-	INLINE errno_t ftruncate(mut_FileHandle file, u64 len)
-	{
-		return _chsize_s(_fileno(file), len);
 	}
 }
