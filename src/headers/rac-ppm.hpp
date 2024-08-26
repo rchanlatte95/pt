@@ -1,6 +1,7 @@
 #pragma once
 #include "rac-color.hpp"
 #include "rac-v2.hpp"
+#include "rac-winmem.hpp"
 
 namespace rac::img
 {
@@ -14,6 +15,7 @@ namespace rac::img
 
     using namespace rac::gfx;
     using namespace rac::mth;
+    using namespace rac::mem::windows;
 
     static u32 PPM_FMT_STR_LEN = sizeof("xxx, xxx, xxx ");
     static u32 _HEIGHT = 1024;
@@ -92,7 +94,7 @@ namespace rac::img
             }
 
             // ensures result is of the right byte size before mmap
-            errno_t resize_res = _chsize_s(_fileno(file), PPM_FILE_SZ);
+            errno_t resize_res = SetFileSize(file, PPM_FILE_SZ);
             if (WIN_FAILED(resize_res))
             {
                 return false;
