@@ -72,7 +72,7 @@ namespace rac::mem::windows
 	}
 
 	// https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-unmapviewoffile
-	INLINE bool munmap(mut_ptr addr, u64 len)
+	INLINE bool munmap(mut_ptr addr)
 	{
 		if (UnmapViewOfFile(addr) != 0)
 		{
