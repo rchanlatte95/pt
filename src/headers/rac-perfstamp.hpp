@@ -80,6 +80,15 @@ namespace rac::chronology
         mut_PerfSampleResult result;
 
     public:
+        mut_PerfSample()
+        {
+            active = false;
+            start_time = TimeStamp();
+            end_time = TimeStamp();
+            start_cycles = CycleStamp();
+            end_cycles = CycleStamp();
+            result = PerfSampleResult();
+        }
 
         MAY_INLINE PerfSampleResult GetResult() const noexcept
         {

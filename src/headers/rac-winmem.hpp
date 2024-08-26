@@ -11,25 +11,25 @@
 namespace rac::mem::windows
 {
 	class mut_WinU16;
-	typedef WinU32* mut_WinU16ptr;
-	typedef WinU32& mut_WinU16ref;
-	typedef const WinU32 WinU16;
-	typedef const WinU32* WinU16ptr;
-	typedef const WinU32& WinU16ref;
+	typedef mut_WinU16* mut_WinU16ptr;
+	typedef mut_WinU16& mut_WinU16ref;
+	typedef const mut_WinU16 WinU16;
+	typedef const mut_WinU16* WinU16ptr;
+	typedef const mut_WinU16& WinU16ref;
 
 	class mut_WinU32;
-	typedef WinU32* mut_WinU32ptr;
-	typedef WinU32& mut_WinU32ref;
-	typedef const WinU32 WinU32;
-	typedef const WinU32* WinU32ptr;
-	typedef const WinU32& WinU32ref;
+	typedef mut_WinU32* mut_WinU32ptr;
+	typedef mut_WinU32& mut_WinU32ref;
+	typedef const mut_WinU32 WinU32;
+	typedef const mut_WinU32* WinU32ptr;
+	typedef const mut_WinU32& WinU32ref;
 
 	class mut_WinU64;
-	typedef WinU32* mut_WinU64ptr;
-	typedef WinU32& mut_WinU64ref;
-	typedef const WinU32 WinU64;
-	typedef const WinU32* WinU64ptr;
-	typedef const WinU32& WinU64ref;
+	typedef mut_WinU64* mut_WinU64ptr;
+	typedef mut_WinU64& mut_WinU64ref;
+	typedef const mut_WinU64 WinU64;
+	typedef const mut_WinU64* WinU64ptr;
+	typedef const mut_WinU64& WinU64ref;
 
 	class mut_WinU16
 	{
@@ -43,14 +43,12 @@ namespace rac::mem::windows
 
 	public:
 		mut_WinU16() { word = 0; }
+
+		// mut_WinU16(WORD w)
 		mut_WinU16(u16 w) { word = w; }
-		mut_WinU16(WORD w) { word = w; }
+
+		// mut_WinU16(BYTE low_bits, BYTE high_bits)
 		mut_WinU16(u8 low_bits, u8 high_bits)
-		{
-			low = low_bits;
-			high = high_bits;
-		}
-		mut_WinU16(BYTE low_bits, BYTE high_bits)
 		{
 			low = low_bits;
 			high = high_bits;
@@ -71,26 +69,19 @@ namespace rac::mem::windows
 
 	public:
 		mut_WinU32() { dword = 0; }
+
+		// mut_WinU32(DWORD dw)
 		mut_WinU32(u32 dw) { dword = dw; }
-		mut_WinU32(DWORD dw) { dword = dw; }
+
+		// mut_WinU32(WORD low_bits, WORD high_bits)
 		mut_WinU32(u16 low_bits, u16 high_bits)
 		{
 			low = low_bits;
 			high = high_bits;
 		}
-		mut_WinU32(WORD low_bits, WORD high_bits)
-		{
-			low = low_bits;
-			high = high_bits;
-		}
+
+		// mut_WinU32(BYTE b0, BYTE b1, BYTE b2, BYTE b3)
 		mut_WinU32(u8 b0, u8 b1, u8 b2, u8 b3)
-		{
-			bytes[0] = b0;
-			bytes[1] = b1;
-			bytes[2] = b2;
-			bytes[3] = b3;
-		}
-		mut_WinU32(BYTE b0, BYTE b1, BYTE b2, BYTE b3)
 		{
 			bytes[0] = b0;
 			bytes[1] = b1;
@@ -114,8 +105,9 @@ namespace rac::mem::windows
 
 	public:
 		mut_WinU64() { qword = 0; }
+
+		// mut_WinU64(QWORD q)
 		mut_WinU64(u64 q) { qword = q; }
-		mut_WinU64(QWORD q) { qword = q; }
 	};
 
 	enum MemoryMapType : i32
@@ -218,6 +210,9 @@ namespace rac::mem::windows
 		{
 			return MAP_FAILED;
 		}
+
+
+		return MAP_FAILED;
 	}
 
 	// https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-unmapviewoffile
