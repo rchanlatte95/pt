@@ -175,14 +175,14 @@ namespace rac::mem::windows
 	//		https://github.com/m-labs/uclibc-lm32/blob/master/utils/mmap-windows.c
 	//
 	// void *mmap(void addr[.length], size_t length, int prot, int flags, int fd, off_t offset);
-	MAY_INLINE ptr mmap(ptr start, u64 len, MemoryMapProtection prot, MemoryMapType flags, HANDLE file_descriptor, ptr_offset offset)
+	MAY_INLINE ptr mmap(ptr start, u64 len, MemoryMapProtection prot, MemoryMapType flags, mut_FileHandle file, ptr_offset offset)
 	{
 		if (prot & ~(MemoryMapProtection::Full))
 		{
 			return MAP_FAILED;
 		}
 		bool anonymous = flags & MemoryMapType::Anonymous;
-		if (file_descriptor == INVALID_HANDLE_VALUE)
+		if (file == nullptr)
 		{
 			if (!anonymous || offset)
 			{
@@ -205,5 +205,10 @@ namespace rac::mem::windows
 		}
 
 		return false;
+	}
+
+	INLINE errno_t ftruncate(mut_FileHandle file, u64 len)
+	{
+		return _chsize_s(_fileno(file), len);
 	}
 }
