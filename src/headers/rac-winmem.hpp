@@ -84,6 +84,25 @@ namespace rac::mem::windows
 			low = low_bits;
 			high = high_bits;
 		}
+		mut_Win32(WORD low_bits, WORD high_bits)
+		{
+			low = low_bits;
+			high = high_bits;
+		}
+		mut_Win32(u8 b0, u8 b1, u8 b2, u8 b3)
+		{
+			bytes[0] = b0;
+			bytes[1] = b1;
+			bytes[2] = b2;
+			bytes[3] = b3;
+		}
+		mut_Win32(BYTE b0, BYTE b1, BYTE b2, BYTE b3)
+		{
+			bytes[0] = b0;
+			bytes[1] = b1;
+			bytes[2] = b2;
+			bytes[3] = b3;
+		}
 	};
 
 	class mut_Win64
