@@ -10,11 +10,11 @@
 // something Unix-like
 namespace rac::mem::windows
 {
-	enum MemoryMapType : u32
+	enum MemoryMapType : i32
 	{
 		Shared = 0x1, Private = 0x2, Anonymous = 0x20,
 	};
-	enum MemoryMapProtection : u32
+	enum MemoryMapProtection : i32
 	{
 		None = 0x0,
 
@@ -69,7 +69,22 @@ namespace rac::mem::windows
 	// void *mmap(void addr[.length], size_t length, int prot, int flags, int fd, off_t offset);
 	MAY_INLINE ptr mmap(ptr start, u64 len, MemoryMapProtection prot, MemoryMapType flags, HANDLE file_descriptor, ptr_offset offset)
 	{
-
+		if (prot & ~(MemoryMapProtection::Full))
+		{
+			return MAP_FAILED;
+		}
+		bool anonymous = flags & MemoryMapType::Anonymous;
+		if (file_descriptor == INVALID_HANDLE_VALUE)
+		{
+			if (!anonymous || offset)
+			{
+				return MAP_FAILED;
+			}
+		}
+		else if (anonymous)
+		{
+			return MAP_FAILED;
+		}
 	}
 
 	// https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-unmapviewoffile
