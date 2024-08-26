@@ -36,6 +36,7 @@
 #include <io.h>
 #include <intrin.h>
 #include <Windows.h>
+#include <winDNS.h>
 #include <shlobj.h>
 #include <objbase.h>
 #pragma comment(lib,"Shell32")

@@ -71,14 +71,8 @@ namespace rac::mem::windows
 
 	public:
 		mut_WinU32() { dword = 0; }
-		mut_WinU32(u32 dw)
-		{
-			dword = dw;
-		}
-		mut_WinU32(DWORD dw)
-		{
-			dword = dw;
-		}
+		mut_WinU32(u32 dw) { dword = dw; }
+		mut_WinU32(DWORD dw) { dword = dw; }
 		mut_WinU32(u16 low_bits, u16 high_bits)
 		{
 			low = low_bits;
@@ -110,16 +104,18 @@ namespace rac::mem::windows
 		union
 		{
 			mut_u8 bytes[sizeof(u64)];
-			mut_u16 words[sizeof(u64) / sizeof(u16)];
+			mut_WinU16 words[sizeof(u64) / sizeof(u16)];
 
-			mut_u32 low;
-			mut_u32 high;
+			mut_WinU32 low;
+			mut_WinU32 high;
 
 			mut_u64 qword;
 		};
 
 	public:
 		mut_WinU64() { qword = 0; }
+		mut_WinU64(u64 q) { qword = q; }
+		mut_WinU64(QWORD q) { qword = q; }
 	};
 
 	enum MemoryMapType : i32
