@@ -98,6 +98,8 @@ namespace rac::img
                 return false;
             }
 
+            //dst = mmap(0, statbuf.st_size, PROT_READ | PROT_WRITE, MAP_SHARED, fdout, 0)) == (caddr_t)-1;
+
             fprintf(file, "P3\n%lu %lu\n255\n", WIDTH, HEIGHT);
 
             u32 PENULT_WIDTH = WIDTH - 1;
