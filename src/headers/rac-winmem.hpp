@@ -149,6 +149,9 @@ namespace rac::mem::windows
 		return _chsize_s(GetFileDescriptor(file), len);
 	}
 
+	// https://man7.org/linux/man-pages/man2/ftruncate.2.html
+	// TODO(RYAN_2024-08-26): Add truncate
+
 	INLINE errno_t ftruncate(mut_FilePtr file, u64 len)
 	{
 		return _chsize_s(GetFileDescriptor(file), len);
