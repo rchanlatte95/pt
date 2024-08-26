@@ -10,6 +10,63 @@
 // something Unix-like
 namespace rac::mem::windows
 {
+	class mut_WinU16;
+	typedef WinU32* mut_WinU16ptr;
+	typedef WinU32& mut_WinU16ref;
+	typedef const WinU32 WinU16;
+	typedef const WinU32* WinU16ptr;
+	typedef const WinU32& WinU16ref;
+
+	class mut_WinU32;
+	typedef WinU32* mut_WinU32ptr;
+	typedef WinU32& mut_WinU32ref;
+	typedef const WinU32 WinU32;
+	typedef const WinU32* WinU32ptr;
+	typedef const WinU32& WinU32ref;
+
+	class mut_WinU64;
+	typedef WinU32* mut_WinU64ptr;
+	typedef WinU32& mut_WinU64ref;
+	typedef const WinU32 WinU64;
+	typedef const WinU32* WinU64ptr;
+	typedef const WinU32& WinU64ref;
+
+	class mut_Win16
+	{
+		union
+		{
+			struct { mut_u8 lo, hi; };
+			mut_u16 word;
+		};
+
+	public:
+		mut_Win16() { word = 0; }
+	};
+
+	class mut_Win32
+	{
+		union
+		{
+			struct { mut_u16 lo, hi; };
+			mut_u32 dword;
+		};
+
+	public:
+		mut_Win32() { dword = 0; }
+	};
+
+	class mut_Win64
+	{
+		union
+		{
+			struct { mut_u32 lo, hi; };
+			mut_u64 qword;
+		};
+
+	public:
+		mut_Win64() { qword = 0; }
+	};
+
 	enum MemoryMapType : i32
 	{
 		Shared = 0x1, Private = 0x2, Anonymous = 0x20,
