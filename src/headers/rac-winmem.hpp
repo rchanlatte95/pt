@@ -31,7 +31,7 @@ namespace rac::mem::windows
 	typedef const WinU32* WinU64ptr;
 	typedef const WinU32& WinU64ref;
 
-	class mut_Win16
+	class mut_WinU16
 	{
 		union
 		{
@@ -42,22 +42,22 @@ namespace rac::mem::windows
 		};
 
 	public:
-		mut_Win16() { word = 0; }
-		mut_Win16(u16 w) { word = w; }
-		mut_Win16(WORD w) { word = w; }
-		mut_Win16(u8 low_bits, u8 high_bits)
+		mut_WinU16() { word = 0; }
+		mut_WinU16(u16 w) { word = w; }
+		mut_WinU16(WORD w) { word = w; }
+		mut_WinU16(u8 low_bits, u8 high_bits)
 		{
 			low = low_bits;
 			high = high_bits;
 		}
-		mut_Win16(BYTE low_bits, BYTE high_bits)
+		mut_WinU16(BYTE low_bits, BYTE high_bits)
 		{
 			low = low_bits;
 			high = high_bits;
 		}
 	};
 
-	class mut_Win32
+	class mut_WinU32
 	{
 		union
 		{
@@ -70,33 +70,33 @@ namespace rac::mem::windows
 		};
 
 	public:
-		mut_Win32() { dword = 0; }
-		mut_Win32(u32 dw)
+		mut_WinU32() { dword = 0; }
+		mut_WinU32(u32 dw)
 		{
 			dword = dw;
 		}
-		mut_Win32(DWORD dw)
+		mut_WinU32(DWORD dw)
 		{
 			dword = dw;
 		}
-		mut_Win32(u16 low_bits, u16 high_bits)
+		mut_WinU32(u16 low_bits, u16 high_bits)
 		{
 			low = low_bits;
 			high = high_bits;
 		}
-		mut_Win32(WORD low_bits, WORD high_bits)
+		mut_WinU32(WORD low_bits, WORD high_bits)
 		{
 			low = low_bits;
 			high = high_bits;
 		}
-		mut_Win32(u8 b0, u8 b1, u8 b2, u8 b3)
+		mut_WinU32(u8 b0, u8 b1, u8 b2, u8 b3)
 		{
 			bytes[0] = b0;
 			bytes[1] = b1;
 			bytes[2] = b2;
 			bytes[3] = b3;
 		}
-		mut_Win32(BYTE b0, BYTE b1, BYTE b2, BYTE b3)
+		mut_WinU32(BYTE b0, BYTE b1, BYTE b2, BYTE b3)
 		{
 			bytes[0] = b0;
 			bytes[1] = b1;
@@ -105,7 +105,7 @@ namespace rac::mem::windows
 		}
 	};
 
-	class mut_Win64
+	class mut_WinU64
 	{
 		union
 		{
@@ -119,7 +119,7 @@ namespace rac::mem::windows
 		};
 
 	public:
-		mut_Win64() { qword = 0; }
+		mut_WinU64() { qword = 0; }
 	};
 
 	enum MemoryMapType : i32
