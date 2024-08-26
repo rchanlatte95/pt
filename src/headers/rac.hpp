@@ -151,7 +151,6 @@ namespace rac
 
     u32 BITS_IN_BYTE = 8;
     u32 KB = 1024;
-    u32 WIN_PAGE_SIZE = 4 * KB;
     u32 MB = KB * 1024;
     u32 GB = MB * 1024;
 
