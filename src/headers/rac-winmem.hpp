@@ -5,8 +5,8 @@
 #define MAP_FAILED    ((void *) -1)
 #endif
 
-// NOTE(2024-08-25): This is intended to be a wrapper class for useful
-// memory functions that Windows makes a bit tedious compared to
+// NOTE(RYAN_2024-08-25): This is intended to be a wrapper class for
+// useful memory functions that Windows makes a bit tedious compared to
 // something Unix-like
 namespace rac::mem::windows
 {
@@ -55,4 +55,15 @@ namespace rac::mem::windows
 		mut_i8ptr aligned_ptr = (mut_i8ptr)memory_handle + offset;
 		return (ptr)aligned_ptr;
 	}
+
+	// TODO(RYAN_2024-08-25): Implement mmap equivalent and helper
+	// functions
+	//
+	// references:
+	//		https://man7.org/linux/man-pages/man2/mmap.2.html
+	//		https://bytes.com/topic/c/651056-c-efficiently-writing-large-quantities-data-file
+	//		https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-createfilemappinga
+	//		https://github.com/inexinferis/SyscallWrapper/blob/88005067e5ad96d19dcf6adfb15ef064ef62f3a1/kernel.cpp#L2889
+	//		https://github.com/m-labs/uclibc-lm32/blob/master/utils/mmap-windows.c
+	//
 }
