@@ -57,6 +57,9 @@ namespace rac
     typedef void* mut_ptr;
     typedef const void* ptr;
 
+    typedef off_t mut_ptr_offset;
+    typedef const off_t ptr_offset;
+
     typedef FILE* mut_FileHandle;
     typedef const FILE* FileHandle;
 

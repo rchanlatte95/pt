@@ -66,7 +66,8 @@ namespace rac::mem::windows
 	//		https://github.com/inexinferis/SyscallWrapper/blob/88005067e5ad96d19dcf6adfb15ef064ef62f3a1/kernel.cpp#L2889
 	//		https://github.com/m-labs/uclibc-lm32/blob/master/utils/mmap-windows.c
 	//
-	MAY_INLINE ptr mmap()
+	// void *mmap(void addr[.length], size_t length, int prot, int flags, int fd, off_t offset);
+	MAY_INLINE ptr mmap(ptr start, u64 len, MemoryMapProtection prot, MemoryMapType flags, HANDLE file_descriptor, ptr_offset offset)
 	{
 
 	}
