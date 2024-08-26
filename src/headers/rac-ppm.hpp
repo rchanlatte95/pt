@@ -85,7 +85,7 @@ namespace rac::img
         {
             std::string desk_path = rac::GetDesktopPathStr() + '\\' + filename + PPM_EXT;
 
-            mut_FileHandle file;
+            mut_FilePtr file;
             cstr desk_path_cstr = desk_path.c_str();
             errno_t open_res = fopen_s(&file, desk_path_cstr, "w+");
             if (WIN_FAILED(open_res) || file == nullptr)

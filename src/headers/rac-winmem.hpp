@@ -10,28 +10,28 @@
 // something Unix-like
 namespace rac::mem::windows
 {
-	class mut_WinU16;
-	typedef mut_WinU16* mut_WinU16ptr;
-	typedef mut_WinU16& mut_WinU16ref;
-	typedef const mut_WinU16 WinU16;
-	typedef const mut_WinU16* WinU16ptr;
-	typedef const mut_WinU16& WinU16ref;
+	class mut_wordU16;
+	typedef mut_wordU16* mut_wordU16ptr;
+	typedef mut_wordU16& mut_wordU16ref;
+	typedef const mut_wordU16 wordU16;
+	typedef const mut_wordU16* wordU16ptr;
+	typedef const mut_wordU16& wordU16ref;
 
-	class mut_WinU32;
-	typedef mut_WinU32* mut_WinU32ptr;
-	typedef mut_WinU32& mut_WinU32ref;
-	typedef const mut_WinU32 WinU32;
-	typedef const mut_WinU32* WinU32ptr;
-	typedef const mut_WinU32& WinU32ref;
+	class mut_dwordU32;
+	typedef mut_dwordU32* mut_dwordU32ptr;
+	typedef mut_dwordU32& mut_dwordU32ref;
+	typedef const mut_dwordU32 dwordU32;
+	typedef const mut_dwordU32* dwordU32ptr;
+	typedef const mut_dwordU32& dwordU32ref;
 
-	class mut_WinU64;
-	typedef mut_WinU64* mut_WinU64ptr;
-	typedef mut_WinU64& mut_WinU64ref;
-	typedef const mut_WinU64 WinU64;
-	typedef const mut_WinU64* WinU64ptr;
-	typedef const mut_WinU64& WinU64ref;
+	class mut_qwordU64;
+	typedef mut_qwordU64* mut_qwordU64ptr;
+	typedef mut_qwordU64& mut_qwordU64ref;
+	typedef const mut_qwordU64 qwordU64;
+	typedef const mut_qwordU64* qwordU64ptr;
+	typedef const mut_qwordU64& qwordU64ref;
 
-	class mut_WinU16
+	class mut_wordU16
 	{
 		union
 		{
@@ -42,20 +42,20 @@ namespace rac::mem::windows
 		};
 
 	public:
-		mut_WinU16() { word = 0; }
+		mut_wordU16() { word = 0; }
 
-		// mut_WinU16(WORD w)
-		mut_WinU16(u16 w) { word = w; }
+		// mut_wordU16(WORD w)
+		mut_wordU16(u16 w) { word = w; }
 
-		// mut_WinU16(BYTE low_bits, BYTE high_bits)
-		mut_WinU16(u8 low_bits, u8 high_bits)
+		// mut_wordU16(BYTE low_bits, BYTE high_bits)
+		mut_wordU16(u8 low_bits, u8 high_bits)
 		{
 			low = low_bits;
 			high = high_bits;
 		}
 	};
 
-	class mut_WinU32
+	class mut_dwordU32
 	{
 		union
 		{
@@ -68,20 +68,20 @@ namespace rac::mem::windows
 		};
 
 	public:
-		mut_WinU32() { dword = 0; }
+		mut_dwordU32() { dword = 0; }
 
-		// mut_WinU32(DWORD dw)
-		mut_WinU32(u32 dw) { dword = dw; }
+		// mut_dwordU32(DWORD dw)
+		mut_dwordU32(u32 dw) { dword = dw; }
 
-		// mut_WinU32(WORD low_bits, WORD high_bits)
-		mut_WinU32(u16 low_bits, u16 high_bits)
+		// mut_dwordU32(WORD low_bits, WORD high_bits)
+		mut_dwordU32(u16 low_bits, u16 high_bits)
 		{
 			low = low_bits;
 			high = high_bits;
 		}
 
-		// mut_WinU32(BYTE b0, BYTE b1, BYTE b2, BYTE b3)
-		mut_WinU32(u8 b0, u8 b1, u8 b2, u8 b3)
+		// mut_dwordU32(BYTE b0, BYTE b1, BYTE b2, BYTE b3)
+		mut_dwordU32(u8 b0, u8 b1, u8 b2, u8 b3)
 		{
 			bytes[0] = b0;
 			bytes[1] = b1;
@@ -90,24 +90,24 @@ namespace rac::mem::windows
 		}
 	};
 
-	class mut_WinU64
+	class mut_qwordU64
 	{
 		union
 		{
 			mut_u8 bytes[sizeof(u64)];
-			mut_WinU16 words[sizeof(u64) / sizeof(u16)];
+			mut_wordU16 words[sizeof(u64) / sizeof(u16)];
 
-			mut_WinU32 low;
-			mut_WinU32 high;
+			mut_dwordU32 low;
+			mut_dwordU32 high;
 
 			mut_u64 qword;
 		};
 
 	public:
-		mut_WinU64() { qword = 0; }
+		mut_qwordU64() { qword = 0; }
 
-		// mut_WinU64(QWORD q)
-		mut_WinU64(u64 q) { qword = q; }
+		// mut_qwordU64(QWORD q)
+		mut_qwordU64(u64 q) { qword = q; }
 	};
 
 	enum MemoryMapType : i32
@@ -125,7 +125,12 @@ namespace rac::mem::windows
 
 	u64 PAGE_BYTE_SIZE = 4 * KB;
 
-	INLINE i32 GetFileDescriptor(mut_FileHandle file)
+	INLINE HANDLE GetHandleFromDescriptor(i32 file_descriptor)
+	{
+		return file_descriptor == -1 ? INVALID_HANDLE_VALUE : (HANDLE)_get_osfhandle(file_descriptor);
+	}
+
+	INLINE i32 GetFileDescriptor(mut_FilePtr file)
 	{
 		return _fileno(file);
 	}
@@ -135,12 +140,12 @@ namespace rac::mem::windows
 		return _chsize_s(file_descriptor, len);
 	}
 
-	INLINE errno_t SetFileSize(mut_FileHandle file, u64 len)
+	INLINE errno_t SetFileSize(mut_FilePtr file, u64 len)
 	{
 		return _chsize_s(GetFileDescriptor(file), len);
 	}
 
-	INLINE errno_t ftruncate(mut_FileHandle file, u64 len)
+	INLINE errno_t ftruncate(mut_FilePtr file, u64 len)
 	{
 		return _chsize_s(GetFileDescriptor(file), len);
 	}
@@ -192,12 +197,13 @@ namespace rac::mem::windows
 	//		https://github.com/m-labs/uclibc-lm32/blob/master/utils/mmap-windows.c
 	//
 	// void *mmap(void addr[.length], size_t length, int prot, int flags, int fd, off_t offset);
-	MAY_INLINE ptr mmap(ptr start, u64 len, MemoryMapProtection prot, MemoryMapType flags, mut_FileHandle file, ptr_offset offset)
+	MAY_INLINE ptr mmap(ptr start, u64 len, MemoryMapProtection prot, MemoryMapType flags, mut_FilePtr file, ptr_offset offset)
 	{
 		if (prot & ~(MemoryMapProtection::Full))
 		{
 			return MAP_FAILED;
 		}
+
 		bool anonymous = flags & MemoryMapType::Anonymous;
 		if (file == nullptr)
 		{
@@ -211,8 +217,54 @@ namespace rac::mem::windows
 			return MAP_FAILED;
 		}
 
+		mut_dwordU32 fl_protect;
+		if (prot & MemoryMapProtection::Write)
+		{
+			if (prot & MemoryMapProtection::Execute)
+			{
+				fl_protect = PAGE_EXECUTE_READWRITE;
+			}
+			else
+			{
+				fl_protect = PAGE_READWRITE;
+			}
+		}
+		else if (prot & MemoryMapProtection::Execute)
+		{
+			if (prot & MemoryMapProtection::Read)
+			{
+				fl_protect = PAGE_EXECUTE_READ;
+			}
+			else
+			{
+				fl_protect = PAGE_EXECUTE;
+			}
+		}
+		else
+		{
+			fl_protect = PAGE_READONLY;
+		}
 
-		return MAP_FAILED;
+		HANDLE mmap_fhandle = GetHandleFromDescriptor(GetFileDescriptor(file));
+		if (mmap_fhandle == INVALID_HANDLE_VALUE)
+		{
+			return MAP_FAILED;
+		}
+
+		mut_dwordU32 end = offset + len;
+		HANDLE h = CreateFileMapping(mmap_fhandle, NULL, fl_protect, DWORD_HI(end), DWORD_LO(end), NULL);
+		if (h == NULL)
+		{
+			return MAP_FAILED;
+		}
+
+		mut_ptr ret = MapViewOfFile(h, dwDesiredAccess, DWORD_HI(offset), DWORD_LO(offset), length);
+		if (ret == nullptr)
+		{
+			CloseHandle(h);
+			ret = MAP_FAILED;
+		}
+		return ret;
 	}
 
 	// https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-unmapviewoffile

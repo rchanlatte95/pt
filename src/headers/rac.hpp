@@ -61,8 +61,8 @@ namespace rac
     typedef off_t mut_ptr_offset;
     typedef const off_t ptr_offset;
 
-    typedef FILE* mut_FileHandle;
-    typedef const FILE* FileHandle;
+    typedef FILE* mut_FilePtr;
+    typedef const FILE* FilePtr;
 
     typedef char* mut_cstr;
     typedef const char* cstr;
