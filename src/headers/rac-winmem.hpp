@@ -66,4 +66,20 @@ namespace rac::mem::windows
 	//		https://github.com/inexinferis/SyscallWrapper/blob/88005067e5ad96d19dcf6adfb15ef064ef62f3a1/kernel.cpp#L2889
 	//		https://github.com/m-labs/uclibc-lm32/blob/master/utils/mmap-windows.c
 	//
+	MAY_INLINE ptr mmap()
+	{
+
+	}
+
+	// https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-unmapviewoffile
+	INLINE bool munmap(mut_ptr addr, u64 len)
+	{
+		if (UnmapViewOfFile(addr) != 0)
+		{
+			addr = nullptr;
+			return true;
+		}
+
+		return false;
+	}
 }
