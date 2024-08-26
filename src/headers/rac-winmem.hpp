@@ -88,6 +88,10 @@ namespace rac::mem::windows
 			bytes[2] = b2;
 			bytes[3] = b3;
 		}
+
+		INLINE u32 Dword() const noexcept { return dword; }
+		INLINE u16 High() const noexcept { return high; }
+		INLINE u16 Low() const noexcept { return low; }
 	};
 
 	class mut_qwordU64
@@ -186,6 +190,44 @@ namespace rac::mem::windows
 		return (ptr)aligned_ptr;
 	}
 
+	INLINE HANDLE GetFileMap(HANDLE File,
+							LPSECURITY_ATTRIBUTES FileMappingAttributes,
+							u32 flProtect,
+							dwordU32 maxSize,
+							LPCWSTR Name)
+	{
+		return CreateFileMappingW(File,
+								FileMappingAttributes,
+								flProtect,
+								maxSize.High(),
+								maxSize.Low(),
+								Name);
+	}
+
+	INLINE HANDLE GetFileMap(HANDLE hFile,
+							u32 flProtect,
+							dwordU32 maxSize)
+	{
+		return CreateFileMappingW(hFile,
+								NULL,
+								flProtect,
+								maxSize.High(),
+								maxSize.Low(),
+								NULL);
+	}
+
+	INLINE mut_ptr GetMapView(HANDLE FileMappingObject,
+							u32 DesiredAccess,
+							dwordU32 FileOffset,
+							u64 NumberOfBytesToMap)
+	{
+		return MapViewOfFile(FileMappingObject,
+							DesiredAccess,
+							FileOffset.High(),
+							FileOffset.Low(),
+							NumberOfBytesToMap);
+	}
+
 	// TODO(RYAN_2024-08-25): Implement mmap equivalent and helper
 	// functions
 	//
@@ -196,8 +238,11 @@ namespace rac::mem::windows
 	//		https://github.com/inexinferis/SyscallWrapper/blob/88005067e5ad96d19dcf6adfb15ef064ef62f3a1/kernel.cpp#L2889
 	//		https://github.com/m-labs/uclibc-lm32/blob/master/utils/mmap-windows.c
 	//
-	// void *mmap(void addr[.length], size_t length, int prot, int flags, int fd, off_t offset);
-	MAY_INLINE ptr mmap(ptr start, u64 len, MemoryMapProtection prot, MemoryMapType flags, mut_FilePtr file, ptr_offset offset)
+	MAY_INLINE ptr mmap(MemoryMapProtection prot,
+					MemoryMapType flags,
+					mut_FilePtr file,
+					ptr_offset offset,
+					u64 length)
 	{
 		if (prot & ~(MemoryMapProtection::Full))
 		{
@@ -217,7 +262,7 @@ namespace rac::mem::windows
 			return MAP_FAILED;
 		}
 
-		mut_dwordU32 fl_protect;
+		mut_u32 fl_protect;
 		if (prot & MemoryMapProtection::Write)
 		{
 			if (prot & MemoryMapProtection::Execute)
@@ -245,23 +290,25 @@ namespace rac::mem::windows
 			fl_protect = PAGE_READONLY;
 		}
 
-		HANDLE mmap_fhandle = GetHandleFromDescriptor(GetFileDescriptor(file));
-		if (mmap_fhandle == INVALID_HANDLE_VALUE)
+		HANDLE target_map_file = GetHandleFromDescriptor(GetFileDescriptor(file));
+		if (target_map_file == INVALID_HANDLE_VALUE)
 		{
 			return MAP_FAILED;
 		}
 
-		mut_dwordU32 end = offset + len;
-		HANDLE h = CreateFileMapping(mmap_fhandle, NULL, fl_protect, DWORD_HI(end), DWORD_LO(end), NULL);
-		if (h == NULL)
+		mut_dwordU32 end = offset + (u32)length;
+		HANDLE map_handle = GetFileMap(target_map_file, fl_protect, end);
+		if (map_handle == NULL)
 		{
 			return MAP_FAILED;
 		}
 
-		mut_ptr ret = MapViewOfFile(h, dwDesiredAccess, DWORD_HI(offset), DWORD_LO(offset), length);
+		mut_dwordU32 offset_ = offset;
+		mut_u32 desired_access = 0;
+		mut_ptr ret = GetMapView(map_handle, desired_access, offset_, length);
 		if (ret == nullptr)
 		{
-			CloseHandle(h);
+			CloseHandle(map_handle);
 			ret = MAP_FAILED;
 		}
 		return ret;
