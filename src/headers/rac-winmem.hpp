@@ -35,14 +35,16 @@ namespace rac::mem::windows
 	{
 		union
 		{
-			struct { mut_u8 low, high; };
+			mut_u8 low;
+			mut_u8 high;
+
 			mut_u16 word;
 		};
 
 	public:
 		mut_Win16() { word = 0; }
-		mut_Win16(u16 word_) { word = word_; }
-		mut_Win16(WORD word_) { word = word_; }
+		mut_Win16(u16 w) { word = w; }
+		mut_Win16(WORD w) { word = w; }
 		mut_Win16(u8 low_bits, u8 high_bits)
 		{
 			low = low_bits;
@@ -59,15 +61,23 @@ namespace rac::mem::windows
 	{
 		union
 		{
-			struct { mut_u16 low, high; };
+			mut_u8 bytes[sizeof(u32)];
+
+			mut_u16 low;
+			mut_u16 high;
+
 			mut_u32 dword;
 		};
 
 	public:
 		mut_Win32() { dword = 0; }
-		mut_Win32(u32 dword_)
+		mut_Win32(u32 dw)
 		{
-			dword = dword_;
+			dword = dw;
+		}
+		mut_Win32(DWORD dw)
+		{
+			dword = dw;
 		}
 		mut_Win32(u16 low_bits, u16 high_bits)
 		{
@@ -80,7 +90,12 @@ namespace rac::mem::windows
 	{
 		union
 		{
-			struct { mut_u32 lo, hi; };
+			mut_u8 bytes[sizeof(u64)];
+			mut_u16 words[sizeof(u64) / sizeof(u16)];
+
+			mut_u32 low;
+			mut_u32 high;
+
 			mut_u64 qword;
 		};
 
