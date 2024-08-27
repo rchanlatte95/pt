@@ -164,7 +164,7 @@ namespace rac::mem::windows
 	INLINE errno_t truncate(cstr path, u64 len)
 	{
 		mut_FilePtr fp = nullptr;
-		errno_t open_res = fopen_s(&fp, path, "w+");
+		errno_t open_res = fopen_s(&fp, path, "a+");
 		if (open_res != 0) { return open_res; }
 
 		errno_t resize_res = _chsize_s(GetFileDescriptor(fp), len);
