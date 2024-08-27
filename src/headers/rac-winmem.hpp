@@ -149,9 +149,6 @@ namespace rac::mem::windows
 		return _chsize_s(GetFileDescriptor(file), len);
 	}
 
-	// https://man7.org/linux/man-pages/man2/ftruncate.2.html
-	// TODO(RYAN_2024-08-26): Add truncate
-
 	INLINE errno_t ftruncate(mut_FilePtr file, u64 len)
 	{
 		return _chsize_s(GetFileDescriptor(file), len);
@@ -160,6 +157,19 @@ namespace rac::mem::windows
 	INLINE errno_t ftruncate(i32 file_descriptor, u64 len)
 	{
 		return _chsize_s(file_descriptor, len);
+	}
+
+	// https://man7.org/linux/man-pages/man2/ftruncate.2.html
+	// TODO(RYAN_2024-08-26): Add truncate
+	INLINE errno_t truncate(cstr path, u64 len)
+	{
+		mut_FilePtr fp = nullptr;
+		errno_t open_res = fopen_s(&fp, path, "w+");
+		if (open_res != 0) { return open_res; }
+
+		errno_t resize_res = _chsize_s(GetFileDescriptor(fp), len);
+		fclose(fp);
+		return resize_res;
 	}
 
 	INLINE ptr AlignPow2(ptr memory_handle, u64 pow2_alignment)
