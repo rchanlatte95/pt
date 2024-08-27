@@ -203,7 +203,7 @@ namespace rac::mem::windows
 		return (ptr)aligned_ptr;
 	}
 
-	INLINE HANDLE GetFileMap(HANDLE File,
+	INLINE HANDLE CreateFileMap(HANDLE File,
 							LPSECURITY_ATTRIBUTES FileMappingAttributes,
 							u32 flProtect,
 							dwordU32 maxSize,
@@ -217,7 +217,7 @@ namespace rac::mem::windows
 								Name);
 	}
 
-	INLINE HANDLE GetFileMap(HANDLE hFile,
+	INLINE HANDLE CreateFileMap(HANDLE hFile,
 							u32 flProtect,
 							dwordU32 maxSize)
 	{
@@ -310,7 +310,7 @@ namespace rac::mem::windows
 		}
 
 		mut_dwordU32 end = offset + (u32)length;
-		HANDLE map_handle = GetFileMap(target_map_file, fl_protect, end);
+		HANDLE map_handle = CreateFileMap(target_map_file, fl_protect, end);
 		if (map_handle == NULL)
 		{
 			return MAP_FAILED;
