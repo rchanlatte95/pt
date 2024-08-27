@@ -129,14 +129,27 @@ namespace rac::mem::windows
 
 	u64 PAGE_BYTE_SIZE = 4 * KB;
 
+	INLINE i32 GetFileDescriptor(mut_FilePtr file)
+	{
+		return _fileno(file);
+	}
+
 	INLINE HANDLE GetHandleFromDescriptor(i32 file_descriptor)
 	{
 		return file_descriptor == -1 ? INVALID_HANDLE_VALUE : (HANDLE)_get_osfhandle(file_descriptor);
 	}
 
-	INLINE i32 GetFileDescriptor(mut_FilePtr file)
+	INLINE HANDLE GetHandleFromFile(mut_FilePtr file)
 	{
-		return _fileno(file);
+		//https://stackoverflow.com/questions/3989545/how-do-i-get-the-file-handle-from-the-fopen-file-structure
+		// supposedly you can cast the file descriptor and it'll be a valid
+		// HANDLE; however, that may not be portable to all Windows platforms?
+		// Not sure. Better safe than sorry.
+		if (file == nullptr)
+		{
+			return INVALID_HANDLE_VALUE;
+		}
+		return GetHandleFromDescriptor(GetFileDescriptor(file));
 	}
 
 	INLINE errno_t SetFileSize(i32 file_descriptor, u64 len)
@@ -239,6 +252,18 @@ namespace rac::mem::windows
 							FileOffset.High(),
 							FileOffset.Low(),
 							NumberOfBytesToMap);
+	}
+
+	INLINE HANDLE CreateFileMap(mut_FilePtr File,
+							u32 flProtect,
+							dwordU32 maxSize)
+	{
+		return CreateFileMappingW(File,
+								NULL,
+								flProtect,
+								maxSize.High(),
+								maxSize.Low(),
+								NULL);
 	}
 
 	// TODO(RYAN_2024-08-25): Implement mmap equivalent and helper
