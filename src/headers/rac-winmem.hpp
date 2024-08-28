@@ -277,10 +277,10 @@ namespace rac::mem::windows
 	//		https://github.com/m-labs/uclibc-lm32/blob/master/utils/mmap-windows.c
 	//
 	MAY_INLINE ptr mmap(MemoryMapProtection prot,
-					MemoryMapType flags,
-					mut_FilePtr file,
-					ptr_offset offset,
-					u64 length)
+						MemoryMapType flags,
+						mut_FilePtr file,
+						ptr_offset offset,
+						u64 length)
 	{
 		if (prot & ~(MemoryMapProtection::Full))
 		{
@@ -342,7 +342,25 @@ namespace rac::mem::windows
 		}
 
 		mut_dwordU32 offset_ = offset;
-		mut_u32 desired_access = 0;
+		mut_u32 desired_access;
+		if (prot & MemoryMapProtection::Write)
+		{
+			desired_access = FILE_MAP_WRITE;
+		}
+		else
+		{
+			desired_access = FILE_MAP_READ;
+		}
+
+		if (prot & MemoryMapProtection::Execute)
+		{
+			desired_access |= FILE_MAP_EXECUTE;
+		}
+		if (flags & MemoryMapType::Private)
+		{
+			desired_access |= FILE_MAP_COPY;
+		}
+
 		mut_ptr ret = GetMapView(map_handle, desired_access, offset_, length);
 		if (ret == nullptr)
 		{
@@ -350,6 +368,25 @@ namespace rac::mem::windows
 			ret = MAP_FAILED;
 		}
 		return ret;
+	}
+
+	MAY_INLINE ptr MapMem(mut_FilePtr file, u64 length,
+						ptr_offset offset,
+						MemoryMapType flags = MemoryMapType::Private)
+	{
+		return mmap(MemoryMapProtection::Full, flags, file, offset, length);
+	}
+	MAY_INLINE ptr MapPrivateMem(mut_FilePtr file, u64 length, ptr_offset offset, MemoryMapProtection prot = MemoryMapProtection::Full)
+	{
+		return mmap(prot, MemoryMapType::Private, file, offset, length);
+	}
+	MAY_INLINE ptr MapSharedMem(mut_FilePtr file, u64 length, ptr_offset offset, MemoryMapProtection prot = MemoryMapProtection::Full)
+	{
+		return mmap(prot, MemoryMapType::Shared, file, offset, length);
+	}
+	MAY_INLINE ptr MapAnonMem(mut_FilePtr file, u64 length, ptr_offset offset, MemoryMapProtection prot = MemoryMapProtection::Full)
+	{
+		return mmap(prot, MemoryMapType::Anonymous, file, offset, length);
 	}
 
 	// https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-unmapviewoffile
