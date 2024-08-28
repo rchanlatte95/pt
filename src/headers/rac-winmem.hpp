@@ -1,4 +1,7 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable:4201)
+
 #include "rac.hpp"
 
 #ifdef _MSC_VER
@@ -35,21 +38,34 @@ namespace rac::mem::windows
 	{
 		union
 		{
-			mut_u8 low;
-			mut_u8 high;
-
 			mut_u16 word;
+			struct
+			{
+				mut_u8 low;
+				mut_u8 high;
+			};
 		};
 
 	public:
-		mut_wordU16() { word = 0; }
+		mut_wordU16()
+		{
+			word = 0;
+			low = 0;
+			high = 0;
+		}
 
 		// mut_wordU16(WORD w)
-		mut_wordU16(u16 w) { word = w; }
+		mut_wordU16(u16 w)
+		{
+			low = 0;
+			high = 0;
+			word = w;
+		}
 
 		// mut_wordU16(BYTE low_bits, BYTE high_bits)
 		mut_wordU16(u8 low_bits, u8 high_bits)
 		{
+			word = 0;
 			low = low_bits;
 			high = high_bits;
 		}
@@ -59,23 +75,38 @@ namespace rac::mem::windows
 	{
 		union
 		{
-			mut_u8 bytes[sizeof(u32)];
-
-			mut_u16 low;
-			mut_u16 high;
-
 			mut_u32 dword;
+			struct
+			{
+				mut_u8 bytes[sizeof(u32)];
+				mut_u16 low;
+				mut_u16 high;
+			};
 		};
 
 	public:
-		mut_dwordU32() { dword = 0; }
+		mut_dwordU32()
+		{
+			low = 0;
+			high = 0;
+			dword = 0;
+		}
 
 		// mut_dwordU32(DWORD dw)
-		mut_dwordU32(u32 dw) { dword = dw; }
+		mut_dwordU32(u32 dw)
+		{
+			low = 0;
+			high = 0;
+			dword = dw;
+		}
 
 		// mut_dwordU32(WORD low_bits, WORD high_bits)
 		mut_dwordU32(u16 low_bits, u16 high_bits)
 		{
+			dword = 0;
+			low = 0;
+			high = 0;
+
 			low = low_bits;
 			high = high_bits;
 		}
@@ -83,6 +114,9 @@ namespace rac::mem::windows
 		// mut_dwordU32(BYTE b0, BYTE b1, BYTE b2, BYTE b3)
 		mut_dwordU32(u8 b0, u8 b1, u8 b2, u8 b3)
 		{
+			dword = 0;
+			low = 0;
+			high = 0;
 			bytes[0] = b0;
 			bytes[1] = b1;
 			bytes[2] = b2;
@@ -96,6 +130,7 @@ namespace rac::mem::windows
 
 	class mut_qwordU64
 	{
+		mut_u64 qword;
 		union
 		{
 			mut_u8 bytes[sizeof(u64)];
@@ -103,15 +138,23 @@ namespace rac::mem::windows
 
 			mut_dwordU32 low;
 			mut_dwordU32 high;
-
-			mut_u64 qword;
 		};
 
 	public:
-		mut_qwordU64() { qword = 0; }
+		mut_qwordU64()
+		{
+			low = 0;
+			high = 0;
+			qword = 0;
+		}
 
 		// mut_qwordU64(QWORD q)
-		mut_qwordU64(u64 q) { qword = q; }
+		mut_qwordU64(u64 q)
+		{
+			low = 0;
+			high = 0;
+			qword = q;
+		}
 	};
 
 	enum MemoryMapType : i32
@@ -216,13 +259,13 @@ namespace rac::mem::windows
 		return (ptr)aligned_ptr;
 	}
 
-	INLINE HANDLE CreateFileMap(HANDLE File,
+	INLINE HANDLE CreateFileMap(HANDLE file_handle,
 							LPSECURITY_ATTRIBUTES FileMappingAttributes,
 							u32 flProtect,
 							dwordU32 maxSize,
 							LPCWSTR Name)
 	{
-		return CreateFileMappingW(File,
+		return CreateFileMappingW(file_handle,
 								FileMappingAttributes,
 								flProtect,
 								maxSize.High(),
@@ -230,11 +273,11 @@ namespace rac::mem::windows
 								Name);
 	}
 
-	INLINE HANDLE CreateFileMap(HANDLE hFile,
+	INLINE HANDLE CreateFileMap(HANDLE file_handle,
 							u32 flProtect,
 							dwordU32 maxSize)
 	{
-		return CreateFileMappingW(hFile,
+		return CreateFileMappingW(file_handle,
 								NULL,
 								flProtect,
 								maxSize.High(),
@@ -328,7 +371,7 @@ namespace rac::mem::windows
 			fl_protect = PAGE_READONLY;
 		}
 
-		HANDLE target_map_file = GetHandleFromDescriptor(GetFileDescriptor(file));
+		HANDLE target_map_file = GetHandleFromFile(file);
 		if (target_map_file == INVALID_HANDLE_VALUE)
 		{
 			return MAP_FAILED;
@@ -401,3 +444,5 @@ namespace rac::mem::windows
 		return false;
 	}
 }
+
+#pragma warning(pop)

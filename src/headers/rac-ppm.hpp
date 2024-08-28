@@ -100,7 +100,7 @@ namespace rac::img
                 return false;
             }
 
-            //dst = mmap(0, statbuf.st_size, PROT_READ | PROT_WRITE, MAP_SHARED, fdout, 0)) == (caddr_t)-1;
+            ptr mmap_file = MapMem(file, PPM_FILE_SZ, 0);
 
             fprintf(file, "P3\n%lu %lu\n255\n", WIDTH, HEIGHT);
 
