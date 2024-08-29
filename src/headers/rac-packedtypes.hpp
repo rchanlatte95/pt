@@ -88,6 +88,9 @@ namespace rac
     typedef const double& f64ref;
     */
 
+    static i32 HIGH = 0;
+    static i32 LOW = 1;
+
     struct p16
     {
         union
@@ -100,15 +103,18 @@ namespace rac
         };
     };
 
-    struct p16
+    struct p32
     {
         union
         {
-            mut_u8 ubytes[sizeof(u16)];
-            mut_i8 bytes[sizeof(u16)];
+            mut_u8 ubytes[sizeof(u32)];
+            mut_i8 bytes[sizeof(u32)];
 
-            mut_u16 uint16;
-            mut_i16 int16;
+            mut_u16 uint16[sizeof(u32) / sizeof(u16)];
+            mut_i16 int16[sizeof(u32) / sizeof(u16)];
+
+            mut_u32 uint32;
+            mut_i32 int32;
         };
     };
 }

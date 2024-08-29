@@ -71,5 +71,8 @@
     <ClInclude Include="headers\rac-winmem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="headers\rac-packedtypes.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
