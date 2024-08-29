@@ -34,6 +34,18 @@ namespace rac::mem::windows
 	typedef const mut_qwordU64* qwordU64ptr;
 	typedef const mut_qwordU64& qwordU64ref;
 
+	static i32 HIGH = 0;
+	static i32 LOW = 1;
+
+	struct packed_dword
+	{
+		union
+		{
+			mut_u8 bytes[sizeof(u32)];
+			mut_u16 words[sizeof(u32) / sizeof(u16)];
+		};
+	};
+
 	class mut_wordU16
 	{
 		union
@@ -41,8 +53,7 @@ namespace rac::mem::windows
 			mut_u16 word;
 			struct
 			{
-				mut_u8 low;
-				mut_u8 high;
+				mut_u8 bytes[sizeof(u16)];
 			};
 		};
 
@@ -50,15 +61,15 @@ namespace rac::mem::windows
 		mut_wordU16()
 		{
 			word = 0;
-			low = 0;
-			high = 0;
+			bytes[HIGH] = 0;
+			bytes[1] = 0;
 		}
 
 		// mut_wordU16(WORD w)
 		mut_wordU16(u16 w)
 		{
-			low = 0;
-			high = 0;
+			bytes[HIGH] = 0;
+			bytes[1] = 0;
 			word = w;
 		}
 
@@ -66,8 +77,8 @@ namespace rac::mem::windows
 		mut_wordU16(u8 low_bits, u8 high_bits)
 		{
 			word = 0;
-			low = low_bits;
-			high = high_bits;
+			bytes[HIGH] = low_bits;
+			bytes[1] = high_bits;
 		}
 	};
 
@@ -76,27 +87,22 @@ namespace rac::mem::windows
 		union
 		{
 			mut_u32 dword;
-			struct
-			{
-				mut_u8 bytes[sizeof(u32)];
-				mut_u16 low;
-				mut_u16 high;
-			};
+			struct packed_dword packed;
 		};
 
 	public:
 		mut_dwordU32()
 		{
-			low = 0;
-			high = 0;
+			packed.words[HIGH] = 0;
+			packed.words[LOW] = 0;
 			dword = 0;
 		}
 
 		// mut_dwordU32(DWORD dw)
 		mut_dwordU32(u32 dw)
 		{
-			low = 0;
-			high = 0;
+			packed.words[HIGH] = 0;
+			packed.words[LOW] = 0;
 			dword = dw;
 		}
 
@@ -104,28 +110,23 @@ namespace rac::mem::windows
 		mut_dwordU32(u16 low_bits, u16 high_bits)
 		{
 			dword = 0;
-			low = 0;
-			high = 0;
-
-			low = low_bits;
-			high = high_bits;
+			packed.words[HIGH] = high_bits;
+			packed.words[LOW] = low_bits;
 		}
 
 		// mut_dwordU32(BYTE b0, BYTE b1, BYTE b2, BYTE b3)
 		mut_dwordU32(u8 b0, u8 b1, u8 b2, u8 b3)
 		{
 			dword = 0;
-			low = 0;
-			high = 0;
-			bytes[0] = b0;
-			bytes[1] = b1;
-			bytes[2] = b2;
-			bytes[3] = b3;
+			packed.bytes[0] = b0;
+			packed.bytes[1] = b1;
+			packed.bytes[2] = b2;
+			packed.bytes[3] = b3;
 		}
 
 		INLINE u32 Dword() const noexcept { return dword; }
-		INLINE u16 High() const noexcept { return high; }
-		INLINE u16 Low() const noexcept { return low; }
+		INLINE u16 High() const noexcept { return packed.words[HIGH]; }
+		INLINE u16 Low() const noexcept { return packed.words[LOW]; }
 	};
 
 	class mut_qwordU64
@@ -135,24 +136,22 @@ namespace rac::mem::windows
 		{
 			mut_u8 bytes[sizeof(u64)];
 			mut_wordU16 words[sizeof(u64) / sizeof(u16)];
-
-			mut_dwordU32 low;
-			mut_dwordU32 high;
+			mut_dwordU32 dwords[sizeof(u64) / sizeof(u32)];
 		};
 
 	public:
 		mut_qwordU64()
 		{
-			low = 0;
-			high = 0;
+			dwords[HIGH] = 0;
+			dwords[LOW] = 0;
 			qword = 0;
 		}
 
 		// mut_qwordU64(QWORD q)
 		mut_qwordU64(u64 q)
 		{
-			low = 0;
-			high = 0;
+			dwords[HIGH] = 0;
+			dwords[LOW] = 0;
 			qword = q;
 		}
 	};
