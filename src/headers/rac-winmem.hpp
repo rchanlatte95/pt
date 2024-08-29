@@ -62,14 +62,14 @@ namespace rac::mem::windows
 		{
 			word = 0;
 			bytes[HIGH] = 0;
-			bytes[1] = 0;
+			bytes[LOW] = 0;
 		}
 
 		// mut_wordU16(WORD w)
 		mut_wordU16(u16 w)
 		{
 			bytes[HIGH] = 0;
-			bytes[1] = 0;
+			bytes[LOW] = 0;
 			word = w;
 		}
 
@@ -78,7 +78,7 @@ namespace rac::mem::windows
 		{
 			word = 0;
 			bytes[HIGH] = low_bits;
-			bytes[1] = high_bits;
+			bytes[LOW] = high_bits;
 		}
 	};
 
