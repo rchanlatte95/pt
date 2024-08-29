@@ -117,4 +117,22 @@ namespace rac
             mut_i32 int32;
         };
     };
+
+    struct p64
+    {
+        union
+        {
+            mut_u8 ubytes[sizeof(u64)];
+            mut_i8 bytes[sizeof(u64)];
+
+            mut_u16 uint16[sizeof(u64) / sizeof(u16)];
+            mut_i16 int16[sizeof(u64) / sizeof(u16)];
+
+            mut_u32 uint32[sizeof(u64) / sizeof(u32)];
+            mut_i32 int32[sizeof(u64) / sizeof(u32)];
+
+            mut_u64 uint64;
+            mut_i64 int64;
+        };
+    };
 }
