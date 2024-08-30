@@ -225,27 +225,49 @@ namespace rac
         mut_p128(u8 b0, u8 b1, u8 b2, u8 b3, u8 b4, u8 b5, u8 b6, u8 b7,
                 u8 b8, u8 b9, u8 b10, u8 b11, u8 b12, u8 b13, u8 b14, u8 b15)
         {
-            bytes[0] = b0;
-            bytes[1] = b1;
-            bytes[2] = b2;
-            bytes[3] = b3;
+            ubytes[0] = b0;
+            ubytes[1] = b1;
+            ubytes[2] = b2;
+            ubytes[3] = b3;
 
-            bytes[4] = b4;
-            bytes[5] = b5;
-            bytes[6] = b6;
-            bytes[7] = b7;
+            ubytes[4] = b4;
+            ubytes[5] = b5;
+            ubytes[6] = b6;
+            ubytes[7] = b7;
 
-            bytes[8] = b8;
-            bytes[9] = b9;
-            bytes[10] = b10;
-            bytes[11] = b11;
+            ubytes[8] = b8;
+            ubytes[9] = b9;
+            ubytes[10] = b10;
+            ubytes[11] = b11;
 
-            bytes[12] = b12;
-            bytes[13] = b13;
-            bytes[14] = b14;
-            bytes[15] = b15;
+            ubytes[12] = b12;
+            ubytes[13] = b13;
+            ubytes[14] = b14;
+            ubytes[15] = b15;
         }
         mut_p128(u8 b0, u8 b1, u8 b2, u8 b3, u8 b4, u8 b5, u8 b6, u8 b7)
+        {
+            ubytes[0] = b0;
+            ubytes[1] = b1;
+            ubytes[2] = b2;
+            ubytes[3] = b3;
+
+            ubytes[4] = b4;
+            ubytes[5] = b5;
+            ubytes[6] = b6;
+            ubytes[7] = b7;
+
+            ubytes[8] = b0;
+            ubytes[9] = b1;
+            ubytes[10] = b2;
+            ubytes[11] = b3;
+
+            ubytes[12] = b4;
+            ubytes[13] = b5;
+            ubytes[14] = b6;
+            ubytes[15] = b7;
+        }
+        mut_p128(i8 b0, i8 b1, i8 b2, i8 b3, i8 b4, i8 b5, i8 b6, i8 b7)
         {
             bytes[0] = b0;
             bytes[1] = b1;
@@ -266,6 +288,29 @@ namespace rac
             bytes[13] = b5;
             bytes[14] = b6;
             bytes[15] = b7;
+        }
+        mut_p128(i8 b0, i8 b1, i8 b2, i8 b3, i8 b4, i8 b5, i8 b6, i8 b7,
+                i8 b8, i8 b9, i8 b10, i8 b11, i8 b12, i8 b13, i8 b14, i8 b15)
+        {
+            bytes[0] = b0;
+            bytes[1] = b1;
+            bytes[2] = b2;
+            bytes[3] = b3;
+
+            bytes[4] = b4;
+            bytes[5] = b5;
+            bytes[6] = b6;
+            bytes[7] = b7;
+
+            bytes[8] = b8;
+            bytes[9] = b9;
+            bytes[10] = b10;
+            bytes[11] = b11;
+
+            bytes[12] = b12;
+            bytes[13] = b13;
+            bytes[14] = b14;
+            bytes[15] = b15;
         }
 
         INLINE u64 High() const noexcept { return uint64[HIGH]; }
