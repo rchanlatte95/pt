@@ -139,12 +139,15 @@ namespace rac
             mut_u32 uint32[sizeof(__m128i) / sizeof(u32)];
             mut_u64 uint64[sizeof(__m128i) / sizeof(u64)];
 
-            __m128i simd128;
+            __m128i int128;
 
             mut_p16 packed16[sizeof(__m128i) / sizeof(p16)];
             mut_p32 packed32[sizeof(__m128i) / sizeof(p32)];
             mut_p64 packed64[sizeof(__m128i) / sizeof(p64)];
         };
+
+        INLINE u64 High() const noexcept { return uint64[HIGH]; }
+        INLINE u64 Low() const noexcept { return uint64[LOW]; }
     };
 
     class mut_p256
@@ -161,14 +164,17 @@ namespace rac
             mut_u32 uint32[sizeof(__m256i) / sizeof(u32)];
             mut_u64 uint64[sizeof(__m256i) / sizeof(u64)];
 
-            __m128i simd128[sizeof(__m256i) / sizeof(__m128i)];
-            __m256i simd256;
+            __m128i int128[sizeof(__m256i) / sizeof(__m128i)];
+            __m256i int256;
 
             mut_p16 packed16[sizeof(__m256i) / sizeof(p16)];
             mut_p32 packed32[sizeof(__m256i) / sizeof(p32)];
             mut_p64 packed64[sizeof(__m256i) / sizeof(p64)];
             mut_p64 packed128[sizeof(__m256i) / sizeof(p128)];
         };
+
+        INLINE __m128i High() const noexcept { return int128[HIGH]; }
+        INLINE __m128i Low() const noexcept { return int128[LOW]; }
     };
 
 
@@ -211,6 +217,9 @@ namespace rac
 
             __m128 f128;
         };
+
+        INLINE f64 High() const noexcept { return float64[HIGH]; }
+        INLINE f64 Low() const noexcept { return float64[LOW]; }
     };
 
     class mut_pf256
@@ -228,8 +237,11 @@ namespace rac
             mut_f32 float32[sizeof(__m256) / sizeof(f32)];
             mut_f64 float64[sizeof(__m256) / sizeof(f64)];
 
-            __m128 f128[sizeof(__m256) / sizeof(__m128)];
-            __m256 f256;
+            __m128 float128[sizeof(__m256) / sizeof(__m128)];
+            __m256 float256;
         };
+
+        INLINE __m128 High() const noexcept { return float128[HIGH]; }
+        INLINE __m128 Low() const noexcept { return float128[LOW]; }
     };
 }
