@@ -3,9 +3,6 @@
 
 namespace rac
 {
-    static i32 HIGH = 0;
-    static i32 LOW = 1;
-
     struct mut_p16;
     typedef mut_p16* mut_p16ptr;
     typedef mut_p16& mut_p16ref;
@@ -69,7 +66,10 @@ namespace rac
     typedef const mut_pf256* pf256ptr;
     typedef const mut_pf256& pf256ref;
 
-    struct mut_p16
+    static i32 HIGH = 0;
+    static i32 LOW = 1;
+
+    class mut_p16
     {
         union
         {
@@ -79,6 +79,9 @@ namespace rac
             mut_u8 ubytes[sizeof(u16)];
             mut_u16 uint16;
         };
+
+        INLINE i8 High() const noexcept { return bytes[HIGH]; }
+        INLINE i8 Low() const noexcept { return bytes[LOW]; }
     };
 
     struct mut_p32
