@@ -84,7 +84,7 @@ namespace rac
         INLINE i8 Low() const noexcept { return bytes[LOW]; }
     };
 
-    struct mut_p32
+    class mut_p32
     {
         union
         {
@@ -100,7 +100,7 @@ namespace rac
         };
     };
 
-    struct mut_p64
+    class mut_p64
     {
         union
         {
@@ -119,7 +119,7 @@ namespace rac
         };
     };
 
-    struct mut_p128
+    class mut_p128
     {
         union
         {
@@ -141,7 +141,7 @@ namespace rac
         };
     };
 
-    struct mut_p256
+    class mut_p256
     {
         union
         {
@@ -167,7 +167,7 @@ namespace rac
 
 
     // Packed Types that have floating point data
-    struct mut_pf32
+    class mut_pf32
     {
         union
         {
@@ -177,7 +177,7 @@ namespace rac
         };
     };
 
-    struct mut_pf64
+    class mut_pf64
     {
         union
         {
@@ -189,7 +189,7 @@ namespace rac
         };
     };
 
-    struct mut_pf128
+    class mut_pf128
     {
         union
         {
@@ -207,7 +207,7 @@ namespace rac
         };
     };
 
-    struct mut_pf256
+    class mut_pf256
     {
         union
         {
