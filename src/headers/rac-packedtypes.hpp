@@ -41,6 +41,34 @@ namespace rac
     typedef const mut_p256* p256ptr;
     typedef const mut_p256& p256ref;
 
+    struct mut_pf32;
+    typedef mut_pf32* mut_pf32ptr;
+    typedef mut_pf32& mut_pf32ref;
+    typedef const mut_pf32 pf32;
+    typedef const mut_pf32* pf32ptr;
+    typedef const mut_pf32& pf32ref;
+
+    struct mut_pf64;
+    typedef mut_pf64* mut_pf64ptr;
+    typedef mut_pf64& mut_pf64ref;
+    typedef const mut_pf64 pf64;
+    typedef const mut_pf64* pf64ptr;
+    typedef const mut_pf64& pf64ref;
+
+    struct mut_pf128;
+    typedef mut_pf128* mut_pf128ptr;
+    typedef mut_pf128& mut_pf128ref;
+    typedef const mut_pf128 pf128;
+    typedef const mut_pf128* pf128ptr;
+    typedef const mut_pf128& pf128ref;
+
+    struct mut_pf256;
+    typedef mut_pf256* mut_pf256ptr;
+    typedef mut_pf256& mut_pf256ref;
+    typedef const mut_pf256 pf256;
+    typedef const mut_pf256* pf256ptr;
+    typedef const mut_pf256& pf256ref;
+
     struct mut_p16
     {
         union
