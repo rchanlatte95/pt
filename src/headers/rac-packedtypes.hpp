@@ -157,12 +157,12 @@ namespace rac
         };
 
         mut_p64() { uint64 = 0; }
-        mut_p64(i32 i) { uint64 = i; }
-        mut_p64(u32 u) { uint64 = u; }
+        mut_p64(i64 i) { uint64 = i; }
+        mut_p64(u64 u) { uint64 = u; }
         mut_p64(u32 high, u32 low)
         {
-            uint16[HIGH] = high;
-            uint16[LOW] = low;
+            uint32[HIGH] = high;
+            uint32[LOW] = low;
         }
         mut_p64(p32 high, p32 low)
         {
@@ -190,6 +190,7 @@ namespace rac
 
     class mut_p128
     {
+    public:
         union
         {
             mut_i8 bytes[sizeof(__m128i)];
@@ -208,6 +209,64 @@ namespace rac
             mut_p32 packed32[sizeof(__m128i) / sizeof(p32)];
             mut_p64 packed64[sizeof(__m128i) / sizeof(p64)];
         };
+
+        mut_p128() { int128 = _mm_set_epi64x(0x0, 0x0); }
+        mut_p128(__m128i i) { int128 = i; }
+        mut_p128(u64 high, u64 low)
+        {
+            uint64[HIGH] = high;
+            uint64[LOW] = low;
+        }
+        mut_p128(p64 high, p64 low)
+        {
+            uint64[HIGH] = high.uint64;
+            uint64[LOW] = low.uint64;
+        }
+        mut_p128(u8 b0, u8 b1, u8 b2, u8 b3, u8 b4, u8 b5, u8 b6, u8 b7,
+                u8 b8, u8 b9, u8 b10, u8 b11, u8 b12, u8 b13, u8 b14, u8 b15)
+        {
+            bytes[0] = b0;
+            bytes[1] = b1;
+            bytes[2] = b2;
+            bytes[3] = b3;
+
+            bytes[4] = b4;
+            bytes[5] = b5;
+            bytes[6] = b6;
+            bytes[7] = b7;
+
+            bytes[8] = b8;
+            bytes[9] = b9;
+            bytes[10] = b10;
+            bytes[11] = b11;
+
+            bytes[12] = b12;
+            bytes[13] = b13;
+            bytes[14] = b14;
+            bytes[15] = b15;
+        }
+        mut_p128(u8 b0, u8 b1, u8 b2, u8 b3, u8 b4, u8 b5, u8 b6, u8 b7)
+        {
+            bytes[0] = b0;
+            bytes[1] = b1;
+            bytes[2] = b2;
+            bytes[3] = b3;
+
+            bytes[4] = b4;
+            bytes[5] = b5;
+            bytes[6] = b6;
+            bytes[7] = b7;
+
+            bytes[8] = b0;
+            bytes[9] = b1;
+            bytes[10] = b2;
+            bytes[11] = b3;
+
+            bytes[12] = b4;
+            bytes[13] = b5;
+            bytes[14] = b6;
+            bytes[15] = b7;
+        }
 
         INLINE u64 High() const noexcept { return uint64[HIGH]; }
         INLINE u64 Low() const noexcept { return uint64[LOW]; }
