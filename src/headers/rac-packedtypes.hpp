@@ -80,8 +80,8 @@ namespace rac
             mut_u16 uint16;
         };
 
-        INLINE i8 High() const noexcept { return bytes[HIGH]; }
-        INLINE i8 Low() const noexcept { return bytes[LOW]; }
+        INLINE u8 High() const noexcept { return ubytes[HIGH]; }
+        INLINE u8 Low() const noexcept { return ubytes[LOW]; }
     };
 
     class mut_p32
@@ -98,6 +98,9 @@ namespace rac
 
             mut_p16 packed16[sizeof(u32) / sizeof(p16)];
         };
+
+        INLINE u16 High() const noexcept { return uint16[HIGH]; }
+        INLINE u16 Low() const noexcept { return uint16[LOW]; }
     };
 
     class mut_p64
@@ -117,6 +120,9 @@ namespace rac
             mut_p16 packed16[sizeof(u64) / sizeof(p16)];
             mut_p32 packed32[sizeof(u64) / sizeof(p32)];
         };
+
+        INLINE u32 High() const noexcept { return uint32[HIGH]; }
+        INLINE u32 Low() const noexcept { return uint32[LOW]; }
     };
 
     class mut_p128
