@@ -199,6 +199,9 @@ namespace rac
             mut_f32 float32[sizeof(p64) / sizeof(f32)];
             mut_f64 float64;
         };
+
+        INLINE f32 High() const noexcept { return float32[HIGH]; }
+        INLINE f32 Low() const noexcept { return float32[LOW]; }
     };
 
     class mut_pf128
