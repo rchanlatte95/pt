@@ -49,6 +49,7 @@ namespace rac::img
             mut_i64 ct = (i64)(HEIGHT * WIDTH) >> 3;
             while (--ct > -1)
             {
+                //_mm256_set1_epi32(code);
                 _mm256_maskstore_epi32(p, MASK_VEC, code_vec);
                 p += 8;
             }

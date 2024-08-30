@@ -247,7 +247,7 @@ namespace rac
             mut_p64 packed64[sizeof(__m128i) / sizeof(p64)];
         };
 
-        mut_p128() { int128 = _mm_set_epi64x(0x0, 0x0); }
+        mut_p128() { int128 = _mm_setzero_si128(); }
 
         mut_p128(__m128i i) { int128 = i; }
 
