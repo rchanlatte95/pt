@@ -96,6 +96,7 @@ namespace rac
 
     class mut_p32
     {
+    public:
         union
         {
             mut_i8 bytes[sizeof(u32)];
@@ -138,6 +139,7 @@ namespace rac
 
     class mut_p64
     {
+    public:
         union
         {
             mut_i8 bytes[sizeof(u64)];
@@ -153,6 +155,32 @@ namespace rac
             mut_p16 packed16[sizeof(u64) / sizeof(p16)];
             mut_p32 packed32[sizeof(u64) / sizeof(p32)];
         };
+
+        mut_p64() { uint64 = 0; }
+        mut_p64(i32 i) { uint64 = i; }
+        mut_p64(u32 u) { uint64 = u; }
+        mut_p64(u32 high, u32 low)
+        {
+            uint16[HIGH] = high;
+            uint16[LOW] = low;
+        }
+        mut_p64(p32 high, p32 low)
+        {
+            uint32[HIGH] = high.uint32;
+            uint32[LOW] = low.uint32;
+        }
+        mut_p64(u8 b0, u8 b1, u8 b2, u8 b3, u8 b4, u8 b5, u8 b6, u8 b7)
+        {
+            bytes[0] = b0;
+            bytes[1] = b1;
+            bytes[2] = b2;
+            bytes[3] = b3;
+
+            bytes[4] = b4;
+            bytes[5] = b5;
+            bytes[6] = b6;
+            bytes[7] = b7;
+        }
 
         INLINE u32 High() const noexcept { return uint32[HIGH]; }
         INLINE u32 Low() const noexcept { return uint32[LOW]; }
