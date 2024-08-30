@@ -116,6 +116,8 @@ namespace rac
             mut_u32 uint32;
 
             mut_f32 float32;
+
+            p16 packed16[sizeof(u32) / sizeof(p16)];
         };
     };
 
@@ -135,6 +137,9 @@ namespace rac
 
             mut_f32 float32[sizeof(u64) / sizeof(u32)];
             mut_f64 float64;
+
+            p16 packed16[sizeof(u64) / sizeof(p16)];
+            p32 packed32[sizeof(u64) / sizeof(p32)];
         };
     };
 
@@ -154,6 +159,10 @@ namespace rac
 
             mut_f32 float32[sizeof(__m128i) / sizeof(f32)];
             mut_f64 float64[sizeof(__m128i) / sizeof(f64)];
+
+            p16 packed16[sizeof(__m128i) / sizeof(p16)];
+            p32 packed32[sizeof(__m128i) / sizeof(p32)];
+            p64 packed64[sizeof(__m128i) / sizeof(p64)];
 
             __m128i simd128;
         };
