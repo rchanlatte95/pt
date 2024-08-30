@@ -109,6 +109,27 @@ namespace rac
             mut_p16 packed16[sizeof(u32) / sizeof(p16)];
         };
 
+        mut_p32() { uint32 = 0; }
+        mut_p32(i32 i) { uint32 = i; }
+        mut_p32(u32 u) { uint32 = u; }
+        mut_p32(u16 high, u16 low)
+        {
+            uint16[HIGH] = high;
+            uint16[LOW] = low;
+        }
+        mut_p32(p16 high, p16 low)
+        {
+            uint16[HIGH] = high.uint16;
+            uint16[LOW] = low.uint16;
+        }
+        mut_p32(u8 b0, u8 b1, u8 b2, u8 b3)
+        {
+            bytes[0] = b0;
+            bytes[1] = b1;
+            bytes[2] = b2;
+            bytes[3] = b3;
+        }
+
         INLINE u16 High() const noexcept { return uint16[HIGH]; }
         INLINE u16 Low() const noexcept { return uint16[LOW]; }
         INLINE p16 PackedHigh() const noexcept { return packed16[HIGH]; }
