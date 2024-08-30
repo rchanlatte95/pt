@@ -101,6 +101,8 @@ namespace rac
 
         INLINE u16 High() const noexcept { return uint16[HIGH]; }
         INLINE u16 Low() const noexcept { return uint16[LOW]; }
+        INLINE p16 PackedHigh() const noexcept { return packed16[HIGH]; }
+        INLINE p16 PackedLow() const noexcept { return packed16[LOW]; }
     };
 
     class mut_p64
@@ -123,6 +125,8 @@ namespace rac
 
         INLINE u32 High() const noexcept { return uint32[HIGH]; }
         INLINE u32 Low() const noexcept { return uint32[LOW]; }
+        INLINE p32 PackedHigh() const noexcept { return packed32[HIGH]; }
+        INLINE p32 PackedLow() const noexcept { return packed32[LOW]; }
     };
 
     class mut_p128
@@ -148,6 +152,8 @@ namespace rac
 
         INLINE u64 High() const noexcept { return uint64[HIGH]; }
         INLINE u64 Low() const noexcept { return uint64[LOW]; }
+        INLINE p64 PackedHigh() const noexcept { return packed64[HIGH]; }
+        INLINE p64 PackedLow() const noexcept { return packed64[LOW]; }
     };
 
     class mut_p256
@@ -170,11 +176,13 @@ namespace rac
             mut_p16 packed16[sizeof(__m256i) / sizeof(p16)];
             mut_p32 packed32[sizeof(__m256i) / sizeof(p32)];
             mut_p64 packed64[sizeof(__m256i) / sizeof(p64)];
-            mut_p64 packed128[sizeof(__m256i) / sizeof(p128)];
+            mut_p128 packed128[sizeof(__m256i) / sizeof(p128)];
         };
 
         INLINE __m128i High() const noexcept { return int128[HIGH]; }
         INLINE __m128i Low() const noexcept { return int128[LOW]; }
+        INLINE p128 PackedHigh() const noexcept { return packed128[HIGH]; }
+        INLINE p128 PackedLow() const noexcept { return packed128[LOW]; }
     };
 
 
@@ -202,6 +210,9 @@ namespace rac
 
         INLINE f32 High() const noexcept { return float32[HIGH]; }
         INLINE f32 Low() const noexcept { return float32[LOW]; }
+
+        INLINE p128 PackedHigh() const noexcept { return packed128[HIGH]; }
+        INLINE p128 PackedLow() const noexcept { return packed128[LOW]; }
     };
 
     class mut_pf128
