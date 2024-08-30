@@ -95,11 +95,11 @@ namespace rac
     {
         union
         {
-            mut_u8 ubytes[sizeof(u16)];
             mut_i8 bytes[sizeof(u16)];
-
-            mut_u16 uint16;
             mut_i16 int16;
+
+            mut_u8 ubytes[sizeof(u16)];
+            mut_u16 uint16;
         };
     };
 
@@ -107,14 +107,15 @@ namespace rac
     {
         union
         {
-            mut_u8 ubytes[sizeof(u32)];
             mut_i8 bytes[sizeof(u32)];
-
-            mut_u16 uint16[sizeof(u32) / sizeof(u16)];
             mut_i16 int16[sizeof(u32) / sizeof(u16)];
-
-            mut_u32 uint32;
             mut_i32 int32;
+
+            mut_u8 ubytes[sizeof(u32)];
+            mut_u16 uint16[sizeof(u32) / sizeof(u16)];
+            mut_u32 uint32;
+
+            mut_f32 float32;
         };
     };
 
@@ -122,17 +123,41 @@ namespace rac
     {
         union
         {
-            mut_u8 ubytes[sizeof(u64)];
             mut_i8 bytes[sizeof(u64)];
-
-            mut_u16 uint16[sizeof(u64) / sizeof(u16)];
             mut_i16 int16[sizeof(u64) / sizeof(u16)];
-
-            mut_u32 uint32[sizeof(u64) / sizeof(u32)];
             mut_i32 int32[sizeof(u64) / sizeof(u32)];
-
-            mut_u64 uint64;
             mut_i64 int64;
+
+            mut_u8 ubytes[sizeof(u64)];
+            mut_u16 uint16[sizeof(u64) / sizeof(u16)];
+            mut_u32 uint32[sizeof(u64) / sizeof(u32)];
+            mut_u64 uint64;
+
+            mut_f32 float32[sizeof(u64) / sizeof(u32)];
+            mut_f64 float64;
         };
     };
+
+    struct p128
+    {
+        union
+        {
+            mut_i8 bytes[sizeof(__m128i)];
+            mut_i16 int16[sizeof(__m128i) / sizeof(u16)];
+            mut_i32 int32[sizeof(__m128i) / sizeof(u32)];
+            mut_i64 int64[sizeof(__m128i) / sizeof(u64)];
+
+            mut_u8 ubytes[sizeof(__m128i)];
+            mut_u16 uint16[sizeof(__m128i) / sizeof(u16)];
+            mut_u32 uint32[sizeof(__m128i) / sizeof(u32)];
+            mut_u64 uint64[sizeof(__m128i) / sizeof(u64)];
+
+            mut_f32 float32[sizeof(__m128i) / sizeof(f32)];
+            mut_f64 float64[sizeof(__m128i) / sizeof(f64)];
+
+            __m128i simd128;
+        };
+    };
+
+    //__m256i
 }
