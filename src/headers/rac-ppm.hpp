@@ -102,6 +102,11 @@ namespace rac::img
 
             ptr mmap_file = MapMem(file, PPM_FILE_SZ, 0);
 
+            if (mmap_file == nullptr)
+            {
+                return false;
+            }
+
             fprintf(file, "P3\n%lu %lu\n255\n", WIDTH, HEIGHT);
 
             u32 PENULT_WIDTH = WIDTH - 1;
