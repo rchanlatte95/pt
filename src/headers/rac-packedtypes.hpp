@@ -251,33 +251,43 @@ namespace rac
 
         mut_p128(__m128i i) { int128 = i; }
 
-        mut_p128(u64 high, u64 low)
+        mut_p128(u64 uint64_0) { int128 = _mm_set1_epi64x(uint64_0); }
+        mut_p128(u64 uint64_0, u64 uint64_1)
         {
-            uint64[HIGH] = high;
-            uint64[LOW] = low;
-        }
-        mut_p128(p64 high, p64 low)
-        {
-            uint64[HIGH] = high.uint64;
-            uint64[LOW] = low.uint64;
+            int128 = _mm_set_epi64x(uint64_1, uint64_0);
         }
 
+        mut_p128(i64 int64_0) { int128 = _mm_set1_epi64x(int64_0); }
+        mut_p128(i64 int64_0, i64 int64_1)
+        {
+            int128 = _mm_set_epi64x(int64_1, int64_0);
+        }
+
+        mut_p128(u32 uint32_0) { int128 = _mm_set1_epi32(uint32_0); }
+        mut_p128(u32 uint32_0, u32 uint32_1)
+        {
+            int128 = _mm_set_epi32(uint32_1, uint32_0, uint32_1, uint32_0);
+        }
         mut_p128(u32 uint32_0, u32 uint32_1, u32 uint32_2, u32 uint32_3)
         {
-            uint32[0] = uint32_0;
-            uint32[1] = uint32_1;
-            uint32[2] = uint32_2;
-            uint32[3] = uint32_3;
+            int128 = _mm_set_epi32(uint32_3, uint32_2, uint32_1, uint32_0);
+        }
+
+        mut_p128(i32 int32_0) { int128 = _mm_set1_epi32(int32_0); }
+        mut_p128(i32 int32_0, i32 int32_1)
+        {
+            int128 = _mm_set_epi32(int32_1, int32_0, int32_1, int32_0);
         }
         mut_p128(i32 int32_0, i32 int32_1, i32 int32_2, i32 int32_3)
         {
-            int32[0] = int32_0;
-            int32[1] = int32_1;
-            int32[2] = int32_2;
-            int32[3] = int32_3;
+            int128 = _mm_set_epi32(int32_3, int32_2, int32_1, int32_0);
         }
 
         mut_p128(u16 uint16_0) { int128 = _mm_set1_epi16(uint16_0); }
+        mut_p128(u16 uint16_0, u16 uint16_1, u16 uint16_2, u16 uint16_3)
+        {
+            int128 = _mm_set_epi16(uint16_3, uint16_2, uint16_1, uint16_0, uint16_3, uint16_2, uint16_1, uint16_0);
+        }
         mut_p128(u16 uint16_0, u16 uint16_1, u16 uint16_2, u16 uint16_3, u16 uint16_4, u16 uint16_5, u16 uint16_6, u16 uint16_7)
         {
             int128 = _mm_set_epi16(uint16_7, uint16_6, uint16_5, uint16_4, uint16_3, uint16_2, uint16_1, uint16_0);
