@@ -262,95 +262,47 @@ namespace rac
             uint64[LOW] = low.uint64;
         }
 
+        mut_p128(u32 uint32_0, u32 uint32_1, u32 uint32_2, u32 uint32_3)
+        {
+            uint32[0] = uint32_0;
+            uint32[1] = uint32_1;
+            uint32[2] = uint32_2;
+            uint32[3] = uint32_3;
+        }
+        mut_p128(i32 int32_0, i32 int32_1, i32 int32_2, i32 int32_3)
+        {
+            int32[0] = int32_0;
+            int32[1] = int32_1;
+            int32[2] = int32_2;
+            int32[3] = int32_3;
+        }
+
+        mut_p128(u16 uint16_0) { int128 = _mm_set1_epi16(uint16_0); }
+        mut_p128(u16 uint16_0, u16 uint16_1, u16 uint16_2, u16 uint16_3, u16 uint16_4, u16 uint16_5, u16 uint16_6, u16 uint16_7)
+        {
+            int128 = _mm_set_epi16(uint16_7, uint16_6, uint16_5, uint16_4, uint16_3, uint16_2, uint16_1, uint16_0);
+        }
+
+        mut_p128(u8 b0) { int128 = _mm_set1_epi8(b0); }
+        mut_p128(u8 b0, u8 b1, u8 b2, u8 b3, u8 b4, u8 b5, u8 b6, u8 b7)
+        {
+            int128 = _mm_set_epi8(b7, b6, b5, b4, b3, b2, b1, b0, b7, b6, b5, b4, b3, b2, b1, b0);
+        }
         mut_p128(u8 b0, u8 b1, u8 b2, u8 b3, u8 b4, u8 b5, u8 b6, u8 b7,
                 u8 b8, u8 b9, u8 b10, u8 b11, u8 b12, u8 b13, u8 b14, u8 b15)
         {
-            ubytes[0] = b0;
-            ubytes[1] = b1;
-            ubytes[2] = b2;
-            ubytes[3] = b3;
-
-            ubytes[4] = b4;
-            ubytes[5] = b5;
-            ubytes[6] = b6;
-            ubytes[7] = b7;
-
-            ubytes[8] = b8;
-            ubytes[9] = b9;
-            ubytes[10] = b10;
-            ubytes[11] = b11;
-
-            ubytes[12] = b12;
-            ubytes[13] = b13;
-            ubytes[14] = b14;
-            ubytes[15] = b15;
+            int128 = _mm_set_epi8(b15, b14, b13, b12, b11, b10, b9, b8, b7, b6, b5, b4, b3, b2, b1, b0);
         }
-        mut_p128(u8 b0, u8 b1, u8 b2, u8 b3, u8 b4, u8 b5, u8 b6, u8 b7)
-        {
-            ubytes[0] = b0;
-            ubytes[1] = b1;
-            ubytes[2] = b2;
-            ubytes[3] = b3;
 
-            ubytes[4] = b4;
-            ubytes[5] = b5;
-            ubytes[6] = b6;
-            ubytes[7] = b7;
-
-            ubytes[8] = b0;
-            ubytes[9] = b1;
-            ubytes[10] = b2;
-            ubytes[11] = b3;
-
-            ubytes[12] = b4;
-            ubytes[13] = b5;
-            ubytes[14] = b6;
-            ubytes[15] = b7;
-        }
+        mut_p128(i8 b0) { int128 = _mm_set1_epi8(b0); }
         mut_p128(i8 b0, i8 b1, i8 b2, i8 b3, i8 b4, i8 b5, i8 b6, i8 b7)
         {
-            bytes[0] = b0;
-            bytes[1] = b1;
-            bytes[2] = b2;
-            bytes[3] = b3;
-
-            bytes[4] = b4;
-            bytes[5] = b5;
-            bytes[6] = b6;
-            bytes[7] = b7;
-
-            bytes[8] = b0;
-            bytes[9] = b1;
-            bytes[10] = b2;
-            bytes[11] = b3;
-
-            bytes[12] = b4;
-            bytes[13] = b5;
-            bytes[14] = b6;
-            bytes[15] = b7;
+            int128 = _mm_set_epi8(b7, b6, b5, b4, b3, b2, b1, b0, b7, b6, b5, b4, b3, b2, b1, b0);
         }
         mut_p128(i8 b0, i8 b1, i8 b2, i8 b3, i8 b4, i8 b5, i8 b6, i8 b7,
                 i8 b8, i8 b9, i8 b10, i8 b11, i8 b12, i8 b13, i8 b14, i8 b15)
         {
-            bytes[0] = b0;
-            bytes[1] = b1;
-            bytes[2] = b2;
-            bytes[3] = b3;
-
-            bytes[4] = b4;
-            bytes[5] = b5;
-            bytes[6] = b6;
-            bytes[7] = b7;
-
-            bytes[8] = b8;
-            bytes[9] = b9;
-            bytes[10] = b10;
-            bytes[11] = b11;
-
-            bytes[12] = b12;
-            bytes[13] = b13;
-            bytes[14] = b14;
-            bytes[15] = b15;
+            int128 = _mm_set_epi8(b15, b14, b13, b12, b11, b10, b9, b8, b7, b6, b5, b4, b3, b2, b1, b0);
         }
 
         INLINE u64 High() const noexcept { return uint64[HIGH]; }
