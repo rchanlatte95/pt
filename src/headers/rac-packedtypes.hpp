@@ -350,7 +350,6 @@ namespace rac
         INLINE p128 PackedLow() const noexcept { return packed128[LOW]; }
     };
 
-
     // Packed Types that have floating point data
     class mut_pf32
     {
