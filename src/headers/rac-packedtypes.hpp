@@ -201,7 +201,7 @@ namespace rac
     {
         union
         {
-            mut_p32 packed32[sizeof(p64) / sizeof(p32)];
+            mut_p32 packedf32[sizeof(p64) / sizeof(p32)];
             mut_p64 packed64;
 
             mut_f32 float32[sizeof(p64) / sizeof(f32)];
@@ -210,9 +210,8 @@ namespace rac
 
         INLINE f32 High() const noexcept { return float32[HIGH]; }
         INLINE f32 Low() const noexcept { return float32[LOW]; }
-
-        INLINE p128 PackedHigh() const noexcept { return packed128[HIGH]; }
-        INLINE p128 PackedLow() const noexcept { return packed128[LOW]; }
+        INLINE p32 PackedHigh() const noexcept { return packedf32[HIGH]; }
+        INLINE p32 PackedLow() const noexcept { return packedf32[LOW]; }
     };
 
     class mut_pf128
@@ -234,6 +233,8 @@ namespace rac
 
         INLINE f64 High() const noexcept { return float64[HIGH]; }
         INLINE f64 Low() const noexcept { return float64[LOW]; }
+        INLINE pf64 PackedHigh() const noexcept { return packedf64[HIGH]; }
+        INLINE pf64 PackedLow() const noexcept { return packedf64[LOW]; }
     };
 
     class mut_pf256
@@ -257,5 +258,7 @@ namespace rac
 
         INLINE __m128 High() const noexcept { return float128[HIGH]; }
         INLINE __m128 Low() const noexcept { return float128[LOW]; }
+        INLINE pf128 PackedHigh() const noexcept { return packedf128[HIGH]; }
+        INLINE pf128 PackedLow() const noexcept { return packedf128[LOW]; }
     };
 }
