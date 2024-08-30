@@ -71,6 +71,7 @@ namespace rac
 
     class mut_p16
     {
+    public:
         union
         {
             mut_i8 bytes[sizeof(u16)];
@@ -79,6 +80,15 @@ namespace rac
             mut_u8 ubytes[sizeof(u16)];
             mut_u16 uint16;
         };
+
+        mut_p16() { int16 = 0; }
+        mut_p16(i16 i) { int16 = i; }
+        mut_p16(u16 u) { uint16 = u; }
+        mut_p16(u8 b0, u8 b1)
+        {
+            bytes[0] = b0;
+            bytes[1] = b1;
+        }
 
         INLINE u8 High() const noexcept { return ubytes[HIGH]; }
         INLINE u8 Low() const noexcept { return ubytes[LOW]; }
