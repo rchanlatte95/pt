@@ -157,8 +157,10 @@ namespace rac
         };
 
         mut_p64() { uint64 = 0; }
+
         mut_p64(i64 i) { uint64 = i; }
         mut_p64(u64 u) { uint64 = u; }
+
         mut_p64(u32 high, u32 low)
         {
             uint32[HIGH] = high;
@@ -169,7 +171,42 @@ namespace rac
             uint32[HIGH] = high.uint32;
             uint32[LOW] = low.uint32;
         }
+
+        mut_p64(u16 uint16_0, u16 uint16_1, u16 uint16_2, u16 uint16_3)
+        {
+            uint16[0] = uint16_0;
+            uint16[1] = uint16_1;
+            uint16[2] = uint16_2;
+            uint16[3] = uint16_3;
+        }
+        mut_p64(i16 int16_0, i16 int16_1, i16 int16_2, i16 int16_3)
+        {
+            int16[0] = int16_0;
+            int16[1] = int16_1;
+            int16[2] = int16_2;
+            int16[3] = int16_3;
+        }
+        mut_p64(p16 p16_0, p16 p16_1, p16 p16_2, p16 p16_3)
+        {
+            packed16[0] = p16_0;
+            packed16[1] = p16_1;
+            packed16[2] = p16_2;
+            packed16[3] = p16_3;
+        }
+
         mut_p64(u8 b0, u8 b1, u8 b2, u8 b3, u8 b4, u8 b5, u8 b6, u8 b7)
+        {
+            ubytes[0] = b0;
+            ubytes[1] = b1;
+            ubytes[2] = b2;
+            ubytes[3] = b3;
+
+            ubytes[4] = b4;
+            ubytes[5] = b5;
+            ubytes[6] = b6;
+            ubytes[7] = b7;
+        }
+        mut_p64(i8 b0, i8 b1, i8 b2, i8 b3, i8 b4, i8 b5, i8 b6, i8 b7)
         {
             bytes[0] = b0;
             bytes[1] = b1;
@@ -211,7 +248,9 @@ namespace rac
         };
 
         mut_p128() { int128 = _mm_set_epi64x(0x0, 0x0); }
+
         mut_p128(__m128i i) { int128 = i; }
+
         mut_p128(u64 high, u64 low)
         {
             uint64[HIGH] = high;
@@ -222,6 +261,7 @@ namespace rac
             uint64[HIGH] = high.uint64;
             uint64[LOW] = low.uint64;
         }
+
         mut_p128(u8 b0, u8 b1, u8 b2, u8 b3, u8 b4, u8 b5, u8 b6, u8 b7,
                 u8 b8, u8 b9, u8 b10, u8 b11, u8 b12, u8 b13, u8 b14, u8 b15)
         {
