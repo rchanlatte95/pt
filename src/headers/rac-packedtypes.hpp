@@ -3,63 +3,63 @@
 
 namespace rac
 {
-    struct mut_p16;
+    class mut_p16;
     typedef mut_p16* mut_p16ptr;
     typedef mut_p16& mut_p16ref;
     typedef const mut_p16 p16;
     typedef const mut_p16* p16ptr;
     typedef const mut_p16& p16ref;
 
-    struct mut_p32;
+    class mut_p32;
     typedef mut_p32* mut_p32ptr;
     typedef mut_p32& mut_p32ref;
     typedef const mut_p32 p32;
     typedef const mut_p32* p32ptr;
     typedef const mut_p32& p32ref;
 
-    struct mut_p64;
+    class mut_p64;
     typedef mut_p64* mut_p64ptr;
     typedef mut_p64& mut_p64ref;
     typedef const mut_p64 p64;
     typedef const mut_p64* p64ptr;
     typedef const mut_p64& p64ref;
 
-    struct mut_p128;
+    class mut_p128;
     typedef mut_p128* mut_p128ptr;
     typedef mut_p128& mut_p128ref;
     typedef const mut_p128 p128;
     typedef const mut_p128* p128ptr;
     typedef const mut_p128& p128ref;
 
-    struct mut_p256;
+    class mut_p256;
     typedef mut_p256* mut_p256ptr;
     typedef mut_p256& mut_p256ref;
     typedef const mut_p256 p256;
     typedef const mut_p256* p256ptr;
     typedef const mut_p256& p256ref;
 
-    struct mut_pf32;
+    class mut_pf32;
     typedef mut_pf32* mut_pf32ptr;
     typedef mut_pf32& mut_pf32ref;
     typedef const mut_pf32 pf32;
     typedef const mut_pf32* pf32ptr;
     typedef const mut_pf32& pf32ref;
 
-    struct mut_pf64;
+    class mut_pf64;
     typedef mut_pf64* mut_pf64ptr;
     typedef mut_pf64& mut_pf64ref;
     typedef const mut_pf64 pf64;
     typedef const mut_pf64* pf64ptr;
     typedef const mut_pf64& pf64ref;
 
-    struct mut_pf128;
+    class mut_pf128;
     typedef mut_pf128* mut_pf128ptr;
     typedef mut_pf128& mut_pf128ref;
     typedef const mut_pf128 pf128;
     typedef const mut_pf128* pf128ptr;
     typedef const mut_pf128& pf128ref;
 
-    struct mut_pf256;
+    class mut_pf256;
     typedef mut_pf256* mut_pf256ptr;
     typedef mut_pf256& mut_pf256ref;
     typedef const mut_pf256 pf256;
@@ -158,8 +158,7 @@ namespace rac
 
         mut_p64() { uint64 = 0; }
 
-        mut_p64(i64 i) { uint64 = i; }
-        mut_p64(u64 u) { uint64 = u; }
+        mut_p64(i64 i) { int64 = i; }
 
         mut_p64(u32 high, u32 low)
         {
