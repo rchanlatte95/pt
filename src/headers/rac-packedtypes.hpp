@@ -133,6 +133,8 @@ namespace rac
 
         INLINE u16 High() const noexcept { return uint16[HIGH]; }
         INLINE u16 Low() const noexcept { return uint16[LOW]; }
+        INLINE u16 HighWord() const noexcept { return High(); }
+        INLINE u16 LowWord() const noexcept { return Low(); }
         INLINE p16 PackedHigh() const noexcept { return packed16[HIGH]; }
         INLINE p16 PackedLow() const noexcept { return packed16[LOW]; }
     };
@@ -220,6 +222,8 @@ namespace rac
 
         INLINE u32 High() const noexcept { return uint32[HIGH]; }
         INLINE u32 Low() const noexcept { return uint32[LOW]; }
+        INLINE u32 HighDword() const noexcept { return High(); }
+        INLINE u32 LowDword() const noexcept { return Low(); }
         INLINE p32 PackedHigh() const noexcept { return packed32[HIGH]; }
         INLINE p32 PackedLow() const noexcept { return packed32[LOW]; }
     };
@@ -250,26 +254,10 @@ namespace rac
 
         mut_p128(__m128i i) { int128 = i; }
 
-        mut_p128(u64 uint64_0) { int128 = _mm_set1_epi64x(uint64_0); }
-        mut_p128(u64 uint64_0, u64 uint64_1)
-        {
-            int128 = _mm_set_epi64x(uint64_1, uint64_0);
-        }
-
         mut_p128(i64 int64_0) { int128 = _mm_set1_epi64x(int64_0); }
         mut_p128(i64 int64_0, i64 int64_1)
         {
             int128 = _mm_set_epi64x(int64_1, int64_0);
-        }
-
-        mut_p128(u32 uint32_0) { int128 = _mm_set1_epi32(uint32_0); }
-        mut_p128(u32 uint32_0, u32 uint32_1)
-        {
-            int128 = _mm_set_epi32(uint32_1, uint32_0, uint32_1, uint32_0);
-        }
-        mut_p128(u32 uint32_0, u32 uint32_1, u32 uint32_2, u32 uint32_3)
-        {
-            int128 = _mm_set_epi32(uint32_3, uint32_2, uint32_1, uint32_0);
         }
 
         mut_p128(i32 int32_0) { int128 = _mm_set1_epi32(int32_0); }
@@ -282,25 +270,14 @@ namespace rac
             int128 = _mm_set_epi32(int32_3, int32_2, int32_1, int32_0);
         }
 
-        mut_p128(u16 uint16_0) { int128 = _mm_set1_epi16(uint16_0); }
-        mut_p128(u16 uint16_0, u16 uint16_1, u16 uint16_2, u16 uint16_3)
+        mut_p128(i16 uint16_0) { int128 = _mm_set1_epi16(uint16_0); }
+        mut_p128(i16 uint16_0, i16 uint16_1, i16 uint16_2, i16 uint16_3)
         {
             int128 = _mm_set_epi16(uint16_3, uint16_2, uint16_1, uint16_0, uint16_3, uint16_2, uint16_1, uint16_0);
         }
-        mut_p128(u16 uint16_0, u16 uint16_1, u16 uint16_2, u16 uint16_3, u16 uint16_4, u16 uint16_5, u16 uint16_6, u16 uint16_7)
+        mut_p128(i16 uint16_0, i16 uint16_1, i16 uint16_2, i16 uint16_3, i16 uint16_4, i16 uint16_5, i16 uint16_6, i16 uint16_7)
         {
             int128 = _mm_set_epi16(uint16_7, uint16_6, uint16_5, uint16_4, uint16_3, uint16_2, uint16_1, uint16_0);
-        }
-
-        mut_p128(u8 b0) { int128 = _mm_set1_epi8(b0); }
-        mut_p128(u8 b0, u8 b1, u8 b2, u8 b3, u8 b4, u8 b5, u8 b6, u8 b7)
-        {
-            int128 = _mm_set_epi8(b7, b6, b5, b4, b3, b2, b1, b0, b7, b6, b5, b4, b3, b2, b1, b0);
-        }
-        mut_p128(u8 b0, u8 b1, u8 b2, u8 b3, u8 b4, u8 b5, u8 b6, u8 b7,
-                u8 b8, u8 b9, u8 b10, u8 b11, u8 b12, u8 b13, u8 b14, u8 b15)
-        {
-            int128 = _mm_set_epi8(b15, b14, b13, b12, b11, b10, b9, b8, b7, b6, b5, b4, b3, b2, b1, b0);
         }
 
         mut_p128(i8 b0) { int128 = _mm_set1_epi8(b0); }
@@ -316,6 +293,8 @@ namespace rac
 
         INLINE u64 High() const noexcept { return uint64[HIGH]; }
         INLINE u64 Low() const noexcept { return uint64[LOW]; }
+        INLINE u64 HighQword() const noexcept { return High(); }
+        INLINE u64 LowQword() const noexcept { return Low(); }
         INLINE p64 PackedHigh() const noexcept { return packed64[HIGH]; }
         INLINE p64 PackedLow() const noexcept { return packed64[LOW]; }
     };
