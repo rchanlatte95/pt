@@ -3,6 +3,7 @@
 #pragma warning(disable:4201)
 
 #include "rac.hpp"
+#include "rac-packedtypes.hpp"
 
 #ifdef _MSC_VER
 #define MAP_FAILED    ((void *) -1)
@@ -13,149 +14,6 @@
 // something Unix-like
 namespace rac::mem::windows
 {
-	class mut_wordU16;
-	typedef mut_wordU16* mut_wordU16ptr;
-	typedef mut_wordU16& mut_wordU16ref;
-	typedef const mut_wordU16 wordU16;
-	typedef const mut_wordU16* wordU16ptr;
-	typedef const mut_wordU16& wordU16ref;
-
-	class mut_dwordU32;
-	typedef mut_dwordU32* mut_dwordU32ptr;
-	typedef mut_dwordU32& mut_dwordU32ref;
-	typedef const mut_dwordU32 dwordU32;
-	typedef const mut_dwordU32* dwordU32ptr;
-	typedef const mut_dwordU32& dwordU32ref;
-
-	class mut_qwordU64;
-	typedef mut_qwordU64* mut_qwordU64ptr;
-	typedef mut_qwordU64& mut_qwordU64ref;
-	typedef const mut_qwordU64 qwordU64;
-	typedef const mut_qwordU64* qwordU64ptr;
-	typedef const mut_qwordU64& qwordU64ref;
-
-	static i32 HIGH = 0;
-	static i32 LOW = 1;
-
-	struct packed_dword
-	{
-		union
-		{
-			mut_u8 bytes[sizeof(u32)];
-			mut_u16 words[sizeof(u32) / sizeof(u16)];
-		};
-	};
-
-	class mut_wordU16
-	{
-		union
-		{
-			mut_u16 word;
-			struct
-			{
-				mut_u8 bytes[sizeof(u16)];
-			};
-		};
-
-	public:
-		mut_wordU16()
-		{
-			word = 0;
-			bytes[HIGH] = 0;
-			bytes[LOW] = 0;
-		}
-
-		// mut_wordU16(WORD w)
-		mut_wordU16(u16 w)
-		{
-			bytes[HIGH] = 0;
-			bytes[LOW] = 0;
-			word = w;
-		}
-
-		// mut_wordU16(BYTE low_bits, BYTE high_bits)
-		mut_wordU16(u8 low_bits, u8 high_bits)
-		{
-			word = 0;
-			bytes[HIGH] = low_bits;
-			bytes[LOW] = high_bits;
-		}
-	};
-
-	class mut_dwordU32
-	{
-		union
-		{
-			mut_u32 dword;
-			struct packed_dword packed;
-		};
-
-	public:
-		mut_dwordU32()
-		{
-			packed.words[HIGH] = 0;
-			packed.words[LOW] = 0;
-			dword = 0;
-		}
-
-		// mut_dwordU32(DWORD dw)
-		mut_dwordU32(u32 dw)
-		{
-			packed.words[HIGH] = 0;
-			packed.words[LOW] = 0;
-			dword = dw;
-		}
-
-		// mut_dwordU32(WORD low_bits, WORD high_bits)
-		mut_dwordU32(u16 low_bits, u16 high_bits)
-		{
-			dword = 0;
-			packed.words[HIGH] = high_bits;
-			packed.words[LOW] = low_bits;
-		}
-
-		// mut_dwordU32(BYTE b0, BYTE b1, BYTE b2, BYTE b3)
-		mut_dwordU32(u8 b0, u8 b1, u8 b2, u8 b3)
-		{
-			dword = 0;
-			packed.bytes[0] = b0;
-			packed.bytes[1] = b1;
-			packed.bytes[2] = b2;
-			packed.bytes[3] = b3;
-		}
-
-		INLINE u32 Dword() const noexcept { return dword; }
-		INLINE u16 High() const noexcept { return packed.words[HIGH]; }
-		INLINE u16 Low() const noexcept { return packed.words[LOW]; }
-	};
-
-	class mut_qwordU64
-	{
-		mut_u64 qword;
-		union
-		{
-			mut_u8 bytes[sizeof(u64)];
-			mut_wordU16 words[sizeof(u64) / sizeof(u16)];
-			mut_dwordU32 dwords[sizeof(u64) / sizeof(u32)];
-		};
-
-	public:
-		mut_qwordU64()
-		{
-			dwords[HIGH] = 0;
-			dwords[LOW] = 0;
-			qword = 0;
-		}
-
-		// mut_qwordU64(QWORD q)
-		mut_qwordU64(u64 q)
-		{
-			dwords[HIGH] = 0;
-			dwords[LOW] = 0;
-			qword = q;
-		}
-	};
-
 	enum MemoryMapType : i32
 	{
 		Shared = 0x1, Private = 0x2, Anonymous = 0x20,
@@ -261,7 +119,7 @@ namespace rac::mem::windows
 	INLINE HANDLE CreateFileMap(HANDLE file_handle,
 							LPSECURITY_ATTRIBUTES FileMappingAttributes,
 							u32 flProtect,
-							dwordU32 maxSize,
+							p64 maxSize,
 							LPCWSTR Name)
 	{
 		return CreateFileMappingW(file_handle,
@@ -274,7 +132,7 @@ namespace rac::mem::windows
 
 	INLINE HANDLE CreateFileMap(HANDLE file_handle,
 							u32 flProtect,
-							dwordU32 maxSize)
+							p64 maxSize)
 	{
 		return CreateFileMappingW(file_handle,
 								NULL,
@@ -286,7 +144,7 @@ namespace rac::mem::windows
 
 	INLINE mut_ptr GetMapView(HANDLE FileMappingObject,
 							u32 DesiredAccess,
-							dwordU32 FileOffset,
+							p64 FileOffset,
 							u64 NumberOfBytesToMap)
 	{
 		return MapViewOfFile(FileMappingObject,
@@ -298,7 +156,7 @@ namespace rac::mem::windows
 
 	INLINE HANDLE CreateFileMap(mut_FilePtr File,
 							u32 flProtect,
-							dwordU32 maxSize)
+							p64 maxSize)
 	{
 		return CreateFileMappingW(File,
 								NULL,
@@ -321,26 +179,17 @@ namespace rac::mem::windows
 	MAY_INLINE ptr mmap(MemoryMapProtection prot,
 						MemoryMapType flags,
 						mut_FilePtr file,
-						ptr_offset offset,
+						ptr_offset file_ptr_offset,
 						u64 length)
 	{
-		if (prot & ~(MemoryMapProtection::Full))
-		{
-			return MAP_FAILED;
-		}
+		if (prot & ~(MemoryMapProtection::Full)) { return MAP_FAILED; }
 
 		bool anonymous = flags & MemoryMapType::Anonymous;
 		if (file == nullptr)
 		{
-			if (!anonymous || offset)
-			{
-				return MAP_FAILED;
-			}
+			if (!anonymous || file_ptr_offset) { return MAP_FAILED; }
 		}
-		else if (anonymous)
-		{
-			return MAP_FAILED;
-		}
+		else if (anonymous) { return MAP_FAILED; }
 
 		mut_u32 fl_protect;
 		if (prot & MemoryMapProtection::Write)
@@ -349,10 +198,7 @@ namespace rac::mem::windows
 			{
 				fl_protect = PAGE_EXECUTE_READWRITE;
 			}
-			else
-			{
-				fl_protect = PAGE_READWRITE;
-			}
+			else { fl_protect = PAGE_READWRITE; }
 		}
 		else if (prot & MemoryMapProtection::Execute)
 		{
@@ -360,15 +206,9 @@ namespace rac::mem::windows
 			{
 				fl_protect = PAGE_EXECUTE_READ;
 			}
-			else
-			{
-				fl_protect = PAGE_EXECUTE;
-			}
+			else { fl_protect = PAGE_EXECUTE; }
 		}
-		else
-		{
-			fl_protect = PAGE_READONLY;
-		}
+		else { fl_protect = PAGE_READONLY; }
 
 		HANDLE target_map_file = GetHandleFromFile(file);
 		if (target_map_file == INVALID_HANDLE_VALUE)
@@ -376,23 +216,16 @@ namespace rac::mem::windows
 			return MAP_FAILED;
 		}
 
-		mut_dwordU32 end = offset + (u32)length;
+		mut_p64 end = file_ptr_offset + length;
 		HANDLE map_handle = CreateFileMap(target_map_file, fl_protect, end);
-		if (map_handle == NULL)
-		{
-			return MAP_FAILED;
-		}
+		if (map_handle == NULL) { return MAP_FAILED; }
 
-		mut_dwordU32 offset_ = offset;
 		mut_u32 desired_access;
 		if (prot & MemoryMapProtection::Write)
 		{
 			desired_access = FILE_MAP_WRITE;
 		}
-		else
-		{
-			desired_access = FILE_MAP_READ;
-		}
+		else  { desired_access = FILE_MAP_READ; }
 
 		if (prot & MemoryMapProtection::Execute)
 		{
@@ -403,6 +236,7 @@ namespace rac::mem::windows
 			desired_access |= FILE_MAP_COPY;
 		}
 
+		mut_p64 offset_ = mut_p64(file_ptr_offset);
 		mut_ptr ret = GetMapView(map_handle, desired_access, offset_, length);
 		if (ret == nullptr)
 		{
