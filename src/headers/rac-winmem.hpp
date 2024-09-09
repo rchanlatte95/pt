@@ -236,7 +236,7 @@ namespace rac::mem::windows
 			desired_access |= FILE_MAP_COPY;
 		}
 
-		mut_p64 offset_ = mut_p64(file_ptr_offset);
+		mut_p64 offset_ = file_ptr_offset;
 		mut_ptr ret = GetMapView(map_handle, desired_access, offset_, length);
 		if (ret == nullptr)
 		{
