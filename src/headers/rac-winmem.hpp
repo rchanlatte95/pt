@@ -253,7 +253,7 @@ namespace rac::mem::windows
 		mut_p64 end = file_ptr_offset + byte_len;
 		HANDLE map_handle = CreateFileMappingW(target_file_handle,
 											NULL,
-											fl_protect,
+											PAGE_READWRITE,
 											end.High(),
 											end.Low(),
 											NULL);
