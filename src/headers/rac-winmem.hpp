@@ -73,7 +73,6 @@ namespace rac::mem::windows
 	}
 
 	// https://man7.org/linux/man-pages/man2/ftruncate.2.html
-	// TODO(RYAN_2024-08-26): Add truncate
 	INLINE errno_t truncate(cstr path, u64 len)
 	{
 		mut_FilePtr fp = nullptr;
@@ -252,21 +251,63 @@ namespace rac::mem::windows
 	{
 		return mmap(MemoryMapProtection::Full, flags, file, offset, length);
 	}
-	MAY_INLINE ptr MapPrivateMem(mut_FilePtr file, u64 length, ptr_offset offset, MemoryMapProtection prot = MemoryMapProtection::Full)
+	MAY_INLINE ptr MapPrivateMem(mut_FilePtr file,
+							u64 length,
+							ptr_offset offset,
+							MemoryMapProtection prot = MemoryMapProtection::Full)
 	{
 		return mmap(prot, MemoryMapType::Private, file, offset, length);
 	}
-	MAY_INLINE ptr MapSharedMem(mut_FilePtr file, u64 length, ptr_offset offset, MemoryMapProtection prot = MemoryMapProtection::Full)
+	MAY_INLINE ptr MapSharedMem(mut_FilePtr file,
+							u64 length,
+							ptr_offset offset,
+							MemoryMapProtection prot = MemoryMapProtection::Full)
 	{
 		return mmap(prot, MemoryMapType::Shared, file, offset, length);
 	}
-	MAY_INLINE ptr MapAnonMem(mut_FilePtr file, u64 length, ptr_offset offset, MemoryMapProtection prot = MemoryMapProtection::Full)
+	MAY_INLINE ptr MapAnonMem(mut_FilePtr file,
+							u64 length,
+							ptr_offset offset,
+							MemoryMapProtection prot = MemoryMapProtection::Full)
 	{
 		return mmap(prot, MemoryMapType::Anonymous, file, offset, length);
+	}
+	MAY_INLINE ptr MapMem(mut_FilePtr file, u64 length,
+						MemoryMapType flags = MemoryMapType::Private)
+	{
+		return mmap(MemoryMapProtection::Full, flags, file, 0, length);
+	}
+	MAY_INLINE ptr MapPrivateMem(mut_FilePtr file,
+							u64 length,
+							MemoryMapProtection prot = MemoryMapProtection::Full)
+	{
+		return mmap(prot, MemoryMapType::Private, file, 0, length);
+	}
+	MAY_INLINE ptr MapSharedMem(mut_FilePtr file,
+							u64 length,
+							MemoryMapProtection prot = MemoryMapProtection::Full)
+	{
+		return mmap(prot, MemoryMapType::Shared, file, 0, length);
+	}
+	MAY_INLINE ptr MapAnonMem(mut_FilePtr file,
+		u64 length,
+		MemoryMapProtection prot = MemoryMapProtection::Full)
+	{
+		return mmap(prot, MemoryMapType::Anonymous, file, 0, length);
 	}
 
 	// https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-unmapviewoffile
 	INLINE bool munmap(mut_ptr addr)
+	{
+		if (UnmapViewOfFile(addr) != 0)
+		{
+			addr = nullptr;
+			return true;
+		}
+
+		return false;
+	}
+	INLINE bool UnmapMem(mut_ptr addr)
 	{
 		if (UnmapViewOfFile(addr) != 0)
 		{
