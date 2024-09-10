@@ -19,22 +19,18 @@ namespace rac::mem::windows
 		Shared = 0x1, Private = 0x2, Anonymous = 0x20,
 	};
 
-	/*
-	#define PAGE_GUARD             0x100
-	#define PAGE_NOCACHE           0x200
-	#define PAGE_WRITECOMBINE      0x400
-	*/
-	enum PageMemProtection : i32
+	enum PageMemProtection : u32
 	{
-		NoAccess = PAGE_NOACCESS,
+		None = 0x0,
 
-		Read = PAGE_READONLY,
-		Write = PAGE_WRITECOPY,
-		Execute = PAGE_EXECUTE,
+		Read = 0x1,
+		Write = 0x2,
+		ReadWrite = Read | Write,
+		Execute = 0x4,
 
-		ExecuteRead = PAGE_EXECUTE_READ,
-		ReadWrite = PAGE_READWRITE,
-		Full = PAGE_EXECUTE_READWRITE
+		ExecuteRead = Read |	Execute,
+		ExecuteReadWrite = ReadWrite | Execute,
+		Full = ExecuteReadWrite
 	};
 
 	u64 PAGE_BYTE_SIZE = 4 * KB;
