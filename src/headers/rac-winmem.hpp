@@ -28,6 +28,16 @@ namespace rac::mem::windows
 	};
 
 	u64 PAGE_BYTE_SIZE = 4 * KB;
+	u64 MAX_FILE_BYTE_SIZE = 8 * GB;
+
+	INLINE bool ValidFileSize(u64 byte_len)
+	{
+		return byte_len > 0 && byte_len <= MAX_FILE_BYTE_SIZE;
+	}
+	INLINE bool InvalidFileSize(u64 byte_len)
+	{
+		return !ValidFileSize(byte_len);
+	}
 
 	INLINE i32 GetFileDescriptor(mut_FilePtr file)
 	{
@@ -43,8 +53,8 @@ namespace rac::mem::windows
 	{
 		//https://stackoverflow.com/questions/3989545/how-do-i-get-the-file-handle-from-the-fopen-file-structure
 		// supposedly you can cast the file descriptor and it'll be a valid
-		// HANDLE; however, that may not be portable to all Windows platforms?
-		// Not sure. Better safe than sorry.
+		// HANDLE; however, that may not be portable to all Windows
+		// platforms? Not sure. Better safe than sorry.
 		if (file == nullptr)
 		{
 			return INVALID_HANDLE_VALUE;
@@ -176,11 +186,12 @@ namespace rac::mem::windows
 	//		https://github.com/m-labs/uclibc-lm32/blob/master/utils/mmap-windows.c
 	//
 	MAY_INLINE ptr mmap(MemoryMapProtection prot,
-						MemoryMapType flags,
-						mut_FilePtr file,
-						ptr_offset file_ptr_offset,
-						u64 length)
+					MemoryMapType flags,
+					mut_FilePtr file,
+					ptr_offset file_ptr_offset,
+					u64 byte_len)
 	{
+		if (InvalidFileSize(byte_len)) { return MAP_FAILED; }
 		if (prot & ~(MemoryMapProtection::Full)) { return MAP_FAILED; }
 
 		bool anonymous = flags & MemoryMapType::Anonymous;
@@ -215,7 +226,7 @@ namespace rac::mem::windows
 			return MAP_FAILED;
 		}
 
-		mut_p64 end = file_ptr_offset + length;
+		mut_p64 end = file_ptr_offset + byte_len;
 		HANDLE map_handle = CreateFileMap(target_map_file, fl_protect, end);
 		if (map_handle == NULL) { return MAP_FAILED; }
 
@@ -236,7 +247,7 @@ namespace rac::mem::windows
 		}
 
 		mut_p64 offset_ = file_ptr_offset;
-		mut_ptr ret = GetMapView(map_handle, desired_access, offset_, length);
+		mut_ptr ret = GetMapView(map_handle, desired_access, offset_, byte_len);
 		if (ret == nullptr)
 		{
 			CloseHandle(map_handle);
@@ -290,8 +301,8 @@ namespace rac::mem::windows
 		return mmap(prot, MemoryMapType::Shared, file, 0, length);
 	}
 	MAY_INLINE ptr MapAnonMem(mut_FilePtr file,
-		u64 length,
-		MemoryMapProtection prot = MemoryMapProtection::Full)
+							u64 length,
+							MemoryMapProtection prot = MemoryMapProtection::Full)
 	{
 		return mmap(prot, MemoryMapType::Anonymous, file, 0, length);
 	}
