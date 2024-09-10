@@ -128,50 +128,61 @@ namespace rac::mem::windows
 	INLINE HANDLE CreateFileMap(HANDLE file_handle,
 							LPSECURITY_ATTRIBUTES FileMappingAttributes,
 							u32 flProtect,
-							p64 maxSize,
+							p64 bytesToMap,
 							LPCWSTR Name)
 	{
 		return CreateFileMappingW(file_handle,
 								FileMappingAttributes,
 								flProtect,
-								maxSize.High(),
-								maxSize.Low(),
+								bytesToMap.High(),
+								bytesToMap.Low(),
 								Name);
 	}
 
 	INLINE HANDLE CreateFileMap(HANDLE file_handle,
 							u32 flProtect,
-							p64 maxSize)
+							p64 bytesToMap)
 	{
 		return CreateFileMappingW(file_handle,
 								NULL,
 								flProtect,
-								maxSize.High(),
-								maxSize.Low(),
+								bytesToMap.High(),
+								bytesToMap.Low(),
 								NULL);
 	}
 
 	INLINE mut_ptr GetMapView(HANDLE FileMappingObject,
 							u32 DesiredAccess,
 							p64 FileOffset,
-							u64 NumberOfBytesToMap)
+							u64 bytesToMap)
 	{
 		return MapViewOfFile(FileMappingObject,
 							DesiredAccess,
 							FileOffset.High(),
 							FileOffset.Low(),
-							NumberOfBytesToMap);
+							bytesToMap);
+	}
+
+	INLINE mut_ptr GetMapView(HANDLE FileMappingObject,
+							u32 DesiredAccess,
+							u64 bytesToMap)
+	{
+		return MapViewOfFile(FileMappingObject,
+							DesiredAccess,
+							0,
+							0,
+							bytesToMap);
 	}
 
 	INLINE HANDLE CreateFileMap(mut_FilePtr File,
 							u32 flProtect,
-							p64 maxSize)
+							p64 bytesToMap)
 	{
 		return CreateFileMappingW(File,
 								NULL,
 								flProtect,
-								maxSize.High(),
-								maxSize.Low(),
+								bytesToMap.High(),
+								bytesToMap.Low(),
 								NULL);
 	}
 
