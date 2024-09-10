@@ -66,8 +66,8 @@ namespace rac
     typedef const mut_pf256* pf256ptr;
     typedef const mut_pf256& pf256ref;
 
-    static i32 HIGH = 0;
-    static i32 LOW = 1;
+    static i32 LOW = 0;
+    static i32 HIGH = 1;
 
     class mut_p16
     {
@@ -86,8 +86,8 @@ namespace rac
         mut_p16(u16 u) { uint16 = u; }
         mut_p16(u8 b0, u8 b1)
         {
-            bytes[0] = b0;
-            bytes[1] = b1;
+            bytes[LOW] = b0;
+            bytes[HIGH] = b1;
         }
 
         INLINE u8 High() const noexcept { return ubytes[HIGH]; }

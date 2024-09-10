@@ -51,7 +51,7 @@ namespace rac::mem::windows
 
 	INLINE HANDLE GetHandleFromFile(mut_FilePtr file)
 	{
-		//https://stackoverflow.com/questions/3989545/how-do-i-get-the-file-handle-from-the-fopen-file-structure
+		// https://stackoverflow.com/questions/3989545/how-do-i-get-the-file-handle-from-the-fopen-file-structure
 		// supposedly you can cast the file descriptor and it'll be a valid
 		// HANDLE; however, that may not be portable to all Windows
 		// platforms? Not sure. Better safe than sorry.
@@ -231,14 +231,32 @@ namespace rac::mem::windows
 		}
 		else { fl_protect = PAGE_READONLY; }
 
-		HANDLE target_map_file = GetHandleFromFile(file);
-		if (target_map_file == INVALID_HANDLE_VALUE)
+		HANDLE target_file_handle = GetHandleFromFile(file);
+		if (target_file_handle == INVALID_HANDLE_VALUE)
 		{
 			return MAP_FAILED;
 		}
 
+		/*
+
+		typedef enum _OBJECT_INFORMATION_CLASS { ObjectBasicInformation, ObjectTypeInformation } OBJECT_INFORMATION_CLASS;
+
+		__kernel_entry NTSYSCALLAPI NTSTATUS NtQueryObject(
+			[in, optional]  HANDLE                   Handle,
+			[in]            OBJECT_INFORMATION_CLASS ObjectInformationClass,
+			[out, optional] PVOID                    ObjectInformation,
+			[in]            ULONG                    ObjectInformationLength,
+			[out, optional] PULONG                   ReturnLength
+		);
+		*/
+
 		mut_p64 end = file_ptr_offset + byte_len;
-		HANDLE map_handle = CreateFileMap(target_map_file, fl_protect, end);
+		HANDLE map_handle = CreateFileMappingW(target_file_handle,
+											NULL,
+											fl_protect,
+											end.High(),
+											end.Low(),
+											NULL);
 		if (map_handle == NULL) { return MAP_FAILED; }
 
 		mut_u32 desired_access;
