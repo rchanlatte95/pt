@@ -243,22 +243,10 @@ namespace rac::mem::windows
 			return MAP_FAILED;
 		}
 
-		/*
-		typedef enum _OBJECT_INFORMATION_CLASS { ObjectBasicInformation, ObjectTypeInformation } OBJECT_INFORMATION_CLASS;
-
-		__kernel_entry NTSYSCALLAPI NTSTATUS NtQueryObject(
-			[in, optional]  HANDLE                   Handle,
-			[in]            OBJECT_INFORMATION_CLASS ObjectInformationClass,
-			[out, optional] PVOID                    ObjectInformation,
-			[in]            ULONG                    ObjectInformationLength,
-			[out, optional] PULONG                   ReturnLength
-		);
-		*/
-
 		mut_p64 end = file_ptr_offset + byte_len;
 		HANDLE map_handle = CreateFileMappingW(target_file_handle,
 												NULL,
-												PAGE_READWRITE,
+												fl_protect,
 												end.High(),
 												end.Low(),
 												NULL);

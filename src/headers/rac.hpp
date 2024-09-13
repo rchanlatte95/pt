@@ -30,6 +30,8 @@
 #include <algorithm>
 #include <filesystem>
 
+
+// Windows Headers
 #ifdef _MSC_VER
 #define NOMINMAX 0
 
@@ -42,8 +44,8 @@
 #pragma comment(lib,"Shell32")
 #pragma comment(lib,"Ole32")
 
-#define WIN_FAILED(x) (x != 0)
-#define WIN_SUCCESS(x) (x == 0)
+#define WIN_FAILED(x) ((x) != 0)
+#define WIN_SUCCESS(x) ((x) == 0)
 
 #else
 #include <x86intrin.h>
