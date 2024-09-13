@@ -148,6 +148,12 @@ namespace rac::img
                 printf("\r\n\tPath tracer result unable to save to: %s\r\n", desk_path_cstr);
             }
 
+            bool unmap_failed = UnmapMem(mmap_file) == false;
+            if (unmap_failed)
+            {
+                printf("\r\n\t*** WARNING: Failed to unmap memory!\r\n");
+            }
+
             return saved_successfully;
         }
 

@@ -257,11 +257,11 @@ namespace rac::mem::windows
 
 		mut_p64 end = file_ptr_offset + byte_len;
 		HANDLE map_handle = CreateFileMappingW(target_file_handle,
-											NULL,
-											PAGE_READWRITE,
-											end.High(),
-											end.Low(),
-											NULL);
+												NULL,
+												PAGE_READWRITE,
+												end.High(),
+												end.Low(),
+												NULL);
 		if (map_handle == NULL) { return MAP_FAILED; }
 
 		mut_u32 desired_access;
@@ -294,26 +294,26 @@ namespace rac::mem::windows
 						ptr_offset offset,
 						MemoryMapType flags = MemoryMapType::Private)
 	{
-		return mmap(PageMemProtection::ReadWrite, flags, file, offset, length);
+		return mmap(PageMemProtection::None, flags, file, offset, length);
 	}
 	MAY_INLINE ptr MapPrivateMem(mut_FilePtr file,
 							u64 length,
 							ptr_offset offset,
-							PageMemProtection prot = PageMemProtection::ReadWrite)
+							PageMemProtection prot = PageMemProtection::None)
 	{
 		return mmap(prot, MemoryMapType::Private, file, offset, length);
 	}
 	MAY_INLINE ptr MapSharedMem(mut_FilePtr file,
 							u64 length,
 							ptr_offset offset,
-							PageMemProtection prot = PageMemProtection::ReadWrite)
+							PageMemProtection prot = PageMemProtection::None)
 	{
 		return mmap(prot, MemoryMapType::Shared, file, offset, length);
 	}
 	MAY_INLINE ptr MapAnonMem(mut_FilePtr file,
 							u64 length,
 							ptr_offset offset,
-							PageMemProtection prot = PageMemProtection::ReadWrite)
+							PageMemProtection prot = PageMemProtection::None)
 	{
 		return mmap(prot, MemoryMapType::Anonymous, file, offset, length);
 	}
@@ -324,19 +324,19 @@ namespace rac::mem::windows
 	}
 	MAY_INLINE ptr MapPrivateMem(mut_FilePtr file,
 							u64 length,
-							PageMemProtection prot = PageMemProtection::ReadWrite)
+							PageMemProtection prot = PageMemProtection::None)
 	{
 		return mmap(prot, MemoryMapType::Private, file, 0, length);
 	}
 	MAY_INLINE ptr MapSharedMem(mut_FilePtr file,
 							u64 length,
-							PageMemProtection prot = PageMemProtection::ReadWrite)
+							PageMemProtection prot = PageMemProtection::None)
 	{
 		return mmap(prot, MemoryMapType::Shared, file, 0, length);
 	}
 	MAY_INLINE ptr MapAnonMem(mut_FilePtr file,
 							u64 length,
-							PageMemProtection prot = PageMemProtection::ReadWrite)
+							PageMemProtection prot = PageMemProtection::None)
 	{
 		return mmap(prot, MemoryMapType::Anonymous, file, 0, length);
 	}
@@ -352,7 +352,7 @@ namespace rac::mem::windows
 
 		return false;
 	}
-	INLINE bool UnmapMem(mut_ptr addr)
+	INLINE bool UnmapMem(ptr addr)
 	{
 		if (UnmapViewOfFile(addr) != 0)
 		{
