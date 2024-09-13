@@ -170,7 +170,7 @@
     <ClInclude Include="headers\rac-packedtypes.hpp" />
     <ClInclude Include="headers\rac-perfstamp.hpp" />
     <ClInclude Include="headers\rac-ppm.hpp" />
-    <ClInclude Include="headers\rac-rnd-noise-blue.hpp" />
+    <ClInclude Include="headers\rac-noise-blue.hpp" />
     <ClInclude Include="headers\rac-sphere.hpp" />
     <ClInclude Include="headers\rac-ray.hpp" />
     <ClInclude Include="headers\rac-staticstr.hpp" />

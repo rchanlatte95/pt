@@ -74,7 +74,7 @@
     <ClInclude Include="headers\rac-packedtypes.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\rac-rnd-noise-blue.hpp">
+    <ClInclude Include="headers\rac-noise-blue.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
