@@ -77,5 +77,8 @@
     <ClInclude Include="headers\rac-noise-blue.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="headers\rac-rnd-marsaglia.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
