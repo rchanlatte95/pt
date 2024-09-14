@@ -15,19 +15,29 @@ namespace rac::rnd::marsaglia
     // 41, 57, 190, 161, 127, 80, 98, 18, 187, 141, 124, 169, 75, 129, 180, 160
     u64 MAX_SEED_CT = 16;
     static u32 seeds[MAX_SEED_CT] = { 1063, 1723, 9293, 7481, 5381, 2803, 3733, 283, 8999, 6229, 5107, 8011, 2609, 5503, 8581, 7417 };
-    static mut_u32 seed = seeds[std::rand() % MAX_SEED_CT];
+    static mut_u32 u32_seed = seeds[std::rand() % MAX_SEED_CT];
+    static mut_i32 i32_seed = seeds[std::rand() % MAX_SEED_CT];
 
     class mut_XorRng
     {
     public:
 
-        static u32 Get()
+        static u32 GetU32()
         {
-            mut_u32 res = seed;
-            res <<= 3;
-            res >>= 25;
-            res <<= 24;
-            seed = res;
+            mut_u32 res = u32_seed;
+            res ^= res << 3;
+            res ^= res >> 25;
+            res ^= res << 24;
+            u32_seed = res;
+            return res;
+        }
+        static u32 GetI32()
+        {
+            mut_i32 res = i32_seed;
+            res ^= res >> 5;
+            res ^= res << 21;
+            res ^= res >> 12;
+            i32_seed = res;
             return res;
         }
     };
