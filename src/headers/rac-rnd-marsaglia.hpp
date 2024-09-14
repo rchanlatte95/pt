@@ -21,9 +21,8 @@ namespace rac::rnd::marsaglia
     // NOTE(RYAN_2024-09-14): Cryptographically generated random
     // numbers being used to select MORE super primes
     // (https://en.wikipedia.org/wiki/Super-prime):
-    // 155, 143, 135, 85, 193, 199, 111, 192, 2, 140, 46, 146, 6, 15, 191, 188, 151, 26
-    // 135, 85, 193, 199, 111, 192, 2, 140, 46, 146, 6, 15, 191, 188, 151, 26
-    static u64 u64_seeds[MAX_SEED_CT] = { 7057, 6323, };
+    // 155, 143, 135, 85, 193, 199, 111, 192, 2, 140, 46, 146, 6, 15, 191, 188
+    static u64 u64_seeds[MAX_SEED_CT] = { 7057, 6323, 5801, 3067, 9461, 9859, 4463, 9403, 5, 6217, 1217, 6469, 41, 211, 9319, 9041 };
     static mut_u64 u64_seed = u64_seeds[std::rand() % MAX_SEED_CT];
     static mut_u64 i64_seed = u64_seeds[std::rand() % MAX_SEED_CT];
 
