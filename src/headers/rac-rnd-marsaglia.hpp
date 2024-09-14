@@ -20,6 +20,15 @@ namespace rac::rnd::marsaglia
     class mut_XorRng
     {
     public:
-    };
 
+        static u32 Get()
+        {
+            mut_u32 res = seed;
+            res <<= 3;
+            res >>= 25;
+            res <<= 24;
+            seed = res;
+            return res;
+        }
+    };
 }
