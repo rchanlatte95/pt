@@ -39,7 +39,7 @@ namespace rac::rnd::marsaglia
             u32_seed = res;
             return res;
         }
-        static u32 GetI32()
+        static i32 GetI32()
         {
             mut_i32 res = i32_seed;
             res ^= res >> 5;
@@ -48,5 +48,28 @@ namespace rac::rnd::marsaglia
             i32_seed = res;
             return res;
         }
+
+        static u64 GetU64()
+        {
+            mut_u64 res = u64_seed;
+            res ^= res << 7;
+            res ^= res >> 51;
+            res ^= res << 24;
+            u32_seed = res;
+            return res;
+        }
+        static u64 GetI64()
+        {
+            mut_i64 res = i64_seed;
+            res ^= res >> 25;
+            res ^= res << 33;
+            res ^= res >> 36;
+            i32_seed = res;
+            return res;
+        }
+
+
+        //16,11,27
+        //4, 9,13
     };
 }
