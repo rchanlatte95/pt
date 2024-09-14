@@ -28,6 +28,29 @@ namespace rac::rnd::marsaglia
 
     class mut_XorRng
     {
+    private:
+
+        //16,11,27
+        //4, 9,13
+        static u32 GetU32()
+        {
+            mut_u32 res = u32_seed;
+            res ^= res << 3;
+            res ^= res >> 25;
+            res ^= res << 24;
+            u32_seed = res;
+            return res;
+        }
+        static i32 GetI32()
+        {
+            mut_i32 res = i32_seed;
+            res ^= res >> 5;
+            res ^= res << 21;
+            res ^= res >> 12;
+            i32_seed = res;
+            return res;
+        }
+
     public:
 
         static u32 GetU32()
@@ -58,13 +81,6 @@ namespace rac::rnd::marsaglia
             u32_seed = res;
             return res;
         }
-
-        /*
-        yˆ=y>>c; yˆ=y<<b; yˆ=y>>a;
-        yˆ=y<<a; yˆ=y<<c; yˆ=y>>b;
-        yˆ=y<<c; yˆ=y<<a; yˆ=y>>b;
-        yˆ=y>>c; yˆ=y>>a; yˆ=y<<b;
-        */
         static u64 GetI64()
         {
             mut_i64 res = i64_seed;
@@ -74,8 +90,5 @@ namespace rac::rnd::marsaglia
             i32_seed = res;
             return res;
         }
-
-        //16,11,27
-        //4, 9,13
     };
 }
