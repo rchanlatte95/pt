@@ -52,22 +52,28 @@ namespace rac::rnd::marsaglia
         static u64 GetU64()
         {
             mut_u64 res = u64_seed;
-            res ^= res << 7;
-            res ^= res >> 51;
-            res ^= res << 24;
+            res ^= res >> 7;
+            res ^= res >> 24;
+            res ^= res << 51;
             u32_seed = res;
             return res;
         }
+
+        /*
+        yˆ=y>>c; yˆ=y<<b; yˆ=y>>a;
+        yˆ=y<<a; yˆ=y<<c; yˆ=y>>b;
+        yˆ=y<<c; yˆ=y<<a; yˆ=y>>b;
+        yˆ=y>>c; yˆ=y>>a; yˆ=y<<b;
+        */
         static u64 GetI64()
         {
             mut_i64 res = i64_seed;
-            res ^= res >> 25;
-            res ^= res << 33;
-            res ^= res >> 36;
+            res ^= res << 36;
+            res ^= res >> 33;
+            res ^= res << 25;
             i32_seed = res;
             return res;
         }
-
 
         //16,11,27
         //4, 9,13
