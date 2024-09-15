@@ -842,30 +842,54 @@ namespace rac
             __m128i int128[sizeof(__m256i) / sizeof(__m128i)];
             __m256i int256;
 
-            mut_p16 packed16[sizeof(__m256i) / sizeof(p16)];
-            mut_p32 packed32[sizeof(__m256i) / sizeof(p32)];
-            mut_p64 packed64[sizeof(__m256i) / sizeof(p64)];
-            mut_p128 packed128[sizeof(__m256i) / sizeof(p128)];
+            mut_p16 packed16[sizeof(uint16)];
+            mut_p32 packed32[sizeof(uint32)];
+            mut_p64 packed64[sizeof(uint64)];
+            mut_p128 packed128[sizeof(int128)];
         };
 
         mut_p256() { int256 = _mm256_setzero_si256(); }
 
-        mut_p256(const __m256i& i) { int256 = _mm256_loadu_si256(&i); }
+        mut_p256(const __m256i& i256) { int256 = _mm256_loadu_si256(&i256); }
 
-        mut_p256(const __m128i& i)
+        mut_p256(const __m128i& i128_all)
         {
-            int256 = _mm256_set_m128i(i, i);
+            int256 = _mm256_set_m128i(i128_all, i128_all);
         }
         mut_p256(const __m128i& high, const __m128i& low)
         {
             int256 = _mm256_set_m128i(high, low);
         }
 
-        mut_p256(i64 int64_0) { int256 = _mm256_set1_epi64x(int64_0); }
+        mut_p256(i64 i64_all) { int256 = _mm256_set1_epi64x(i64_all); }
+        mut_p256(i64 i64_0, i64 i64_1, i64 i64_2, i64 i64_3)
+        {
+            //__m256i _mm256_set_epi64x(__int64 e3, __int64 e2, __int64 e1, __int64 e0)
+            int256 = _mm256_set_epi64x(i64_3, i64_2, i64_1, i64_0);
+        }
 
-        mut_p256(i32 int32_0) { int256 = _mm256_set1_epi32(int32_0); }
+        mut_p256(i32 i32_all) { int256 = _mm256_set1_epi32(i32_all); }
+        mut_p256(i32 i32_0, i32 i32_1, i32 i32_2, i32 i32_3,
+                i32 i32_4, i32 i32_5, i32 i32_6, i32 i32_7)
+        {
+            //__m256i _mm256_set_epi32(int e7, int e6, int e5, int e4,
+            //                          int e3, int e2, int e1, int e0)
+            int256 = _mm256_set_epi32(i32_7, i32_6, i32_5, i32_4,
+                                    i32_3, i32_2, i32_1, i32_0);
+        }
 
-        mut_p256(i16 uint16_0) { int256 = _mm256_set1_epi16(uint16_0); }
+        mut_p256(i16 i16_all) { int256 = _mm256_set1_epi16(i16_all); }
+        mut_p256(i16 i16_15, i16 i16_14, i16 i16_13, i16 i16_12,
+                i16 i16_11, i16 i16_10, i16 i16_9, i16 i16_8,
+                i16 i16_7, i16 i16_6, i16 i16_5, i16 i16_4,
+                i16 i16_3, i16 i16_2, i16 i16_1, i16 i16_0)
+        {
+            //__m256i _mm256_set_epi16(short e15, short e14, short e13, short e12, short e11, short e10, short e9, short e8, short e7, short e6, short e5, short e4, short e3, short e2, short e1, short e0)
+            int256 = _mm256_set_epi16(i16_15, i16_14, i16_13, i16_12,
+                                    i16_11, i16_10, i16_9, i16_8,
+                                    i16_7, i16_6, i16_5, i16_4,
+                                    i16_3, i16_2, i16_1, i16_0);
+        }
 
         INLINE mut_p256 operator-() const noexcept
         {
