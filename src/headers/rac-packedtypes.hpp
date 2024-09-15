@@ -726,7 +726,7 @@ namespace rac
             mut_p64 packed64[sizeof(__m128i) / sizeof(p64)];
         };
 
-        mut_p128() { int128 = _mm_setzero_si128(); }
+        mut_p128() { }
 
         mut_p128(__m128i i) { int128 = i; }
 
@@ -765,6 +765,39 @@ namespace rac
                 i8 b8, i8 b9, i8 b10, i8 b11, i8 b12, i8 b13, i8 b14, i8 b15)
         {
             int128 = _mm_set_epi8(b15, b14, b13, b12, b11, b10, b9, b8, b7, b6, b5, b4, b3, b2, b1, b0);
+        }
+
+        INLINE const mut_p128& operator+=(__m128i u) noexcept
+        {
+            int128 = _mm_add_epi32(int128, u);
+        }
+        INLINE const mut_p128& operator-=(__m128i u) noexcept
+        {
+            int128 = _mm_sub_epi32(int128, u);
+        }
+        INLINE const mut_p128& operator*=(__m128i u) noexcept
+        {
+            int128 = _mm_mullo_epi32(int128, u);
+        }
+        INLINE const mut_p128& operator/=(__m128i u) noexcept
+        {
+            //int128 /= u;
+        }
+        INLINE const mut_p128& operator+=(const mut_p128 p) noexcept
+        {
+            *this += p.int128;
+        }
+        INLINE const mut_p128& operator-=(const mut_p128 p) noexcept
+        {
+            *this -= p.int128;
+        }
+        INLINE const mut_p128& operator*=(const mut_p128 p) noexcept
+        {
+            *this *= p.int128;
+        }
+        INLINE const mut_p128& operator/=(const mut_p128 p) noexcept
+        {
+            *this /= p.int128;
         }
 
         INLINE u64 High() const noexcept { return uint64[HIGH]; }
