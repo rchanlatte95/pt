@@ -82,7 +82,6 @@ namespace rac
         };
 
         mut_p16() { int16 = 0; }
-        mut_p16(i16 i) { int16 = i; }
         mut_p16(u16 u) { uint16 = u; }
         mut_p16(u8 b0, u8 b1)
         {
@@ -126,6 +125,56 @@ namespace rac
         INLINE u8 High() const noexcept { return ubytes[HIGH]; }
         INLINE u8 Low() const noexcept { return ubytes[LOW]; }
     };
+
+    INLINE p16 operator+(p16ref lhs, u16ref rhs)
+    {
+        return p16(lhs.uint16 + rhs);
+    }
+    INLINE p16 operator-(p16ref lhs, u16ref rhs)
+    {
+        return p16(lhs.uint16 - rhs);
+    }
+    INLINE p16 operator*(p16ref lhs, u16ref rhs)
+    {
+        return p16(lhs.uint16 * rhs);
+    }
+    INLINE p16 operator/(p16ref lhs, u16ref rhs)
+    {
+        return p16(lhs.uint16 / rhs);
+    }
+    INLINE p16 operator+(u16ref lhs, p16ref rhs)
+    {
+        return p16(lhs + rhs.uint16);
+    }
+    INLINE p16 operator-(u16ref lhs, p16ref rhs)
+    {
+        return p16(lhs - rhs.uint16);
+    }
+    INLINE p16 operator*(u16ref lhs, p16ref rhs)
+    {
+        return p16(lhs * rhs.uint16);
+    }
+    INLINE p16 operator/(u16ref lhs, p16ref rhs)
+    {
+        return p16(lhs / rhs.uint16);
+    }
+    INLINE p16 operator+(p16ref lhs, p16ref rhs)
+    {
+        return lhs + rhs.uint16;
+    }
+    INLINE p16 operator-(p16ref lhs, p16ref rhs)
+    {
+        return lhs - rhs.uint16;
+    }
+    INLINE p16 operator*(p16ref lhs, p16ref rhs)
+    {
+        return lhs * rhs.uint16;
+    }
+    INLINE p16 operator/(p16ref lhs, p16ref rhs)
+    {
+        return lhs / rhs.uint16;
+    }
+
 
     class mut_p32
     {
