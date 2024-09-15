@@ -893,6 +893,44 @@ namespace rac
             const __m256i mask = _mm256_set1_epi32(-1);
             return _mm256_sign_epi32(int256, mask);
         }
+        INLINE const mut_p256& operator+=(__m256i u) noexcept
+        {
+            int256 = _mm256_add_epi32(int256, u);
+        }
+        INLINE const mut_p256& operator-=(__m256i u) noexcept
+        {
+            int256 = _mm256_sub_epi32(int256, u);
+        }
+        INLINE const mut_p256& operator*=(__m256i u) noexcept
+        {
+            int256 = _mm256_mullo_epi32(int256, u);
+        }
+        INLINE const mut_p256& operator/=(__m256i u) noexcept
+        {
+            //__m256d _mm256_castsi256_pd(__m256i a) -> cast int256 to float256
+            //__m256 _mm256_div_ps(__m256 a, __m256 b) -> float, f32
+            //__m256i _mm256_castpd_si256(__m256d a)
+            uint64[0] /= u.m256i_u64[0];
+            uint64[1] /= u.m256i_u64[1];
+            uint64[2] /= u.m256i_u64[2];
+            uint64[3] /= u.m256i_u64[3];
+        }
+        INLINE const mut_p256& operator+=(const mut_p256 p) noexcept
+        {
+            *this += p.int256;
+        }
+        INLINE const mut_p256& operator-=(const mut_p256 p) noexcept
+        {
+            *this -= p.int256;
+        }
+        INLINE const mut_p256& operator*=(const mut_p256 p) noexcept
+        {
+            *this *= p.int256;
+        }
+        INLINE const mut_p256& operator/=(const mut_p256 p) noexcept
+        {
+            *this /= p.int256;
+        }
 
         INLINE __m128i High() const noexcept { return int128[HIGH]; }
         INLINE __m128i Low() const noexcept { return int128[LOW]; }
