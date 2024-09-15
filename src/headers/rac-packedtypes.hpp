@@ -90,6 +90,39 @@ namespace rac
             bytes[HIGH] = b1;
         }
 
+        INLINE const mut_p16& operator+=(const mut_p16 p) noexcept
+        {
+            uint16 += p.uint16;
+        }
+        INLINE const mut_p16& operator-=(const mut_p16 p) noexcept
+        {
+            uint16 -= p.uint16;
+        }
+        INLINE const mut_p16& operator*=(mut_p16 p) noexcept
+        {
+            uint16 *= p.uint16;
+        }
+        INLINE const mut_p16& operator/=(mut_p16 p) noexcept
+        {
+            uint16 /= p.uint16;
+        }
+        INLINE const mut_p16& operator+=(u16 u) noexcept
+        {
+            uint16 += u;
+        }
+        INLINE const mut_p16& operator-=(u16 u) noexcept
+        {
+            uint16 -= u;
+        }
+        INLINE const mut_p16& operator*=(u16 u) noexcept
+        {
+            uint16 *= u;
+        }
+        INLINE const mut_p16& operator/=(u16 u) noexcept
+        {
+            uint16 /= u;
+        }
+
         INLINE u8 High() const noexcept { return ubytes[HIGH]; }
         INLINE u8 Low() const noexcept { return ubytes[LOW]; }
     };
