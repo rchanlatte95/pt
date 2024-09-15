@@ -850,7 +850,8 @@ namespace rac
 
         INLINE mut_p256 operator-() const noexcept
         {
-            //return mut_p256(-int256);
+            const __m256i mask = _mm256_set1_epi32(-1);
+            return _mm256_sign_epi32(int256, mask);
         }
 
         INLINE __m128i High() const noexcept { return int128[HIGH]; }
