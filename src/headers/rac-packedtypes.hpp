@@ -578,6 +578,57 @@ namespace rac
         INLINE p32 PackedLow() const noexcept { return packed32[LOW]; }
     };
 
+    INLINE p64 operator+(p64ref lhs, u64ref rhs)
+    {
+        return p64(lhs.uint64 + rhs);
+    }
+    INLINE p64 operator-(p64ref lhs, u64ref rhs)
+    {
+        return p64(lhs.uint64 - rhs);
+    }
+    INLINE p64 operator*(p64ref lhs, u64ref rhs)
+    {
+        return p64(lhs.uint64 * rhs);
+    }
+    INLINE p64 operator/(p64ref lhs, u64ref rhs)
+    {
+        return p64(lhs.uint64 / rhs);
+    }
+
+    INLINE p64 operator+(u64ref lhs, p64ref rhs)
+    {
+        return p64(lhs + rhs.uint64);
+    }
+    INLINE p64 operator-(u64ref lhs, p64ref rhs)
+    {
+        return p64(lhs - rhs.uint64);
+    }
+    INLINE p64 operator*(u64ref lhs, p64ref rhs)
+    {
+        return p64(lhs * rhs.uint64);
+    }
+    INLINE p64 operator/(u64ref lhs, p64ref rhs)
+    {
+        return p64(lhs / rhs.uint64);
+    }
+
+    INLINE p64 operator+(p64ref lhs, p64ref rhs)
+    {
+        return lhs + rhs.uint64;
+    }
+    INLINE p64 operator-(p64ref lhs, p64ref rhs)
+    {
+        return lhs - rhs.uint64;
+    }
+    INLINE p64 operator*(p64ref lhs, p64ref rhs)
+    {
+        return lhs * rhs.uint64;
+    }
+    INLINE p64 operator/(p64ref lhs, p64ref rhs)
+    {
+        return lhs / rhs.uint64;
+    }
+
     class mut_p128
     {
     public:
