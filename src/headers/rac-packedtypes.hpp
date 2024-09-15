@@ -848,6 +848,25 @@ namespace rac
             mut_p128 packed128[sizeof(__m256i) / sizeof(p128)];
         };
 
+        mut_p256() { int256 = _mm256_setzero_si256(); }
+
+        mut_p256(const __m256i& i) { int256 = _mm256_loadu_si256(&i); }
+
+        mut_p256(const __m128i& i)
+        {
+            int256 = _mm256_set_m128i(i, i);
+        }
+        mut_p256(const __m128i& high, const __m128i& low)
+        {
+            int256 = _mm256_set_m128i(high, low);
+        }
+
+        mut_p256(i64 int64_0) { int256 = _mm256_set1_epi64x(int64_0); }
+
+        mut_p256(i32 int32_0) { int256 = _mm256_set1_epi32(int32_0); }
+
+        mut_p256(i16 uint16_0) { int256 = _mm256_set1_epi16(uint16_0); }
+
         INLINE mut_p256 operator-() const noexcept
         {
             const __m256i mask = _mm256_set1_epi32(-1);
