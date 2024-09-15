@@ -730,14 +730,14 @@ namespace rac
 
             __m128i int128;
 
-            mut_p16 packed16[sizeof(__m128i) / sizeof(p16)];
-            mut_p32 packed32[sizeof(__m128i) / sizeof(p32)];
-            mut_p64 packed64[sizeof(__m128i) / sizeof(p64)];
+            mut_p16 packed16[sizeof(uint16)];
+            mut_p32 packed32[sizeof(uint32)];
+            mut_p64 packed64[sizeof(uint64)];
         };
 
-        mut_p128() { }
+        mut_p128() { int128 = _mm_setzero_si128(); }
 
-        mut_p128(__m128i i) { int128 = i; }
+        mut_p128(__m128i i) { int128 = _mm_loadu_si128(&i); }
 
         mut_p128(i64 int64_0) { int128 = _mm_set1_epi64x(int64_0); }
         mut_p128(i64 int64_0, i64 int64_1)
