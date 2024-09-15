@@ -771,6 +771,40 @@ namespace rac
                                 b3, b2, b1, b0);
         }
 
+        /*
+        &	bitwise AND
+        |	bitwise inclusive OR
+        ^	bitwise XOR (exclusive OR)
+        <<	left shift
+        >>	right shift
+        ~	bitwise NOT (ones' complement) (unary)
+        */
+        INLINE const mut_p128& operator&=(__m128i u) noexcept
+        {
+            //__m128i _mm_and_si128(__m128i a, __m128i b)
+            int128 = _mm_and_si128(int128, u);
+        }
+        INLINE const mut_p128& operator|=(__m128i u) noexcept
+        {
+            //__m128i _mm_or_si128(__m128i a, __m128i b)
+            int128 = _mm_or_si128(int128, u);
+        }
+        INLINE const mut_p128& operator^=(__m128i u) noexcept
+        {
+            //__m128i _mm_xor_si128(__m128i a, __m128i b)
+            int128 = _mm_xor_si128(int128, u);
+        }
+        INLINE const mut_p128& operator<<=(i32 shift_ct) noexcept
+        {
+            //__m128i _mm_slli_epi32(__m128i, int);
+            int128 = _mm_slli_epi32(int128, shift_ct);
+        }
+        INLINE const mut_p128& operator>>=(i32 shift_ct) noexcept
+        {
+            //__m128i _mm_srli_epi32(__m128i, int);
+            int128 = _mm_srli_epi32(int128, shift_ct);
+        }
+
         INLINE mut_p128 operator-() const noexcept
         {
             const __m128i mask = _mm_set1_epi32(-1);
@@ -788,6 +822,14 @@ namespace rac
         {
             int128 = _mm_mullo_epi32(int128, u);
         }
+
+        // TODO(RYAN_2024-09-15): Look into and check if a cast to
+        // floating point -> reciprocal -> multiply
+        // is faster than this piecewise division.
+        //
+        //__m256d _mm256_castsi256_pd(__m256i a) -> cast int256 to float256
+        //__m256 _mm256_div_ps(__m256 a, __m256 b) -> float, f32
+        //__m256i _mm256_castpd_si256(__m256d a)
         INLINE const mut_p128& operator/=(__m128i u) noexcept
         {
             uint32[0] /= u.m128i_u32[0];
@@ -795,6 +837,7 @@ namespace rac
             uint32[2] /= u.m128i_u32[2];
             uint32[3] /= u.m128i_u32[3];
         }
+
         INLINE const mut_p128& operator+=(const mut_p128 p) noexcept
         {
             *this += p.int128;
@@ -818,6 +861,13 @@ namespace rac
         INLINE u64 LowQword() const noexcept { return Low(); }
         INLINE p64 PackedHigh() const noexcept { return packed64[HIGH]; }
         INLINE p64 PackedLow() const noexcept { return packed64[LOW]; }
+
+        // (~this & b)
+        INLINE __m128i AndNot(const __m128i& against) const noexcept
+        {
+            //__m128i _mm_andnot_si128(__m128i a, __m128i b)
+            return _mm_andnot_si128(int128, against);
+        }
     };
 
     class mut_p256
@@ -905,11 +955,16 @@ namespace rac
         {
             int256 = _mm256_mullo_epi32(int256, u);
         }
+
+        // TODO(RYAN_2024-09-15): Look into and check if a cast to
+        // floating point -> reciprocal -> multiply
+        // is faster than this piecewise division.
+        //
+        //__m256d _mm256_castsi256_pd(__m256i a) -> cast int256 to float256
+        //__m256 _mm256_div_ps(__m256 a, __m256 b) -> float, f32
+        //__m256i _mm256_castpd_si256(__m256d a)
         INLINE const mut_p256& operator/=(__m256i u) noexcept
         {
-            //__m256d _mm256_castsi256_pd(__m256i a) -> cast int256 to float256
-            //__m256 _mm256_div_ps(__m256 a, __m256 b) -> float, f32
-            //__m256i _mm256_castpd_si256(__m256d a)
             uint64[0] /= u.m256i_u64[0];
             uint64[1] /= u.m256i_u64[1];
             uint64[2] /= u.m256i_u64[2];
