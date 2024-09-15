@@ -89,6 +89,7 @@ namespace rac
             bytes[HIGH] = b1;
         }
 
+        INLINE mut_p16 operator-() const noexcept { return mut_p16(-int16); }
         INLINE const mut_p16& operator+=(const mut_p16 p) noexcept
         {
             uint16 += p.uint16;
@@ -289,6 +290,10 @@ namespace rac
             bytes[3] = b3;
         }
 
+        INLINE mut_p32 operator-() const noexcept
+        {
+            return mut_p32(-int32);
+        }
         INLINE const mut_p32& operator+=(const mut_p32 p) noexcept
         {
             uint32 += p.uint32;
@@ -537,6 +542,10 @@ namespace rac
             bytes[7] = b7;
         }
 
+        INLINE mut_p64 operator-() const noexcept
+        {
+            return mut_p64(-int64);
+        }
         INLINE const mut_p64& operator+=(const mut_p64 p) noexcept
         {
             uint64 += p.uint64;
@@ -767,6 +776,10 @@ namespace rac
             int128 = _mm_set_epi8(b15, b14, b13, b12, b11, b10, b9, b8, b7, b6, b5, b4, b3, b2, b1, b0);
         }
 
+        INLINE mut_p128 operator-() const noexcept
+        {
+            //return mut_p128(-int128);
+        }
         INLINE const mut_p128& operator+=(__m128i u) noexcept
         {
             int128 = _mm_add_epi32(int128, u);
@@ -781,7 +794,10 @@ namespace rac
         }
         INLINE const mut_p128& operator/=(__m128i u) noexcept
         {
-            //int128 /= u;
+            uint32[0] /= u.m128i_u32[0];
+            uint32[1] /= u.m128i_u32[1];
+            uint32[2] /= u.m128i_u32[2];
+            uint32[3] /= u.m128i_u32[3];
         }
         INLINE const mut_p128& operator+=(const mut_p128 p) noexcept
         {
@@ -830,6 +846,11 @@ namespace rac
             mut_p64 packed64[sizeof(__m256i) / sizeof(p64)];
             mut_p128 packed128[sizeof(__m256i) / sizeof(p128)];
         };
+
+        INLINE mut_p256 operator-() const noexcept
+        {
+            //return mut_p256(-int256);
+        }
 
         INLINE __m128i High() const noexcept { return int128[HIGH]; }
         INLINE __m128i Low() const noexcept { return int128[LOW]; }
