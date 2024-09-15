@@ -1,4 +1,5 @@
-#include "rac.hpp"
+#pragma once
+#include "rac-packedtypes.hpp"
 
 namespace rac::rnd::marsaglia
 {
@@ -26,41 +27,15 @@ namespace rac::rnd::marsaglia
     static mut_u64 u64_seed = u64_seeds[std::rand() % MAX_SEED_CT];
     static mut_u64 i64_seed = u64_seeds[std::rand() % MAX_SEED_CT];
 
-    /*
-    Unused transformations:
-        y^=y<<c; y^=y<<a; y^=y>>b;
-        y^=y>>c; y^=y>>a; y^=y<<b;
-    */
     class mut_XorRng
     {
-    private:
-
-        static u64 GetU64_ForBlocks()
-        {
-            // a = 16
-            // b = 11
-            // c = 27
-            mut_u32 res = u32_seed;
-            res ^= res >> 27;
-            res ^= res << 11;
-            res ^= res >> 16;
-            u32_seed = res;
-            return res;
-        }
-        static i64 GetI64_ForBlocks()
-        {
-            // a = 4
-            // b = 9
-            // c = 13
-            mut_i32 res = i32_seed;
-            res ^= res << 4;
-            res ^= res << 13;
-            res ^= res >> 9;
-            i32_seed = res;
-            return res;
-        }
-
     public:
+
+        /*
+        Unused transformations:
+            y^=y<<c; y^=y<<a; y^=y>>b;
+            y^=y>>c; y^=y>>a; y^=y<<b;
+        */
 
         static u32 GetU32()
         {
@@ -86,6 +61,18 @@ namespace rac::rnd::marsaglia
             i32_seed = res;
             return res;
         }
+        static p32 GetP32()
+        {
+            // a = 13
+            // b = 17
+            // c = 5
+            mut_p32 res = u32_seed;
+            res.uint32 ^= res.uint32 >> 13;
+            res.uint32 ^= res.uint32 << 17;
+            res.uint32 ^= res.uint32 >> 5;
+            u32_seed = res.uint32;
+            return res;
+        }
 
         static u64 GetU64()
         {
@@ -109,6 +96,18 @@ namespace rac::rnd::marsaglia
             res ^= res >> 33;
             res ^= res << 25;
             i32_seed = res;
+            return res;
+        }
+        static p64 GetP64()
+        {
+            // a = 16
+            // b = 11
+            // c = 27
+            mut_p64 res = u64_seed;
+            res.uint64 ^= res.uint64 >> 27;
+            res.uint64 ^= res.uint64 << 11;
+            res.uint64 ^= res.uint64 >> 16;
+            u64_seed = res.uint64;
             return res;
         }
     };
