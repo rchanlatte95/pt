@@ -778,7 +778,8 @@ namespace rac
 
         INLINE mut_p128 operator-() const noexcept
         {
-            //return mut_p128(-int128);
+            const __m128i mask = _mm_set1_epi32(-1);
+            return _mm_sign_epi32(int128, mask);
         }
         INLINE const mut_p128& operator+=(__m128i u) noexcept
         {
