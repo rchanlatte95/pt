@@ -142,6 +142,7 @@ namespace rac
     {
         return p16(lhs.uint16 / rhs);
     }
+
     INLINE p16 operator+(u16ref lhs, p16ref rhs)
     {
         return p16(lhs + rhs.uint16);
@@ -158,6 +159,7 @@ namespace rac
     {
         return p16(lhs / rhs.uint16);
     }
+
     INLINE p16 operator+(p16ref lhs, p16ref rhs)
     {
         return lhs + rhs.uint16;
@@ -377,6 +379,81 @@ namespace rac
     INLINE p32 operator/(p32ref lhs, p32ref rhs)
     {
         return lhs / rhs.uint32;
+    }
+
+    INLINE bool operator==(p32ref lhs, u32ref rhs) noexcept
+    {
+        return lhs.uint32 == rhs;
+    }
+    INLINE bool operator!=(p32ref lhs, u32ref rhs) noexcept
+    {
+        return !(lhs == rhs);
+    }
+    INLINE bool operator<(p32ref lhs, u32ref rhs) noexcept
+    {
+        return lhs.uint32 < rhs;
+    }
+    INLINE bool operator>(p32ref lhs, u32ref rhs) noexcept
+    {
+        return rhs < lhs.uint32;
+    }
+    INLINE bool operator<=(p32ref lhs, u32ref rhs) noexcept
+    {
+        return !(lhs > rhs);
+    }
+    INLINE bool operator>=(p32ref lhs, u32ref rhs) noexcept
+    {
+        return !(lhs < rhs);
+    }
+
+    INLINE bool operator==(u32ref lhs, p32ref rhs) noexcept
+    {
+        return lhs == rhs.uint32;
+    }
+    INLINE bool operator!=(u32ref lhs, p32ref rhs) noexcept
+    {
+        return !(lhs == rhs);
+    }
+    INLINE bool operator<(u32ref lhs, p32ref rhs) noexcept
+    {
+        return lhs < rhs.uint32;
+    }
+    INLINE bool operator>(u32ref lhs, p32ref rhs) noexcept
+    {
+        return rhs.uint32 < lhs;
+    }
+    INLINE bool operator<=(u32ref lhs, p32ref rhs) noexcept
+    {
+        return !(lhs > rhs);
+    }
+    INLINE bool operator>=(u32ref lhs, p32ref rhs) noexcept
+    {
+        return !(lhs < rhs);
+    }
+
+    INLINE bool operator==(p32ref lhs, p32ref rhs) noexcept
+    {
+        return lhs.uint32 == rhs.uint32;
+    }
+    INLINE bool operator!=(p32ref lhs, p32ref rhs) noexcept
+    {
+        return !(lhs.uint32 == rhs.uint32);
+    }
+    INLINE bool operator<(p32ref lhs, p32ref rhs) noexcept
+    {
+        return lhs.uint32 < rhs.uint32;
+    }
+    INLINE bool operator>(p32ref lhs, p32ref rhs) noexcept
+    {
+        return rhs.uint32 < lhs.uint32;
+    }
+    INLINE bool operator<=(p32ref lhs, p32ref rhs) noexcept
+    {
+        return !(lhs > rhs);
+    }
+    INLINE bool operator>=(p32ref lhs, p32ref rhs) noexcept
+    {
+        return !(lhs < rhs);
     }
 
     class mut_p64
