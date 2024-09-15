@@ -737,43 +737,38 @@ namespace rac
 
         mut_p128() { int128 = _mm_setzero_si128(); }
 
-        mut_p128(__m128i i) { int128 = _mm_loadu_si128(&i); }
+        mut_p128(__m128i i128) { int128 = _mm_loadu_si128(&i128); }
 
-        mut_p128(i64 int64_0) { int128 = _mm_set1_epi64x(int64_0); }
-        mut_p128(i64 int64_0, i64 int64_1)
+        mut_p128(i64 i64_all) { int128 = _mm_set1_epi64x(i64_all); }
+        mut_p128(i64 Low, i64 High)
         {
-            int128 = _mm_set_epi64x(int64_1, int64_0);
-        }
-
-        mut_p128(i32 int32_0) { int128 = _mm_set1_epi32(int32_0); }
-        mut_p128(i32 int32_0, i32 int32_1)
-        {
-            int128 = _mm_set_epi32(int32_1, int32_0, int32_1, int32_0);
-        }
-        mut_p128(i32 int32_0, i32 int32_1, i32 int32_2, i32 int32_3)
-        {
-            int128 = _mm_set_epi32(int32_3, int32_2, int32_1, int32_0);
+            int128 = _mm_set_epi64x(High, Low);
         }
 
-        mut_p128(i16 uint16_0) { int128 = _mm_set1_epi16(uint16_0); }
-        mut_p128(i16 uint16_0, i16 uint16_1, i16 uint16_2, i16 uint16_3)
+        mut_p128(i32 i32_all) { int128 = _mm_set1_epi32(i32_all); }
+        mut_p128(i32 i32_0, i32 i32_1, i32 i32_2, i32 i32_3)
         {
-            int128 = _mm_set_epi16(uint16_3, uint16_2, uint16_1, uint16_0, uint16_3, uint16_2, uint16_1, uint16_0);
-        }
-        mut_p128(i16 uint16_0, i16 uint16_1, i16 uint16_2, i16 uint16_3, i16 uint16_4, i16 uint16_5, i16 uint16_6, i16 uint16_7)
-        {
-            int128 = _mm_set_epi16(uint16_7, uint16_6, uint16_5, uint16_4, uint16_3, uint16_2, uint16_1, uint16_0);
+            int128 = _mm_set_epi32(i32_3, i32_2, i32_1, i32_0);
         }
 
-        mut_p128(i8 b0) { int128 = _mm_set1_epi8(b0); }
-        mut_p128(i8 b0, i8 b1, i8 b2, i8 b3, i8 b4, i8 b5, i8 b6, i8 b7)
+        mut_p128(i16 i16_all) { int128 = _mm_set1_epi16(i16_all); }
+        mut_p128(i16 i16_0, i16 i16_1, i16 i16_2, i16 i16_3,
+                i16 i16_4, i16 i16_5, i16 i16_6, i16 i16_7)
         {
-            int128 = _mm_set_epi8(b7, b6, b5, b4, b3, b2, b1, b0, b7, b6, b5, b4, b3, b2, b1, b0);
+            int128 = _mm_set_epi16(i16_7, i16_6, i16_5, i16_4,
+                                i16_3, i16_2, i16_1, i16_0);
         }
-        mut_p128(i8 b0, i8 b1, i8 b2, i8 b3, i8 b4, i8 b5, i8 b6, i8 b7,
-                i8 b8, i8 b9, i8 b10, i8 b11, i8 b12, i8 b13, i8 b14, i8 b15)
+
+        mut_p128(i8 b_all) { int128 = _mm_set1_epi8(b_all); }
+        mut_p128(i8 b0, i8 b1, i8 b2, i8 b3,
+                i8 b4, i8 b5, i8 b6, i8 b7,
+                i8 b8, i8 b9, i8 b10, i8 b11,
+                i8 b12, i8 b13, i8 b14, i8 b15)
         {
-            int128 = _mm_set_epi8(b15, b14, b13, b12, b11, b10, b9, b8, b7, b6, b5, b4, b3, b2, b1, b0);
+            int128 = _mm_set_epi8(b15, b14, b13, b12,
+                                b11, b10, b9, b8,
+                                b7, b6, b5, b4,
+                                b3, b2, b1, b0);
         }
 
         INLINE mut_p128 operator-() const noexcept
@@ -890,6 +885,8 @@ namespace rac
                                     i16_7, i16_6, i16_5, i16_4,
                                     i16_3, i16_2, i16_1, i16_0);
         }
+
+        mut_p256(i8 i8_all) { int256 = _mm256_set1_epi8(i8_all); }
 
         INLINE mut_p256 operator-() const noexcept
         {
