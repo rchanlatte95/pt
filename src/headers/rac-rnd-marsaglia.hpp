@@ -26,27 +26,36 @@ namespace rac::rnd::marsaglia
     static mut_u64 u64_seed = u64_seeds[std::rand() % MAX_SEED_CT];
     static mut_u64 i64_seed = u64_seeds[std::rand() % MAX_SEED_CT];
 
+    /*
+    Unused transformations:
+        y^=y<<c; y^=y<<a; y^=y>>b;
+        y^=y>>c; y^=y>>a; y^=y<<b;
+    */
     class mut_XorRng
     {
     private:
 
-        //16,11,27
-        //4, 9,13
-        static u32 GetU32()
+        static u64 GetU64_ForBlocks()
         {
+            // a = 16
+            // b = 11
+            // c = 27
             mut_u32 res = u32_seed;
-            res ^= res << 3;
-            res ^= res >> 25;
-            res ^= res << 24;
+            res ^= res >> 27;
+            res ^= res << 11;
+            res ^= res >> 16;
             u32_seed = res;
             return res;
         }
-        static i32 GetI32()
+        static i64 GetI64_ForBlocks()
         {
+            // a = 4
+            // b = 9
+            // c = 13
             mut_i32 res = i32_seed;
-            res ^= res >> 5;
-            res ^= res << 21;
-            res ^= res >> 12;
+            res ^= res << 4;
+            res ^= res << 13;
+            res ^= res >> 9;
             i32_seed = res;
             return res;
         }
@@ -55,6 +64,9 @@ namespace rac::rnd::marsaglia
 
         static u32 GetU32()
         {
+            // a = 3
+            // b = 25
+            // c = 24
             mut_u32 res = u32_seed;
             res ^= res << 3;
             res ^= res >> 25;
@@ -64,6 +76,9 @@ namespace rac::rnd::marsaglia
         }
         static i32 GetI32()
         {
+            // a = 5
+            // b = 21
+            // c = 12
             mut_i32 res = i32_seed;
             res ^= res >> 5;
             res ^= res << 21;
@@ -74,6 +89,9 @@ namespace rac::rnd::marsaglia
 
         static u64 GetU64()
         {
+            // a = 7
+            // b = 51
+            // c = 24
             mut_u64 res = u64_seed;
             res ^= res >> 7;
             res ^= res >> 24;
@@ -83,6 +101,9 @@ namespace rac::rnd::marsaglia
         }
         static u64 GetI64()
         {
+            // a = 25
+            // b = 33
+            // c = 36
             mut_i64 res = i64_seed;
             res ^= res << 36;
             res ^= res >> 33;
