@@ -98,11 +98,11 @@ namespace rac
         {
             uint16 -= p.uint16;
         }
-        INLINE const mut_p16& operator*=(mut_p16 p) noexcept
+        INLINE const mut_p16& operator*=(const mut_p16 p) noexcept
         {
             uint16 *= p.uint16;
         }
-        INLINE const mut_p16& operator/=(mut_p16 p) noexcept
+        INLINE const mut_p16& operator/=(const mut_p16 p) noexcept
         {
             uint16 /= p.uint16;
         }
@@ -162,6 +162,39 @@ namespace rac
             bytes[1] = b1;
             bytes[2] = b2;
             bytes[3] = b3;
+        }
+
+        INLINE const mut_p32& operator+=(const mut_p32 p) noexcept
+        {
+            uint32 += p.uint32;
+        }
+        INLINE const mut_p32& operator-=(const mut_p32 p) noexcept
+        {
+            uint32 -= p.uint32;
+        }
+        INLINE const mut_p32& operator*=(const mut_p32 p) noexcept
+        {
+            uint32 *= p.uint32;
+        }
+        INLINE const mut_p32& operator/=(const mut_p32 p) noexcept
+        {
+            uint32 /= p.uint32;
+        }
+        INLINE const mut_p32& operator+=(u32 u) noexcept
+        {
+            uint32 += u;
+        }
+        INLINE const mut_p32& operator-=(u32 u) noexcept
+        {
+            uint32 -= u;
+        }
+        INLINE const mut_p32& operator*=(u32 u) noexcept
+        {
+            uint32 *= u;
+        }
+        INLINE const mut_p32& operator/=(u32 u) noexcept
+        {
+            uint32 /= u;
         }
 
         INLINE u16 High() const noexcept { return uint16[HIGH]; }
@@ -251,6 +284,39 @@ namespace rac
             bytes[5] = b5;
             bytes[6] = b6;
             bytes[7] = b7;
+        }
+
+        INLINE const mut_p64& operator+=(const mut_p64 p) noexcept
+        {
+            uint64 += p.uint64;
+        }
+        INLINE const mut_p64& operator-=(const mut_p64 p) noexcept
+        {
+            uint64 -= p.uint64;
+        }
+        INLINE const mut_p64& operator*=(const mut_p64 p) noexcept
+        {
+            uint64 *= p.uint64;
+        }
+        INLINE const mut_p64& operator/=(const mut_p64 p) noexcept
+        {
+            uint64 /= p.uint64;
+        }
+        INLINE const mut_p64& operator+=(u64 u) noexcept
+        {
+            uint64 += u;
+        }
+        INLINE const mut_p64& operator-=(u64 u) noexcept
+        {
+            uint64 -= u;
+        }
+        INLINE const mut_p64& operator*=(u64 u) noexcept
+        {
+            uint64 *= u;
+        }
+        INLINE const mut_p64& operator/=(u64 u) noexcept
+        {
+            uint64 /= u;
         }
 
         INLINE u32 High() const noexcept { return uint32[HIGH]; }
