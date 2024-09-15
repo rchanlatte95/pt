@@ -629,6 +629,81 @@ namespace rac
         return lhs / rhs.uint64;
     }
 
+    INLINE bool operator==(p64ref lhs, u64ref rhs) noexcept
+    {
+        return lhs.uint64 == rhs;
+    }
+    INLINE bool operator!=(p64ref lhs, u64ref rhs) noexcept
+    {
+        return !(lhs == rhs);
+    }
+    INLINE bool operator<(p64ref lhs, u64ref rhs) noexcept
+    {
+        return lhs.uint64 < rhs;
+    }
+    INLINE bool operator>(p64ref lhs, u64ref rhs) noexcept
+    {
+        return rhs < lhs.uint64;
+    }
+    INLINE bool operator<=(p64ref lhs, u64ref rhs) noexcept
+    {
+        return !(lhs > rhs);
+    }
+    INLINE bool operator>=(p64ref lhs, u64ref rhs) noexcept
+    {
+        return !(lhs < rhs);
+    }
+
+    INLINE bool operator==(u64ref lhs, p64ref rhs) noexcept
+    {
+        return lhs == rhs.uint64;
+    }
+    INLINE bool operator!=(u64ref lhs, p64ref rhs) noexcept
+    {
+        return !(lhs == rhs);
+    }
+    INLINE bool operator<(u64ref lhs, p64ref rhs) noexcept
+    {
+        return lhs < rhs.uint64;
+    }
+    INLINE bool operator>(u64ref lhs, p64ref rhs) noexcept
+    {
+        return rhs.uint64 < lhs;
+    }
+    INLINE bool operator<=(u64ref lhs, p64ref rhs) noexcept
+    {
+        return !(lhs > rhs);
+    }
+    INLINE bool operator>=(u64ref lhs, p64ref rhs) noexcept
+    {
+        return !(lhs < rhs);
+    }
+
+    INLINE bool operator==(p64ref lhs, p64ref rhs) noexcept
+    {
+        return lhs.uint64 == rhs.uint64;
+    }
+    INLINE bool operator!=(p64ref lhs, p64ref rhs) noexcept
+    {
+        return !(lhs.uint64 == rhs.uint64);
+    }
+    INLINE bool operator<(p64ref lhs, p64ref rhs) noexcept
+    {
+        return lhs.uint64 < rhs.uint64;
+    }
+    INLINE bool operator>(p64ref lhs, p64ref rhs) noexcept
+    {
+        return rhs.uint64 < lhs.uint64;
+    }
+    INLINE bool operator<=(p64ref lhs, p64ref rhs) noexcept
+    {
+        return !(lhs > rhs);
+    }
+    INLINE bool operator>=(p64ref lhs, p64ref rhs) noexcept
+    {
+        return !(lhs < rhs);
+    }
+
     class mut_p128
     {
     public:
