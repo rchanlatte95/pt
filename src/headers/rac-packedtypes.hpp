@@ -175,6 +175,80 @@ namespace rac
         return lhs / rhs.uint16;
     }
 
+    INLINE bool operator==(p16ref lhs, u16ref rhs) noexcept
+    {
+        return lhs.uint16 == rhs;
+    }
+    INLINE bool operator!=(p16ref lhs, u16ref rhs) noexcept
+    {
+        return !(lhs == rhs);
+    }
+    INLINE bool operator<(p16ref lhs, u16ref rhs) noexcept
+    {
+        return lhs.uint16 < rhs;
+    }
+    INLINE bool operator>(p16ref lhs, u16ref rhs) noexcept
+    {
+        return rhs < lhs.uint16;
+    }
+    INLINE bool operator<=(p16ref lhs, u16ref rhs) noexcept
+    {
+        return !(lhs > rhs);
+    }
+    INLINE bool operator>=(p16ref lhs, u16ref rhs) noexcept
+    {
+        return !(lhs < rhs);
+    }
+
+    INLINE bool operator==(u16ref lhs, p16ref rhs) noexcept
+    {
+        return lhs == rhs.uint16;
+    }
+    INLINE bool operator!=(u16ref lhs, p16ref rhs) noexcept
+    {
+        return !(lhs == rhs);
+    }
+    INLINE bool operator<(u16ref lhs, p16ref rhs) noexcept
+    {
+        return lhs < rhs.uint16;
+    }
+    INLINE bool operator>(u16ref lhs, p16ref rhs) noexcept
+    {
+        return rhs.uint16 < lhs;
+    }
+    INLINE bool operator<=(u16ref lhs, p16ref rhs) noexcept
+    {
+        return !(lhs > rhs);
+    }
+    INLINE bool operator>=(u16ref lhs, p16ref rhs) noexcept
+    {
+        return !(lhs < rhs);
+    }
+
+    INLINE bool operator==(p16ref lhs, p16ref rhs) noexcept
+    {
+        return lhs.uint16 == rhs.uint16;
+    }
+    INLINE bool operator!=(p16ref lhs, p16ref rhs) noexcept
+    {
+        return !(lhs.uint16 == rhs.uint16);
+    }
+    INLINE bool operator<(p16ref lhs, p16ref rhs) noexcept
+    {
+        return lhs.uint16 < rhs.uint16;
+    }
+    INLINE bool operator>(p16ref lhs, p16ref rhs) noexcept
+    {
+        return rhs.uint16 < lhs.uint16;
+    }
+    INLINE bool operator<=(p16ref lhs, p16ref rhs) noexcept
+    {
+        return !(lhs > rhs);
+    }
+    INLINE bool operator>=(p16ref lhs, p16ref rhs) noexcept
+    {
+        return !(lhs < rhs);
+    }
 
     class mut_p32
     {
