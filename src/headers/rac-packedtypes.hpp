@@ -996,6 +996,7 @@ namespace rac
     // Packed Types that have floating point data
     class mut_pf32
     {
+    public:
         union
         {
             mut_i8 bytes[sizeof(f32)];
@@ -1004,23 +1005,75 @@ namespace rac
 
             mut_f32 float32;
         };
+
+        mut_pf32() { float32 = 0.0f; }
+        mut_pf32(i32 i) { float32 = (f32)i; }
+        mut_pf32(f32 f) { float32 = f; }
+        mut_pf32(i16 high, i16 low)
+        {
+            packed.uint16[HIGH] = high;
+            packed.uint16[LOW] = low;
+        }
+        mut_pf32(p16 high, p16 low)
+        {
+            packed.packed16[HIGH] = high.uint16;
+            packed.packed16[LOW] = low.uint16;
+        }
+        mut_pf32(u8 b0, u8 b1, u8 b2, u8 b3)
+        {
+            bytes[0] = b0;
+            bytes[1] = b1;
+            bytes[2] = b2;
+            bytes[3] = b3;
+        }
     };
 
     class mut_pf64
     {
+    public:
         union
         {
-            mut_p32 packedf32[sizeof(p64) / sizeof(p32)];
-            mut_p64 packed64;
+            mut_i8 bytes[sizeof(f64)];
+
+            mut_pf32 packedf32[sizeof(p64) / sizeof(p32)];
 
             mut_f32 float32[sizeof(p64) / sizeof(f32)];
             mut_f64 float64;
         };
 
+        mut_pf64() { float64 = 0.0; }
+
+        mut_pf64(i64 i) { float64 = (f64)i; }
+        mut_pf64(f64 d) { float64 = d; }
+
+        mut_pf64(i32 high, i32 low)
+        {
+            float32[HIGH] = (f32)high;
+            float32[LOW] = (f32)low;
+        }
+        mut_pf64(pf32 high, pf32 low)
+        {
+            packedf32[HIGH] = high;
+            packedf32[LOW] = low;
+        }
+
+        mut_pf64(i8 b0, i8 b1, i8 b2, i8 b3, i8 b4, i8 b5, i8 b6, i8 b7)
+        {
+            bytes[0] = b0;
+            bytes[1] = b1;
+            bytes[2] = b2;
+            bytes[3] = b3;
+
+            bytes[4] = b4;
+            bytes[5] = b5;
+            bytes[6] = b6;
+            bytes[7] = b7;
+        }
+
         INLINE f32 High() const noexcept { return float32[HIGH]; }
         INLINE f32 Low() const noexcept { return float32[LOW]; }
-        INLINE p32 PackedHigh() const noexcept { return packedf32[HIGH]; }
-        INLINE p32 PackedLow() const noexcept { return packedf32[LOW]; }
+        INLINE pf32 PackedHigh() const noexcept { return packedf32[HIGH]; }
+        INLINE pf32 PackedLow() const noexcept { return packedf32[LOW]; }
     };
 
     class mut_pf128
