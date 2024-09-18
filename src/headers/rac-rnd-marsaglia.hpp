@@ -75,18 +75,24 @@ namespace rac::rnd::marsaglia
         }
         static u32 GetU32(u32 min_inclusive, u32 max_exclusive)
         {
+            assert(min_inclusive < max_exclusive);
+
             f32 random_num = (f32)GetU32();
             f32 diff = ((f32)max_exclusive - (f32)min_inclusive) + 1.0f;
             return (u32)(random_num * diff) + min_inclusive;
         }
         static i32 GetI32(i32 min_inclusive, i32 max_exclusive)
         {
+            assert(min_inclusive < max_exclusive);
+
             f32 random_num = (f32)GetU32();
             f32 diff = ((f32)max_exclusive - (f32)min_inclusive) + 1.0f;
             return (i32)(random_num * diff) + min_inclusive;
         }
         static p32 GetP32(i32 min_inclusive, i32 max_exclusive)
         {
+            assert(min_inclusive < max_exclusive);
+
             f32 random_num = (f32)GetU32();
             f32 diff = ((f32)max_exclusive - (f32)min_inclusive) + 1.0f;
             return p32((i32)(random_num * diff) + min_inclusive);
@@ -130,18 +136,24 @@ namespace rac::rnd::marsaglia
         }
         static u64 GetU64(u64 min_inclusive, u64 max_exclusive)
         {
+            assert(min_inclusive < max_exclusive);
+
             f64 random_num = (f64)GetU32();
             f64 diff = ((f64)max_exclusive - (f64)min_inclusive) + 1.0;
             return (u64)(random_num * diff) + min_inclusive;
         }
         static u64 GetI64(i64 min_inclusive, i64 max_exclusive)
         {
+            assert(min_inclusive < max_exclusive);
+
             f64 random_num = (f64)GetU32();
             f64 diff = ((f64)max_exclusive - (f64)min_inclusive) + 1.0;
             return (i64)(random_num * diff) + min_inclusive;
         }
         static p64 GetP64(i64 min_inclusive, i64 max_exclusive)
         {
+            assert(min_inclusive < max_exclusive);
+
             f64 random_num = (f64)GetU32();
             f64 diff = ((f64)max_exclusive - (f64)min_inclusive) + 1.0;
             return p64((i64)(random_num * diff) + min_inclusive);
