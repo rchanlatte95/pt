@@ -159,6 +159,39 @@ namespace rac::rnd::marsaglia
             return p64((i64)(random_num * diff) + min_inclusive);
         }
 
+        /*
+        * https://numerical.recipes/book.html
+        struct Ranlim32
+        { ran.h
+            High-quality random generator using only 32-bit arithmetic. Same conventions as Ran. Period
+             3:11  1037. Recommended only when 64-bit arithmetic is not available.
+            Uint u,v,w1,w2;
+            Ranlim32(Uint j) : v(2244614371U), w1(521288629U), w2(362436069U)
+            {
+                u = j ^ v; int32();
+                v = u; int32();
+            }
+
+            inline Uint int32()
+            {
+                u = u * 2891336453U + 1640531513U;
+                v ^= v >> 13; v ^= v << 17; v ^= v >> 5;
+                w1 = 33378 * (w1 & 0xffff) + (w1 >> 16);
+                w2 = 57225 * (w2 & 0xffff) + (w2 >> 16);
+                Uint x = u ^ (u << 9); x ^= x >> 17; x ^= x << 6;
+                Uint y = w1 ^ (w1 << 17); y ^= y >> 15; y ^= y << 5;
+                return (x + v) ^ (y + w2);
+            }
+
+            inline Doub doub() { return 2.32830643653869629E-10 * int32(); }
+
+            inline Doub truedoub()
+            {
+                return 2.32830643653869629E-10 * ( int32() + 2.32830643653869629E-10 * int32() );
+            }
+        };
+        */
+
         INLINE static f32 GetF32()
         {
 
