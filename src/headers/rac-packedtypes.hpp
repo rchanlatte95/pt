@@ -998,6 +998,8 @@ namespace rac
     {
         union
         {
+            mut_i8 bytes[sizeof(f32)];
+
             mut_p32 packed;
 
             mut_f32 float32;
@@ -1025,6 +1027,8 @@ namespace rac
     {
         union
         {
+            mut_i8 bytes[sizeof(__m128)];
+
             mut_f32 float32[sizeof(__m128) / sizeof(f32)];
             mut_f64 float64[sizeof(__m128) / sizeof(f64)];
 
@@ -1044,6 +1048,8 @@ namespace rac
     {
         union
         {
+            mut_i8 bytes[sizeof(__m256)];
+
             mut_f32 float32[sizeof(__m256) / sizeof(f32)];
             mut_f64 float64[sizeof(__m256) / sizeof(f64)];
             __m128 float128[sizeof(__m256) / sizeof(__m128)];

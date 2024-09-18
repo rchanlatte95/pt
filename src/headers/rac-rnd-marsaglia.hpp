@@ -198,6 +198,8 @@ namespace rac::rnd::marsaglia
             u32 res = (x + f32_v) ^ (y + f32_w2);
             return 2.32830643653869629E-10 * res;
         }
+        INLINE static pf32 GetPF32() { return pf32(GetF32()); }
+
         INLINE static f64 GetF64()
         {
             f64_u = f64_u * 2862933555777941757LL + 7046029254386353087LL;
@@ -214,9 +216,6 @@ namespace rac::rnd::marsaglia
             u64 res = (x + f64_v) ^ f64_w;
             return 5.42101086242752217E-20 * res;
         }
-        INLINE static pf32 GetPF64()
-        {
-
-        }
+        INLINE static pf64 GetPF64() { return pf64(GetF64()); }
     };
 }
