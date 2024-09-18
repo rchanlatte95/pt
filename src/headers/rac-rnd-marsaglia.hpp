@@ -13,34 +13,26 @@ namespace rac::rnd::marsaglia
     // NOTE(RYAN_2024-09-14): Cryptographically generated random
     // numbers being used to select super primes
     // (https://en.wikipedia.org/wiki/Super-prime):
-    // 41, 57, 190, 161, 127, 80, 98, 18, 187, 141, 124, 169, 75, 129, 180, 160
-    static u64 MAX_SEED_CT = 16;
-    static u32 u32_seeds[MAX_SEED_CT] = { 1063, 1723, 9293, 7481, 5381, 2803, 3733, 283, 8999, 6229, 5107, 8011, 2609, 5503, 8581, 7417 };
-    static mut_u32 u32_seed = u32_seeds[0];
-    static mut_i32 i32_seed = u32_seeds[1];
+    static u64 MAX_SEED_CT = 128;
+    static mut_u32 seeds[MAX_SEED_CT] = { 3, 5, 11, 17, 31, 41, 59, 67, 83, 109, 127, 157, 179, 191, 211, 241, 277, 283, 331, 353, 367, 401, 431, 461, 509, 547, 563, 587, 599, 617, 709, 739, 773, 797, 859, 877, 919, 967, 991, 1031, 1063, 1087, 1153, 1171, 1201, 1217, 1297, 1409, 1433, 1447, 1471, 1499, 1523, 1597, 1621, 1669, 1723, 1741, 1787, 1823, 1847, 1913, 2027, 2063, 2081, 2099, 2221, 2269, 2341, 2351, 2381, 2417, 2477, 2549, 2609, 2647, 2683, 2719, 2749, 2803, 2897, 2909, 3001, 3019, 3067, 3109, 3169, 3229, 3259, 3299, 3319, 3407, 3469, 3517, 3559, 3593, 3637, 3733, 3761, 3911, 3943, 4027, 4091, 4133, 4153, 4217, 4273, 4339, 4397, 4421, 4463, 4517, 4549, 4567, 4663, 4759, 4787, 4801, 4877, 4933, 4943, 5021, 5059, 5107, 5189, 5281, 5381, 5441 };
+    static mut_u32ptr SEEDS_BEGIN = seeds;
+    static mut_u32ptr SEEDS_END = seeds + MAX_SEED_CT;
 
-    // NOTE(RYAN_2024-09-14): Cryptographically generated random
-    // numbers being used to select MORE super primes
-    // (https://en.wikipedia.org/wiki/Super-prime):
-    // 155, 143, 135, 85, 193, 199, 111, 192, 2, 140, 46, 146, 6, 15, 191, 188
-    static u64 u64_seeds[MAX_SEED_CT] = { 7057, 6323, 5801, 3067, 9461, 9859, 4463, 9403, 5, 6217, 1217, 6469, 41, 211, 9319, 9041 };
-    static mut_u64 u64_seed = u64_seeds[0];
-    static mut_i64 i64_seed = u64_seeds[1];
+    static mut_u32 u32_seed = seeds[0];
+    static mut_i32 i32_seed = seeds[1];
 
-    // NOTE(RYAN_2024-09-14): Cryptographically generated random
-    // numbers being used to select MORE super primes
-    // (https://en.wikipedia.org/wiki/Super-prime):
-    // 355, 306, 531, 436, 464, 325, 429, 496, 516, 507, 285, 555, 239, 279, 255, 556
-    static u64 float_seeds[MAX_SEED_CT] = { 21269, 17539, 35993, 27847, 30577, 18917, 27091, 33029, 34607, 33827, 16061, 38039, 12547, 15413, 13649	, 38053 };
-    static mut_u32 f32_seed = (u32)float_seeds[0];
-    static mut_u32 f32_v = (u32)float_seeds[1];
-    static mut_u32 f32_w1 = (u32)float_seeds[2];
-    static mut_u32 f32_w2 = (u32)float_seeds[3];
+    static mut_u64 u64_seed = seeds[0];
+    static mut_i64 i64_seed = seeds[1];
+
+    static mut_u32 f32_seed = (u32)seeds[0];
+    static mut_u32 f32_v = (u32)seeds[1];
+    static mut_u32 f32_w1 = (u32)seeds[2];
+    static mut_u32 f32_w2 = (u32)seeds[3];
     static mut_u32 f32_u = f32_seed ^ f32_v;
 
-    static mut_u64 f64_seed = float_seeds[0];
-    static mut_u64 f64_v = float_seeds[1];
-    static mut_u64 f64_w = float_seeds[2];
+    static mut_u64 f64_seed = seeds[0];
+    static mut_u64 f64_v = seeds[1];
+    static mut_u64 f64_w = seeds[2];
     static mut_u64 f64_u = f64_seed ^ f64_v;
 
     class mut_XorRng
@@ -55,27 +47,26 @@ namespace rac::rnd::marsaglia
 
         MAY_INLINE static void InitRng()
         {
-            i32 range_from = 0;
-            i32 range_to = MAX_SEED_CT;
             std::random_device rand_dev;
             std::mt19937 generator(rand_dev());
-            std::uniform_int_distribution<int> distr(range_from, range_to);
+            std::uniform_int_distribution<int> distr(0, MAX_SEED_CT);
+            std::shuffle(SEEDS_BEGIN, SEEDS_END, generator);
 
-            u32_seed = u32_seeds[distr(generator)];
-            i32_seed = u32_seeds[distr(generator)];
+            u32_seed = seeds[distr(generator)];
+            i32_seed = seeds[distr(generator)];
 
-            u64_seed = u64_seeds[distr(generator)];
-            i64_seed = u64_seeds[distr(generator)];
+            u64_seed = seeds[distr(generator)];
+            i64_seed = seeds[distr(generator)];
 
-            f32_seed = (u32)float_seeds[distr(generator)];
-            f32_v = (u32)float_seeds[distr(generator)];
-            f32_w1 = (u32)float_seeds[distr(generator)];
-            f32_w2 = (u32)float_seeds[distr(generator)];
+            f32_seed = (u32)seeds[distr(generator)];
+            f32_v = (u32)seeds[distr(generator)];
+            f32_w1 = (u32)seeds[distr(generator)];
+            f32_w2 = (u32)seeds[distr(generator)];
             f32_u = f32_seed ^ f32_v;
 
-            f64_seed = float_seeds[distr(generator)];
-            f64_v = float_seeds[distr(generator)];
-            f64_w = float_seeds[distr(generator)];
+            f64_seed = seeds[distr(generator)];
+            f64_v = seeds[distr(generator)];
+            f64_w = seeds[distr(generator)];
             f64_u = f64_seed ^ f64_v;
         }
 
@@ -264,28 +255,28 @@ namespace rac::rnd::marsaglia
             return p64(GetI64(min_inclusive, max_exclusive));
         }
 
-        MAY_INLINE static void InitRng(i32 seed)
+        MAY_INLINE static void InitRng(i32 input_seed)
         {
-            i32 range_from = 0;
-            i32 range_to = MAX_SEED_CT;
             std::random_device rand_dev;
             std::mt19937 generator(rand_dev());
-            std::uniform_int_distribution<int> distr(range_from, range_to);
+            std::uniform_int_distribution<int> distr(0, MAX_SEED_CT);
+            std::shuffle(SEEDS_BEGIN, SEEDS_END, generator);
 
-            u32_seed = seed * u32_seeds[distr(generator)];
+            u32 transformed_seed = input_seed ^ seeds[distr(generator)];
+            u32_seed = transformed_seed;
             i32_seed = (i32)GetU32();
 
-            f32_seed = GetI32() * (i32)float_seeds[distr(generator)];
+            f32_seed = GetI32() ^ (i32)seeds[distr(generator)];
             f32_v = GetI32();
             f32_w1 = GetI32();
             f32_w2 = GetI32();
             f32_u = f32_seed ^ f32_v;
 
             u64_seed = GetU32();
-            u64_seed *= u64_seeds[distr(generator)];
+            u64_seed *= seeds[distr(generator)];
             i64_seed = (i64)GetU64();
 
-            f64_seed = GetI64() * float_seeds[distr(generator)];
+            f64_seed = GetI64() ^ seeds[distr(generator)];
             f64_v = GetI64();
             f64_w = GetI64();
             f64_u = f64_seed ^ f64_v;
