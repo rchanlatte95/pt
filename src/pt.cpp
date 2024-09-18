@@ -6,6 +6,7 @@
 #include "headers\rac-ray.hpp"
 #include "headers\rac-sphere.hpp"
 #include "headers\rac-perfstamp.hpp"
+#include "headers\rac-rnd-marsaglia.hpp"
 
 using namespace rac;
 using namespace rac::static_strings;
@@ -13,6 +14,7 @@ using namespace rac::mth;
 using namespace rac::gfx;
 using namespace rac::img;
 using namespace rac::chronology;
+using namespace rac::rnd::marsaglia;
 
 mut_ppm render;
 mut_camera cam(ppm::WIDTH, ppm::HEIGHT);
@@ -52,6 +54,12 @@ static void RenderScene()
 
 int main()
 {
+    for (mut_i32 i = 0; i < 100; ++i)
+    {
+        i32 k = XorRng::GetI32(-100, 101);
+        printf("random %d: %d\r\n", (i+1), k);
+    }
+
     printf("Casting rays into scene...\r\n\r\n");
 
     perf_tracker.Start();
