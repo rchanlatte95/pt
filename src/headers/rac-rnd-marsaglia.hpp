@@ -130,39 +130,21 @@ namespace rac::rnd::marsaglia
         }
         static u64 GetU64(u64 min_inclusive, u64 max_exclusive)
         {
-            // a = 7
-            // b = 51
-            // c = 24
-            mut_u64 res = u64_seed;
-            res ^= res >> 7;
-            res ^= res >> 24;
-            res ^= res << 51;
-            u32_seed = res;
-            return res;
+            f64 random_num = (f64)GetU32();
+            f64 diff = ((f64)max_exclusive - (f64)min_inclusive) + 1.0;
+            return (u64)(random_num * diff) + min_inclusive;
         }
         static u64 GetI64(i64 min_inclusive, i64 max_exclusive)
         {
-            // a = 25
-            // b = 33
-            // c = 36
-            mut_i64 res = i64_seed;
-            res ^= res << 36;
-            res ^= res >> 33;
-            res ^= res << 25;
-            i32_seed = res;
-            return res;
+            f64 random_num = (f64)GetU32();
+            f64 diff = ((f64)max_exclusive - (f64)min_inclusive) + 1.0;
+            return (i64)(random_num * diff) + min_inclusive;
         }
         static p64 GetP64(i64 min_inclusive, i64 max_exclusive)
         {
-            // a = 16
-            // b = 11
-            // c = 27
-            mut_p64 res = u64_seed;
-            res.uint64 ^= res.uint64 >> 27;
-            res.uint64 ^= res.uint64 << 11;
-            res.uint64 ^= res.uint64 >> 16;
-            u64_seed = res.uint64;
-            return res;
+            f64 random_num = (f64)GetU32();
+            f64 diff = ((f64)max_exclusive - (f64)min_inclusive) + 1.0;
+            return p64((i64)(random_num * diff) + min_inclusive);
         }
     };
 }
