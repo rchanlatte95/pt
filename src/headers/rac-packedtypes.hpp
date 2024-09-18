@@ -481,7 +481,6 @@ namespace rac
         };
 
         mut_p64() { uint64 = 0; }
-
         mut_p64(i64 i) { int64 = i; }
 
         mut_p64(u32 high, u32 low)
@@ -1045,6 +1044,14 @@ namespace rac
 
         mut_pf64(i64 i) { float64 = (f64)i; }
         mut_pf64(f64 d) { float64 = d; }
+
+        mut_pf64(i16 i16_0, i16 i16_1, i16 i16_2, i16 i16_3)
+        {
+            packedf32[HIGH].packed.int16[HIGH] = i16_0;
+            packedf32[HIGH].packed.int16[LOW] = i16_1;
+            packedf32[LOW].packed.int16[HIGH] = i16_2;
+            packedf32[LOW].packed.int16[LOW] = i16_3;
+        }
 
         mut_pf64(i32 high, i32 low)
         {
