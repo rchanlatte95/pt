@@ -10,45 +10,37 @@ namespace rac::rnd::marsaglia
     typedef const mut_XorRng* XorRng_ptr;
     typedef const mut_XorRng& XorRng_ref;
 
-    static u64 MAX_SEED_CT = 16;
-    static i32 range_from = 0;
-    static i32 range_to = MAX_SEED_CT;
-    static std::random_device rand_dev;
-    static std::mt19937 generator(rand_dev());
-    static std::uniform_int_distribution<int> distr(range_from, range_to);
-
     // NOTE(RYAN_2024-09-14): Cryptographically generated random
     // numbers being used to select super primes
     // (https://en.wikipedia.org/wiki/Super-prime):
     // 41, 57, 190, 161, 127, 80, 98, 18, 187, 141, 124, 169, 75, 129, 180, 160
+    static u64 MAX_SEED_CT = 16;
     static u32 u32_seeds[MAX_SEED_CT] = { 1063, 1723, 9293, 7481, 5381, 2803, 3733, 283, 8999, 6229, 5107, 8011, 2609, 5503, 8581, 7417 };
-    static mut_u32 u32_seed = (u32)u32_seeds[std::rand() % MAX_SEED_CT];
-    static mut_i32 i32_seed = (i32)u32_seeds[std::rand() % MAX_SEED_CT];
+    static mut_u32 u32_seed = u32_seeds[0];
+    static mut_i32 i32_seed = u32_seeds[1];
 
     // NOTE(RYAN_2024-09-14): Cryptographically generated random
     // numbers being used to select MORE super primes
     // (https://en.wikipedia.org/wiki/Super-prime):
     // 155, 143, 135, 85, 193, 199, 111, 192, 2, 140, 46, 146, 6, 15, 191, 188
     static u64 u64_seeds[MAX_SEED_CT] = { 7057, 6323, 5801, 3067, 9461, 9859, 4463, 9403, 5, 6217, 1217, 6469, 41, 211, 9319, 9041 };
-    static mut_u64 u64_seed = u64_seeds[std::rand() % MAX_SEED_CT];
-    static mut_i64 i64_seed = (i64)u64_seeds[std::rand() % MAX_SEED_CT];
+    static mut_u64 u64_seed = u64_seeds[0];
+    static mut_i64 i64_seed = u64_seeds[1];
 
     // NOTE(RYAN_2024-09-14): Cryptographically generated random
     // numbers being used to select MORE super primes
     // (https://en.wikipedia.org/wiki/Super-prime):
     // 355, 306, 531, 436, 464, 325, 429, 496, 516, 507, 285, 555, 239, 279, 255, 556
     static u64 float_seeds[MAX_SEED_CT] = { 21269, 17539, 35993, 27847, 30577, 18917, 27091, 33029, 34607, 33827, 16061, 38039, 12547, 15413, 13649	, 38053 };
-    static u64 f32_seed_index = std::rand() % MAX_SEED_CT;
-    static mut_u32 f32_seed = (u32)float_seeds[f32_seed_index];
-    static mut_u32 f32_v = (u32)float_seeds[(f32_seed_index + 1) % MAX_SEED_CT];
-    static mut_u32 f32_w1 = (u32)float_seeds[(f32_seed_index + 2) % MAX_SEED_CT];
-    static mut_u32 f32_w2 = (u32)float_seeds[(f32_seed_index + 3) % MAX_SEED_CT];
+    static mut_u32 f32_seed = (u32)float_seeds[0];
+    static mut_u32 f32_v = (u32)float_seeds[1];
+    static mut_u32 f32_w1 = (u32)float_seeds[2];
+    static mut_u32 f32_w2 = (u32)float_seeds[3];
     static mut_u32 f32_u = f32_seed ^ f32_v;
 
-    static u64 f64_seed_index = std::rand() % MAX_SEED_CT;
-    static mut_u64 f64_seed = float_seeds[f64_seed_index];
-    static mut_u64 f64_v = float_seeds[(f64_seed_index + 1) % MAX_SEED_CT];
-    static mut_u64 f64_w = float_seeds[(f64_seed_index + 2) % MAX_SEED_CT];
+    static mut_u64 f64_seed = float_seeds[0];
+    static mut_u64 f64_v = float_seeds[1];
+    static mut_u64 f64_w = float_seeds[2];
     static mut_u64 f64_u = f64_seed ^ f64_v;
 
     class mut_XorRng
@@ -60,6 +52,32 @@ namespace rac::rnd::marsaglia
             y^=y<<c; y^=y<<a; y^=y>>b;
             y^=y>>c; y^=y>>a; y^=y<<b;
         */
+
+        MAY_INLINE static void InitRng()
+        {
+            i32 range_from = 0;
+            i32 range_to = MAX_SEED_CT;
+            std::random_device rand_dev;
+            std::mt19937 generator(rand_dev());
+            std::uniform_int_distribution<int> distr(range_from, range_to);
+
+            u32_seed = u32_seeds[distr(generator)];
+            i32_seed = u32_seeds[distr(generator)];
+
+            u64_seed = u64_seeds[distr(generator)];
+            i64_seed = u64_seeds[distr(generator)];
+
+            f32_seed = (u32)float_seeds[distr(generator)];
+            f32_v = (u32)float_seeds[distr(generator)];
+            f32_w1 = (u32)float_seeds[distr(generator)];
+            f32_w2 = (u32)float_seeds[distr(generator)];
+            f32_u = f32_seed ^ f32_v;
+
+            f64_seed = float_seeds[distr(generator)];
+            f64_v = float_seeds[distr(generator)];
+            f64_w = float_seeds[distr(generator)];
+            f64_u = f64_seed ^ f64_v;
+        }
 
         INLINE static u32 GetU32()
         {
@@ -244,6 +262,33 @@ namespace rac::rnd::marsaglia
         INLINE static p64 GetP64(i64 min_inclusive, i64 max_exclusive)
         {
             return p64(GetI64(min_inclusive, max_exclusive));
+        }
+
+        MAY_INLINE static void InitRng(i32 seed)
+        {
+            i32 range_from = 0;
+            i32 range_to = MAX_SEED_CT;
+            std::random_device rand_dev;
+            std::mt19937 generator(rand_dev());
+            std::uniform_int_distribution<int> distr(range_from, range_to);
+
+            u32_seed = seed * u32_seeds[distr(generator)];
+            i32_seed = (i32)GetU32();
+
+            f32_seed = GetI32() * (i32)float_seeds[distr(generator)];
+            f32_v = GetI32();
+            f32_w1 = GetI32();
+            f32_w2 = GetI32();
+            f32_u = f32_seed ^ f32_v;
+
+            u64_seed = GetU32();
+            u64_seed *= u64_seeds[distr(generator)];
+            i64_seed = (i64)GetU64();
+
+            f64_seed = GetI64() * float_seeds[distr(generator)];
+            f64_v = GetI64();
+            f64_w = GetI64();
+            f64_u = f64_seed ^ f64_v;
         }
     };
 }
