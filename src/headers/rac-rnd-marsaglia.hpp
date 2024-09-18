@@ -27,6 +27,11 @@ namespace rac::rnd::marsaglia
     static mut_u64 u64_seed = u64_seeds[std::rand() % MAX_SEED_CT];
     static mut_u64 i64_seed = u64_seeds[std::rand() % MAX_SEED_CT];
 
+    // TODO(RYAN_2024-09-17): Gotta fill in
+    static u64 float_seeds[MAX_SEED_CT] = {  };
+    static mut_u64 f32_seed = float_seeds[std::rand() % MAX_SEED_CT];
+    static mut_u64 f64_seed = float_seeds[std::rand() % MAX_SEED_CT];
+
     class mut_XorRng
     {
     public:
