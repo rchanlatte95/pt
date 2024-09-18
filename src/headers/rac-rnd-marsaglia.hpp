@@ -14,7 +14,7 @@ namespace rac::rnd::marsaglia
     // numbers being used to select super primes
     // (https://en.wikipedia.org/wiki/Super-prime):
     static u64 MAX_SEED_CT = 128;
-    static mut_u32 seeds[MAX_SEED_CT] = { 3, 5, 11, 17, 31, 41, 59, 67, 83, 109, 127, 157, 179, 191, 211, 241, 277, 283, 331, 353, 367, 401, 431, 461, 509, 547, 563, 587, 599, 617, 709, 739, 773, 797, 859, 877, 919, 967, 991, 1031, 1063, 1087, 1153, 1171, 1201, 1217, 1297, 1409, 1433, 1447, 1471, 1499, 1523, 1597, 1621, 1669, 1723, 1741, 1787, 1823, 1847, 1913, 2027, 2063, 2081, 2099, 2221, 2269, 2341, 2351, 2381, 2417, 2477, 2549, 2609, 2647, 2683, 2719, 2749, 2803, 2897, 2909, 3001, 3019, 3067, 3109, 3169, 3229, 3259, 3299, 3319, 3407, 3469, 3517, 3559, 3593, 3637, 3733, 3761, 3911, 3943, 4027, 4091, 4133, 4153, 4217, 4273, 4339, 4397, 4421, 4463, 4517, 4549, 4567, 4663, 4759, 4787, 4801, 4877, 4933, 4943, 5021, 5059, 5107, 5189, 5281, 5381, 5441 };
+    static mut_u32 seeds[MAX_SEED_CT] = { 81013, 81043, 81077, 81203, 81233, 81371, 81707, 81919, 81931, 81973, 82217, 82361, 82463, 82549, 82657, 82757, 82763, 82799, 82903, 83059, 83101, 83219, 83443, 83617, 192767, 192853, 193009, 193031, 193183, 193373, 193433, 193619, 193703, 193763, 193813, 193873, 193883, 193957, 194101, 194263, 194591, 194723, 194933, 194989, 318211, 318443, 318467, 318569, 318817, 319049, 319061, 319169, 319201, 319339, 319679, 319687, 320027, 320081, 320237, 320431, 320521, 320791, 321017, 321037, 321109, 451499, 451681, 451753, 451859, 451939, 452041, 452213, 452329, 452531, 453199, 453269, 453329, 453377, 453683, 453737, 453797, 453847, 454021, 454379, 454507, 593573, 593627, 594023, 594047, 594203, 594359, 594401, 594421, 595073, 595087, 595267, 595319, 595363, 595453, 595687, 595709, 595807, 595963, 596081, 596179, 737843, 737929, 738107, 738197, 738301, 738383, 738509, 738539, 738877, 738917, 738953, 739027, 739183, 739217, 739253, 739511, 739649, 739751, 740099, 740359, 740429, 891557, 891577 };
     static mut_u32ptr SEEDS_BEGIN = seeds;
     static mut_u32ptr SEEDS_END = seeds + MAX_SEED_CT;
 
@@ -36,21 +36,32 @@ namespace rac::rnd::marsaglia
         {
             std::random_device rand_dev;
             std::mt19937 generator(rand_dev());
-            std::uniform_int_distribution<int> distr(0, MAX_SEED_CT);
+            std::uniform_int_distribution<int> distr(0, MAX_SEED_CT - 1);
             std::shuffle(SEEDS_BEGIN, SEEDS_END, generator);
 
             u32_seed = seeds[distr(generator)];
             i32_seed = seeds[distr(generator)];
-
-            u64_seed = seeds[distr(generator)];
-            i64_seed = seeds[distr(generator)];
-
             f32_seed = seeds[distr(generator)];
-            f64_seed = seeds[distr(generator)];
+
+
+            mut_u64 High = seeds[distr(generator)];
+            mut_u64 Low = seeds[distr(generator)];
+            u64_seed = (High << 32) | Low;
+
+            High = seeds[distr(generator)];
+            Low = seeds[distr(generator)];
+            i64_seed = (High << 32) | Low;
+
+            High = seeds[distr(generator)];
+            Low = seeds[distr(generator)];
+            f64_seed = (High << 32) | Low;
             for (int i = 0; i < 4; ++i)
             {
-                f32_state[i] = (u32)seeds[distr(generator)];
-                f64_state[i] = seeds[distr(generator)];
+                f32_state[i] = seeds[distr(generator)];
+
+                High = seeds[distr(generator)];
+                Low = seeds[distr(generator)];
+                f64_state[i] = (High << 32) | Low;
             }
         }
 
