@@ -27,8 +27,11 @@ namespace rac::rnd::marsaglia
     static mut_u64 u64_seed = u64_seeds[std::rand() % MAX_SEED_CT];
     static mut_u64 i64_seed = u64_seeds[std::rand() % MAX_SEED_CT];
 
-    // TODO(RYAN_2024-09-17): Gotta fill in
-    static u64 float_seeds[MAX_SEED_CT] = {  };
+    // NOTE(RYAN_2024-09-14): Cryptographically generated random
+    // numbers being used to select MORE super primes
+    // (https://en.wikipedia.org/wiki/Super-prime):
+    // 355, 306, 531, 436, 464, 325, 429, 496, 516, 507, 285, 555, 239, 279, 255, 556
+    static u64 float_seeds[MAX_SEED_CT] = { 21269, 17539, 35993, 27847, 30577, 18917, 27091, 33029, 34607, 33827, 16061, 38039, 12547, 15413, 13649	, 38053 };
     static mut_u64 f32_seed = float_seeds[std::rand() % MAX_SEED_CT];
     static mut_u64 f64_seed = float_seeds[std::rand() % MAX_SEED_CT];
 
@@ -165,32 +168,37 @@ namespace rac::rnd::marsaglia
         }
 
         /*
-        * https://numerical.recipes/book.html
+        https://numerical.recipes/book.html
         struct Ranlim32
-        { ran.h
-            High-quality random generator using only 32-bit arithmetic. Same conventions as Ran. Period
-             3:11  1037. Recommended only when 64-bit arithmetic is not available.
+        {
             Uint u,v,w1,w2;
-            Ranlim32(Uint j) : v(2244614371U), w1(521288629U), w2(362436069U)
-            {
-                u = j ^ v; int32();
-                v = u; int32();
-            }
-
-            inline Uint int32()
+            inline u32 int32()
             {
                 u = u * 2891336453U + 1640531513U;
-                v ^= v >> 13; v ^= v << 17; v ^= v >> 5;
+                v ^= v >> 13;
+                v ^= v << 17;
+                v ^= v >> 5;
+
                 w1 = 33378 * (w1 & 0xffff) + (w1 >> 16);
                 w2 = 57225 * (w2 & 0xffff) + (w2 >> 16);
-                Uint x = u ^ (u << 9); x ^= x >> 17; x ^= x << 6;
-                Uint y = w1 ^ (w1 << 17); y ^= y >> 15; y ^= y << 5;
+
+                Uint x = u ^ (u << 9);
+                x ^= x >> 17;
+                x ^= x << 6;
+
+                Uint y = w1 ^ (w1 << 17);
+                y ^= y >> 15;
+                y ^= y << 5;
+
                 return (x + v) ^ (y + w2);
             }
 
-            inline Doub doub() { return 2.32830643653869629E-10 * int32(); }
+            inline f32 doub()
+            {
+                return 2.32830643653869629E-10 * int32();
+            }
 
-            inline Doub truedoub()
+            inline f32 truedoub()
             {
                 return 2.32830643653869629E-10 * ( int32() + 2.32830643653869629E-10 * int32() );
             }
