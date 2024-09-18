@@ -54,8 +54,7 @@ static void RenderScene()
 
 int main()
 {
-    //XorRng::InitRng(1337);
-    XorRng::InitRng();
+    XorRng::InitRng(1337);
     printf("Casting rays into scene...\r\n\r\n");
 
     perf_tracker.Start();

@@ -20,30 +20,17 @@ namespace rac::rnd::marsaglia
 
     static mut_u32 u32_seed = seeds[0];
     static mut_i32 i32_seed = seeds[1];
+    static mut_u32 f32_seed = seeds[2];
+    static mut_u32 f32_state[4] = { seeds[3], seeds[4], seeds[5], seeds[6] };
 
-    static mut_u64 u64_seed = seeds[0];
-    static mut_i64 i64_seed = seeds[1];
-
-    static mut_u32 f32_seed = (u32)seeds[0];
-    static mut_u32 f32_v = (u32)seeds[1];
-    static mut_u32 f32_w1 = (u32)seeds[2];
-    static mut_u32 f32_w2 = (u32)seeds[3];
-    static mut_u32 f32_u = f32_seed ^ f32_v;
-
-    static mut_u64 f64_seed = seeds[0];
-    static mut_u64 f64_v = seeds[1];
-    static mut_u64 f64_w = seeds[2];
-    static mut_u64 f64_u = f64_seed ^ f64_v;
+    static mut_u64 u64_seed = seeds[7];
+    static mut_i64 i64_seed = seeds[8];
+    static mut_u64 f64_seed = seeds[9];
+    static mut_u64 f64_state[4] = { seeds[10], seeds[11], seeds[12], seeds[13] };
 
     class mut_XorRng
     {
     public:
-
-        /*
-        Unused transformations:
-            y^=y<<c; y^=y<<a; y^=y>>b;
-            y^=y>>c; y^=y>>a; y^=y<<b;
-        */
 
         MAY_INLINE static void InitRng()
         {
@@ -58,16 +45,13 @@ namespace rac::rnd::marsaglia
             u64_seed = seeds[distr(generator)];
             i64_seed = seeds[distr(generator)];
 
-            f32_seed = (u32)seeds[distr(generator)];
-            f32_v = (u32)seeds[distr(generator)];
-            f32_w1 = (u32)seeds[distr(generator)];
-            f32_w2 = (u32)seeds[distr(generator)];
-            f32_u = f32_seed ^ f32_v;
-
+            f32_seed = seeds[distr(generator)];
             f64_seed = seeds[distr(generator)];
-            f64_v = seeds[distr(generator)];
-            f64_w = seeds[distr(generator)];
-            f64_u = f64_seed ^ f64_v;
+            for (int i = 0; i < 4; ++i)
+            {
+                f32_state[i] = (u32)seeds[distr(generator)];
+                f64_state[i] = seeds[distr(generator)];
+            }
         }
 
         INLINE static u32 GetU32()
@@ -109,60 +93,65 @@ namespace rac::rnd::marsaglia
 
         INLINE static u64 GetU64()
         {
-            // a = 7
-            // b = 51
-            // c = 24
+            // a = 21
+            // b = 35
+            // c = 4
             mut_u64 res = u64_seed;
-            res ^= res >> 7;
-            res ^= res >> 24;
-            res ^= res << 51;
+            res ^= res << 21;
+            res ^= res >> 35;
+            res ^= res << 4;
             u64_seed = res;
             return res;
         }
         INLINE static u64 GetI64()
         {
-            // a = 25
-            // b = 33
-            // c = 36
+            // a = 20
+            // b = 41
+            // c = 5
             mut_i64 res = i64_seed;
-            res ^= res << 36;
-            res ^= res >> 33;
-            res ^= res << 25;
+            res ^= res >> 20;
+            res ^= res << 41;
+            res ^= res >> 5;
             i64_seed = res;
             return res;
         }
         INLINE static p64 GetP64()
         {
-            // a = 16
-            // b = 11
-            // c = 27
+            // a = 17
+            // b = 31
+            // c = 8
             mut_p64 res = u64_seed;
-            res.uint64 ^= res.uint64 >> 27;
-            res.uint64 ^= res.uint64 << 11;
-            res.uint64 ^= res.uint64 >> 16;
+            res.uint64 ^= res.uint64 << 27;
+            res.uint64 ^= res.uint64 >> 11;
+            res.uint64 ^= res.uint64 << 16;
             u64_seed = res.uint64;
             return res;
         }
 
         INLINE static f32 GetF32()
         {
-            f32_u = f32_u * 2891336453U + 1640531513U;
-            f32_v ^= f32_v >> 13;
-            f32_v ^= f32_v << 17;
-            f32_v ^= f32_v >> 5;
+            mut_u32ptr u = f32_state;
+            mut_u32ptr v = f32_state + 1;
+            mut_u32ptr w1 = f32_state + 2;
+            mut_u32ptr w2 = f32_state + 3;
 
-            f32_w1 = 33378 * (f32_w1 & 0xffff) + (f32_w1 >> 16);
-            f32_w2 = 57225 * (f32_w2 & 0xffff) + (f32_w2 >> 16);
+            *u = *u * 2891336453U + 1640531513U;
+            *v ^= *v >> 13;
+            *v ^= *v << 17;
+            *v ^= *v >> 5;
 
-            mut_u32 x = f32_u ^ (f32_u << 9);
+            *w1 = 33378 * (*w1 & 0xffff) + (*w1 >> 16);
+            *w2 = 57225 * (*w2 & 0xffff) + (*w2 >> 16);
+
+            mut_u32 x = *u ^ (*u << 9);
             x ^= x >> 17;
             x ^= x << 6;
 
-            mut_u32 y = f32_w1 ^ (f32_w1 << 17);
+            mut_u32 y = *w1 ^ (*w1 << 17);
             y ^= y >> 15;
             y ^= y << 5;
 
-            u32 res = (x + f32_v) ^ (y + f32_w2);
+            u32 res = (x + *v) ^ (y + *w2);
             return 2.32830643653869629E-10f * (f32)res;
         }
         INLINE static f32 GetF32(f32 min_inclusive, f32 max_exclusive)
@@ -181,18 +170,22 @@ namespace rac::rnd::marsaglia
 
         INLINE static f64 GetF64()
         {
-            f64_u = f64_u * 2862933555777941757LL + 7046029254386353087LL;
+            mut_u64ptr u = f64_state;
+            mut_u64ptr v = f64_state + 1;
+            mut_u64ptr w = f64_state + 2;
 
-            f64_v ^= f64_v >> 17;
-            f64_v ^= f64_v << 31;
-            f64_v ^= f64_v >> 8;
+            *u = *u * 2862933555777941757LL + 7046029254386353087LL;
 
-            f64_w = 4294957665U * (f64_w & 0xffffffff) + (f64_w >> 32);
+            *v ^= *v >> 11;
+            *v ^= *v << 29;
+            *v ^= *v >> 14;
 
-            mut_u64 x = f64_u ^ (f64_u << 21);
+            *w = 4294957665U * (*w & 0xffffffff) + (*w >> 32);
+
+            mut_u64 x = *u ^ (*u << 21);
             x ^= x >> 35;
             x ^= x << 4;
-            u64 res = (x + f64_v) ^ f64_w;
+            u64 res = (x + *v) ^ *w;
             return 5.42101086242752217E-20 * res;
         }
         INLINE static f64 GetF64(f64 min_inclusive, f64 max_exclusive)
@@ -236,7 +229,7 @@ namespace rac::rnd::marsaglia
         {
             assert(min_inclusive < max_exclusive);
 
-            f64 rand_zero_to_one = GetF32();
+            f64 rand_zero_to_one = GetF64();
             f64 diff = (f64)max_exclusive - (f64)min_inclusive + 1.0;
             f64 res = rand_zero_to_one * diff;
             return (u64)res + min_inclusive;
@@ -245,7 +238,7 @@ namespace rac::rnd::marsaglia
         {
             assert(min_inclusive < max_exclusive);
 
-            f64 rand_zero_to_one = GetF32();
+            f64 rand_zero_to_one = GetF64();
             f64 diff = (f64)max_exclusive - (f64)min_inclusive + 1.0;
             f64 res = rand_zero_to_one * diff;
             return (i64)res + min_inclusive;
@@ -262,24 +255,57 @@ namespace rac::rnd::marsaglia
             std::uniform_int_distribution<int> distr(0, MAX_SEED_CT);
             std::shuffle(SEEDS_BEGIN, SEEDS_END, generator);
 
-            u32 transformed_seed = input_seed ^ seeds[distr(generator)];
-            u32_seed = transformed_seed;
-            i32_seed = (i32)GetU32();
+            mut_u32 transformed_seed32 = input_seed ^ seeds[distr(generator)];
+            transformed_seed32 ^= transformed_seed32 >> 14;
+            transformed_seed32 ^= transformed_seed32 << 29;
+            transformed_seed32 ^= transformed_seed32 >> 11;
+            u32_seed = transformed_seed32;
 
-            f32_seed = GetI32() ^ (i32)seeds[distr(generator)];
-            f32_v = GetI32();
-            f32_w1 = GetI32();
-            f32_w2 = GetI32();
-            f32_u = f32_seed ^ f32_v;
+            transformed_seed32 ^= input_seed;
+            transformed_seed32 ^= transformed_seed32 << 16;
+            transformed_seed32 ^= transformed_seed32 >> 5;
+            transformed_seed32 ^= transformed_seed32 << 17;
+            i32_seed = (i32)transformed_seed32;
 
-            u64_seed = GetU32();
-            u64_seed *= seeds[distr(generator)];
-            i64_seed = (i64)GetU64();
+            transformed_seed32 ^= input_seed;
+            transformed_seed32 ^= transformed_seed32 >> 13;
+            transformed_seed32 ^= transformed_seed32 << 9;
+            transformed_seed32 ^= transformed_seed32 >> 15;
+            f32_seed = transformed_seed32;
+            for (int i = 0; i < 4; ++i)
+            {
+                transformed_seed32 ^= transformed_seed32 >> 13;
+                transformed_seed32 ^= transformed_seed32 << 9;
+                transformed_seed32 ^= transformed_seed32 >> 15;
+                f32_state[i] = transformed_seed32;
+            }
 
-            f64_seed = GetI64() ^ seeds[distr(generator)];
-            f64_v = GetI64();
-            f64_w = GetI64();
-            f64_u = f64_seed ^ f64_v;
+            u64 uHigh = input_seed ^ seeds[distr(generator)];
+            u64 uLow = input_seed ^ seeds[distr(generator)];
+            mut_u64 transformed_seed64 = (uHigh << 32) | uLow;
+            transformed_seed64 ^= transformed_seed64 << 30;
+            transformed_seed64 ^= transformed_seed64 >> 35;
+            transformed_seed64 ^= transformed_seed64 << 13;
+            u64_seed = transformed_seed64;
+
+            transformed_seed64 ^= input_seed;
+            transformed_seed64 ^= transformed_seed64 << 21;
+            transformed_seed64 ^= transformed_seed64 >> 37;
+            transformed_seed64 ^= transformed_seed64 << 4;
+            i64_seed = (i64)transformed_seed64;
+
+            transformed_seed64 ^= input_seed;
+            transformed_seed64 ^= transformed_seed64 << 23;
+            transformed_seed64 ^= transformed_seed64 >> 41;
+            transformed_seed64 ^= transformed_seed64 << 18;
+            f64_seed = transformed_seed64;
+            for (int i = 0; i < 4; ++i)
+            {
+                transformed_seed64 ^= transformed_seed64 >> 23;
+                transformed_seed64 ^= transformed_seed64 << 41;
+                transformed_seed64 ^= transformed_seed64 >> 18;
+                f64_state[i] = transformed_seed64;
+            }
         }
     };
 }
