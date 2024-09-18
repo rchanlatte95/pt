@@ -33,6 +33,11 @@ namespace rac::rnd::marsaglia
     // 355, 306, 531, 436, 464, 325, 429, 496, 516, 507, 285, 555, 239, 279, 255, 556
     static u64 float_seeds[MAX_SEED_CT] = { 21269, 17539, 35993, 27847, 30577, 18917, 27091, 33029, 34607, 33827, 16061, 38039, 12547, 15413, 13649	, 38053 };
     static mut_u64 f32_seed = float_seeds[std::rand() % MAX_SEED_CT];
+    static mut_u32 f32_v = 2244614371U;
+    static mut_u32 f32_w1 = 521288629U;
+    static mut_u32 f32_w2 = 362436069U;
+    static mut_u32 f32_u = f32_seed ^ v;
+
     static mut_u64 f64_seed = float_seeds[std::rand() % MAX_SEED_CT];
 
     class mut_XorRng
@@ -167,51 +172,68 @@ namespace rac::rnd::marsaglia
             return p64((i64)(random_num * diff) + min_inclusive);
         }
 
-        /*
-        https://numerical.recipes/book.html
-        struct Ranlim32
-        {
-            Uint u,v,w1,w2;
-            inline u32 int32()
-            {
-                u = u * 2891336453U + 1640531513U;
-                v ^= v >> 13;
-                v ^= v << 17;
-                v ^= v >> 5;
-
-                w1 = 33378 * (w1 & 0xffff) + (w1 >> 16);
-                w2 = 57225 * (w2 & 0xffff) + (w2 >> 16);
-
-                Uint x = u ^ (u << 9);
-                x ^= x >> 17;
-                x ^= x << 6;
-
-                Uint y = w1 ^ (w1 << 17);
-                y ^= y >> 15;
-                y ^= y << 5;
-
-                return (x + v) ^ (y + w2);
-            }
-
-            inline f32 doub()
-            {
-                return 2.32830643653869629E-10 * int32();
-            }
-
-            inline f32 truedoub()
-            {
-                return 2.32830643653869629E-10 * ( int32() + 2.32830643653869629E-10 * int32() );
-            }
-        };
-        */
-
         INLINE static f32 GetF32()
         {
+            f32_u = f32_u * 2891336453U + 1640531513U;
+            f32_v ^= v >> 13;
+            f32_v ^= v << 17;
+            f32_v ^= v >> 5;
 
+            f32_w1 = 33378 * (f32_w1 & 0xffff) + (f32_w1 >> 16);
+            f32_w2 = 57225 * (f32_w2 & 0xffff) + (f32_w2 >> 16);
+
+            mut_u32 x = f32_u ^ (f32_u << 9);
+            x ^= x >> 17;
+            x ^= x << 6;
+
+            mut_u32 y = f32_w1 ^ (f32_w1 << 17);
+            y ^= y >> 15;
+            y ^= y << 5;
+
+            u32 res = (x + f32_v) ^ (y + f32_w2);
+            return 2.32830643653869629E-10 * res;
         }
         INLINE static f64 GetF64()
         {
+            /*
+            mut_u64 Ullong v = 4101842887655102017LL;
+            mut_u64 Ullong w = 1;
+            mut_u64 u = j ^ v;
+            Ran(Ullong j)
+            {
+                int64();
 
+                v = u;
+
+                int64();
+
+                w = v;
+
+                int64();
+            }
+            inline Ullong int64()
+            {
+                u = u * 2862933555777941757LL + 7046029254386353087LL;
+                v ^= v >> 17; v ^= v << 31; v ^= v >> 8;
+                w = 4294957665U*(w & 0xffffffff) + (w >> 32);
+                Ullong x = u ^ (u << 21); x ^= x >> 35; x ^= x << 4;
+                return (x + v) ^ w;
+            }
+            */
+
+            mut_u64 v = f64_seed * 3935559000370003845LL + 2691343689449507681LL;
+            v ^= v >> 21;
+            v ^= v << 37;
+            v ^= v >> 4;
+
+            f64_seed = v;
+
+            v *= 4768777513237032717LL;
+
+            v ^= v << 20;
+            v ^= v >> 41;
+            v ^= v << 5;
+            return 5.42101086242752217E-20 * v;
         }
         INLINE static pf32 GetPF64()
         {
