@@ -73,6 +73,42 @@ namespace rac::rnd::marsaglia
             u32_seed = res.uint32;
             return res;
         }
+        static u32 GetU32(u32 min_inclusive, u32 max_exclusive)
+        {
+            // a = 3
+            // b = 25
+            // c = 24
+            mut_u32 res = u32_seed;
+            res ^= res << 3;
+            res ^= res >> 25;
+            res ^= res << 24;
+            u32_seed = res;
+            return res;
+        }
+        static i32 GetI32(i32 min_inclusive, i32 max_exclusive)
+        {
+            // a = 5
+            // b = 21
+            // c = 12
+            mut_i32 res = i32_seed;
+            res ^= res >> 5;
+            res ^= res << 21;
+            res ^= res >> 12;
+            i32_seed = res;
+            return res;
+        }
+        static p32 GetP32(i32 min_inclusive, i32 max_exclusive)
+        {
+            // a = 13
+            // b = 17
+            // c = 5
+            mut_p32 res = u32_seed;
+            res.uint32 ^= res.uint32 >> 13;
+            res.uint32 ^= res.uint32 << 17;
+            res.uint32 ^= res.uint32 >> 5;
+            u32_seed = res.uint32;
+            return res;
+        }
 
         static u64 GetU64()
         {
@@ -99,6 +135,42 @@ namespace rac::rnd::marsaglia
             return res;
         }
         static p64 GetP64()
+        {
+            // a = 16
+            // b = 11
+            // c = 27
+            mut_p64 res = u64_seed;
+            res.uint64 ^= res.uint64 >> 27;
+            res.uint64 ^= res.uint64 << 11;
+            res.uint64 ^= res.uint64 >> 16;
+            u64_seed = res.uint64;
+            return res;
+        }
+        static u64 GetU64(u64 min_inclusive, u64 max_exclusive)
+        {
+            // a = 7
+            // b = 51
+            // c = 24
+            mut_u64 res = u64_seed;
+            res ^= res >> 7;
+            res ^= res >> 24;
+            res ^= res << 51;
+            u32_seed = res;
+            return res;
+        }
+        static u64 GetI64(i64 min_inclusive, i64 max_exclusive)
+        {
+            // a = 25
+            // b = 33
+            // c = 36
+            mut_i64 res = i64_seed;
+            res ^= res << 36;
+            res ^= res >> 33;
+            res ^= res << 25;
+            i32_seed = res;
+            return res;
+        }
+        static p64 GetP64(i64 min_inclusive, i64 max_exclusive)
         {
             // a = 16
             // b = 11
