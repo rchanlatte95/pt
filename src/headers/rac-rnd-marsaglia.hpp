@@ -75,39 +75,21 @@ namespace rac::rnd::marsaglia
         }
         static u32 GetU32(u32 min_inclusive, u32 max_exclusive)
         {
-            // a = 3
-            // b = 25
-            // c = 24
-            mut_u32 res = u32_seed;
-            res ^= res << 3;
-            res ^= res >> 25;
-            res ^= res << 24;
-            u32_seed = res;
-            return res;
+            f32 random_num = (f32)GetU32();
+            f32 diff = ((f32)max_exclusive - (f32)min_inclusive) + 1.0f;
+            return (u32)(random_num * diff) + min_inclusive;
         }
         static i32 GetI32(i32 min_inclusive, i32 max_exclusive)
         {
-            // a = 5
-            // b = 21
-            // c = 12
-            mut_i32 res = i32_seed;
-            res ^= res >> 5;
-            res ^= res << 21;
-            res ^= res >> 12;
-            i32_seed = res;
-            return res;
+            f32 random_num = (f32)GetU32();
+            f32 diff = ((f32)max_exclusive - (f32)min_inclusive) + 1.0f;
+            return (i32)(random_num * diff) + min_inclusive;
         }
         static p32 GetP32(i32 min_inclusive, i32 max_exclusive)
         {
-            // a = 13
-            // b = 17
-            // c = 5
-            mut_p32 res = u32_seed;
-            res.uint32 ^= res.uint32 >> 13;
-            res.uint32 ^= res.uint32 << 17;
-            res.uint32 ^= res.uint32 >> 5;
-            u32_seed = res.uint32;
-            return res;
+            f32 random_num = (f32)GetU32();
+            f32 diff = ((f32)max_exclusive - (f32)min_inclusive) + 1.0f;
+            return p32((i32)(random_num * diff) + min_inclusive);
         }
 
         static u64 GetU64()
