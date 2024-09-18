@@ -37,7 +37,7 @@ namespace rac::rnd::marsaglia
             y^=y>>c; y^=y>>a; y^=y<<b;
         */
 
-        static u32 GetU32()
+        INLINE static u32 GetU32()
         {
             // a = 3
             // b = 25
@@ -49,7 +49,7 @@ namespace rac::rnd::marsaglia
             u32_seed = res;
             return res;
         }
-        static i32 GetI32()
+        INLINE static i32 GetI32()
         {
             // a = 5
             // b = 21
@@ -61,7 +61,7 @@ namespace rac::rnd::marsaglia
             i32_seed = res;
             return res;
         }
-        static p32 GetP32()
+        INLINE static p32 GetP32()
         {
             // a = 13
             // b = 17
@@ -73,7 +73,7 @@ namespace rac::rnd::marsaglia
             u32_seed = res.uint32;
             return res;
         }
-        static u32 GetU32(u32 min_inclusive, u32 max_exclusive)
+        INLINE static u32 GetU32(u32 min_inclusive, u32 max_exclusive)
         {
             assert(min_inclusive < max_exclusive);
 
@@ -81,7 +81,7 @@ namespace rac::rnd::marsaglia
             f32 diff = ((f32)max_exclusive - (f32)min_inclusive) + 1.0f;
             return (u32)(random_num * diff) + min_inclusive;
         }
-        static i32 GetI32(i32 min_inclusive, i32 max_exclusive)
+        INLINE static i32 GetI32(i32 min_inclusive, i32 max_exclusive)
         {
             assert(min_inclusive < max_exclusive);
 
@@ -89,7 +89,7 @@ namespace rac::rnd::marsaglia
             f32 diff = ((f32)max_exclusive - (f32)min_inclusive) + 1.0f;
             return (i32)(random_num * diff) + min_inclusive;
         }
-        static p32 GetP32(i32 min_inclusive, i32 max_exclusive)
+        INLINE static p32 GetP32(i32 min_inclusive, i32 max_exclusive)
         {
             assert(min_inclusive < max_exclusive);
 
@@ -98,7 +98,7 @@ namespace rac::rnd::marsaglia
             return p32((i32)(random_num * diff) + min_inclusive);
         }
 
-        static u64 GetU64()
+        INLINE static u64 GetU64()
         {
             // a = 7
             // b = 51
@@ -110,7 +110,7 @@ namespace rac::rnd::marsaglia
             u32_seed = res;
             return res;
         }
-        static u64 GetI64()
+        INLINE static u64 GetI64()
         {
             // a = 25
             // b = 33
@@ -122,7 +122,7 @@ namespace rac::rnd::marsaglia
             i32_seed = res;
             return res;
         }
-        static p64 GetP64()
+        INLINE static p64 GetP64()
         {
             // a = 16
             // b = 11
@@ -134,7 +134,7 @@ namespace rac::rnd::marsaglia
             u64_seed = res.uint64;
             return res;
         }
-        static u64 GetU64(u64 min_inclusive, u64 max_exclusive)
+        INLINE static u64 GetU64(u64 min_inclusive, u64 max_exclusive)
         {
             assert(min_inclusive < max_exclusive);
 
@@ -142,7 +142,7 @@ namespace rac::rnd::marsaglia
             f64 diff = ((f64)max_exclusive - (f64)min_inclusive) + 1.0;
             return (u64)(random_num * diff) + min_inclusive;
         }
-        static u64 GetI64(i64 min_inclusive, i64 max_exclusive)
+        INLINE static u64 GetI64(i64 min_inclusive, i64 max_exclusive)
         {
             assert(min_inclusive < max_exclusive);
 
@@ -150,13 +150,26 @@ namespace rac::rnd::marsaglia
             f64 diff = ((f64)max_exclusive - (f64)min_inclusive) + 1.0;
             return (i64)(random_num * diff) + min_inclusive;
         }
-        static p64 GetP64(i64 min_inclusive, i64 max_exclusive)
+        INLINE static p64 GetP64(i64 min_inclusive, i64 max_exclusive)
         {
             assert(min_inclusive < max_exclusive);
 
             f64 random_num = (f64)GetU32();
             f64 diff = ((f64)max_exclusive - (f64)min_inclusive) + 1.0;
             return p64((i64)(random_num * diff) + min_inclusive);
+        }
+
+        INLINE static f32 GetF32()
+        {
+
+        }
+        INLINE static f64 GetF64()
+        {
+
+        }
+        INLINE static pf32 GetPF64()
+        {
+
         }
     };
 }
