@@ -1025,17 +1025,13 @@ namespace rac
     {
         union
         {
-            mut_p32 packed32[sizeof(__m128) / sizeof(p32)];
-            mut_p64 packed64[sizeof(__m128) / sizeof(p64)];
-            mut_p128 packed128;
-
-            mut_pf32 packedf32[sizeof(__m128) / sizeof(pf32)];
-            mut_pf64 packedf64[sizeof(__m128) / sizeof(pf64)];
-
             mut_f32 float32[sizeof(__m128) / sizeof(f32)];
             mut_f64 float64[sizeof(__m128) / sizeof(f64)];
 
-            __m128 f128;
+            mut_pf32 packedf32[sizeof(__m128) / sizeof(f32)];
+            mut_pf64 packedf64[sizeof(__m128) / sizeof(f64)];
+
+            __m128 float128;
         };
 
         INLINE f64 High() const noexcept { return float64[HIGH]; }
@@ -1048,18 +1044,14 @@ namespace rac
     {
         union
         {
-            mut_p32 packed32[sizeof(__m256) / sizeof(p32)];
-            mut_p64 packed64[sizeof(__m256) / sizeof(p64)];
-            mut_p128 packed128[sizeof(__m256) / sizeof(p128)];
-
-            mut_pf32 packedf32[sizeof(__m256) / sizeof(pf32)];
-            mut_pf64 packedf64[sizeof(__m256) / sizeof(pf64)];
-            mut_pf128 packedf128[sizeof(__m256) / sizeof(pf128)];
-
             mut_f32 float32[sizeof(__m256) / sizeof(f32)];
             mut_f64 float64[sizeof(__m256) / sizeof(f64)];
-
             __m128 float128[sizeof(__m256) / sizeof(__m128)];
+
+            mut_pf32 packedf32[sizeof(__m256) / sizeof(f32)];
+            mut_pf64 packedf64[sizeof(__m256) / sizeof(f64)];
+            mut_pf128 packedf128[sizeof(__m256) / sizeof(__m128)];
+
             __m256 float256;
         };
 

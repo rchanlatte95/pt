@@ -32,13 +32,18 @@ namespace rac::rnd::marsaglia
     // (https://en.wikipedia.org/wiki/Super-prime):
     // 355, 306, 531, 436, 464, 325, 429, 496, 516, 507, 285, 555, 239, 279, 255, 556
     static u64 float_seeds[MAX_SEED_CT] = { 21269, 17539, 35993, 27847, 30577, 18917, 27091, 33029, 34607, 33827, 16061, 38039, 12547, 15413, 13649	, 38053 };
-    static mut_u64 f32_seed = float_seeds[std::rand() % MAX_SEED_CT];
-    static mut_u32 f32_v = 2244614371U;
-    static mut_u32 f32_w1 = 521288629U;
-    static mut_u32 f32_w2 = 362436069U;
-    static mut_u32 f32_u = f32_seed ^ v;
+    static u64 f32_seed_index = std::rand() % MAX_SEED_CT;
+    static mut_u32 f32_seed = float_seeds[f32_seed_index];
+    static mut_u32 f32_v = float_seeds[(f32_seed_index + 1) % MAX_SEED_CT];
+    static mut_u32 f32_w1 = float_seeds[(f32_seed_index + 2) % MAX_SEED_CT];
+    static mut_u32 f32_w2 = float_seeds[(f32_seed_index + 3) % MAX_SEED_CT];
+    static mut_u32 f32_u = f32_seed ^ f32_v;
 
-    static mut_u64 f64_seed = float_seeds[std::rand() % MAX_SEED_CT];
+    static u64 f64_seed_index = std::rand() % MAX_SEED_CT;
+    static mut_u64 f64_seed = float_seeds[f64_seed_index];
+    mut_u64 f64_v = float_seeds[(f64_seed_index + 1) % MAX_SEED_CT];
+    mut_u64 f64_w = float_seeds[(f64_seed_index + 2) % MAX_SEED_CT];
+    mut_u64 f64_u = f64_seed ^ f64_v;
 
     class mut_XorRng
     {
@@ -175,9 +180,9 @@ namespace rac::rnd::marsaglia
         INLINE static f32 GetF32()
         {
             f32_u = f32_u * 2891336453U + 1640531513U;
-            f32_v ^= v >> 13;
-            f32_v ^= v << 17;
-            f32_v ^= v >> 5;
+            f32_v ^= f32_v >> 13;
+            f32_v ^= f32_v << 17;
+            f32_v ^= f32_v >> 5;
 
             f32_w1 = 33378 * (f32_w1 & 0xffff) + (f32_w1 >> 16);
             f32_w2 = 57225 * (f32_w2 & 0xffff) + (f32_w2 >> 16);
@@ -195,45 +200,19 @@ namespace rac::rnd::marsaglia
         }
         INLINE static f64 GetF64()
         {
-            /*
-            mut_u64 Ullong v = 4101842887655102017LL;
-            mut_u64 Ullong w = 1;
-            mut_u64 u = j ^ v;
-            Ran(Ullong j)
-            {
-                int64();
+            f64_u = f64_u * 2862933555777941757LL + 7046029254386353087LL;
 
-                v = u;
+            f64_v ^= f64_v >> 17;
+            f64_v ^= f64_v << 31;
+            f64_v ^= f64_v >> 8;
 
-                int64();
+            f64_w = 4294957665U * (f64_w & 0xffffffff) + (f64_w >> 32);
 
-                w = v;
-
-                int64();
-            }
-            inline Ullong int64()
-            {
-                u = u * 2862933555777941757LL + 7046029254386353087LL;
-                v ^= v >> 17; v ^= v << 31; v ^= v >> 8;
-                w = 4294957665U*(w & 0xffffffff) + (w >> 32);
-                Ullong x = u ^ (u << 21); x ^= x >> 35; x ^= x << 4;
-                return (x + v) ^ w;
-            }
-            */
-
-            mut_u64 v = f64_seed * 3935559000370003845LL + 2691343689449507681LL;
-            v ^= v >> 21;
-            v ^= v << 37;
-            v ^= v >> 4;
-
-            f64_seed = v;
-
-            v *= 4768777513237032717LL;
-
-            v ^= v << 20;
-            v ^= v >> 41;
-            v ^= v << 5;
-            return 5.42101086242752217E-20 * v;
+            mut_u64 x = f64_u ^ (f64_u << 21);
+            x ^= x >> 35;
+            x ^= x << 4;
+            u64 res = (x + f64_v) ^ f64_w;
+            return 5.42101086242752217E-20 * res;
         }
         INLINE static pf32 GetPF64()
         {
