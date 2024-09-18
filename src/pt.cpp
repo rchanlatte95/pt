@@ -54,12 +54,6 @@ static void RenderScene()
 
 int main()
 {
-    for (mut_i32 i = 0; i < 100; ++i)
-    {
-        i32 k = XorRng::GetI32(-100, 101);
-        printf("random %d: %d\r\n", (i+1), k);
-    }
-
     printf("Casting rays into scene...\r\n\r\n");
 
     perf_tracker.Start();

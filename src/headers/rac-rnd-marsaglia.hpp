@@ -10,11 +10,17 @@ namespace rac::rnd::marsaglia
     typedef const mut_XorRng* XorRng_ptr;
     typedef const mut_XorRng& XorRng_ref;
 
+    static u64 MAX_SEED_CT = 16;
+    static i32 range_from = 0;
+    static i32 range_to = MAX_SEED_CT;
+    static std::random_device rand_dev;
+    static std::mt19937 generator(rand_dev());
+    static std::uniform_int_distribution<int> distr(range_from, range_to);
+
     // NOTE(RYAN_2024-09-14): Cryptographically generated random
     // numbers being used to select super primes
     // (https://en.wikipedia.org/wiki/Super-prime):
     // 41, 57, 190, 161, 127, 80, 98, 18, 187, 141, 124, 169, 75, 129, 180, 160
-    u64 MAX_SEED_CT = 16;
     static u32 u32_seeds[MAX_SEED_CT] = { 1063, 1723, 9293, 7481, 5381, 2803, 3733, 283, 8999, 6229, 5107, 8011, 2609, 5503, 8581, 7417 };
     static mut_u32 u32_seed = (u32)u32_seeds[std::rand() % MAX_SEED_CT];
     static mut_i32 i32_seed = (i32)u32_seeds[std::rand() % MAX_SEED_CT];
@@ -91,30 +97,6 @@ namespace rac::rnd::marsaglia
             u32_seed = res.uint32;
             return res;
         }
-        INLINE static u32 GetU32(u32 min_inclusive, u32 max_exclusive)
-        {
-            assert(min_inclusive < max_exclusive);
-
-            f32 random_num = (f32)GetU32();
-            f32 diff = ((f32)max_exclusive - (f32)min_inclusive) + 1.0f;
-            return (u32)(random_num * diff) + min_inclusive;
-        }
-        INLINE static i32 GetI32(i32 min_inclusive, i32 max_exclusive)
-        {
-            assert(min_inclusive < max_exclusive);
-
-            f32 random_num = (f32)GetI32();
-            f32 diff = ((f32)max_exclusive - (f32)min_inclusive) + 1.0f;
-            return (i32)(random_num * diff) + min_inclusive;
-        }
-        INLINE static p32 GetP32(i32 min_inclusive, i32 max_exclusive)
-        {
-            assert(min_inclusive < max_exclusive);
-
-            f32 random_num = (f32)GetU32();
-            f32 diff = ((f32)max_exclusive - (f32)min_inclusive) + 1.0f;
-            return p32((i32)(random_num * diff) + min_inclusive);
-        }
 
         INLINE static u64 GetU64()
         {
@@ -152,30 +134,6 @@ namespace rac::rnd::marsaglia
             u64_seed = res.uint64;
             return res;
         }
-        INLINE static u64 GetU64(u64 min_inclusive, u64 max_exclusive)
-        {
-            assert(min_inclusive < max_exclusive);
-
-            f64 random_num = (f64)GetU32();
-            f64 diff = ((f64)max_exclusive - (f64)min_inclusive) + 1.0;
-            return (u64)(random_num * diff) + min_inclusive;
-        }
-        INLINE static u64 GetI64(i64 min_inclusive, i64 max_exclusive)
-        {
-            assert(min_inclusive < max_exclusive);
-
-            f64 random_num = (f64)GetU32();
-            f64 diff = ((f64)max_exclusive - (f64)min_inclusive) + 1.0;
-            return (i64)(random_num * diff) + min_inclusive;
-        }
-        INLINE static p64 GetP64(i64 min_inclusive, i64 max_exclusive)
-        {
-            assert(min_inclusive < max_exclusive);
-
-            f64 random_num = (f64)GetU32();
-            f64 diff = ((f64)max_exclusive - (f64)min_inclusive) + 1.0;
-            return p64((i64)(random_num * diff) + min_inclusive);
-        }
 
         INLINE static f32 GetF32()
         {
@@ -203,10 +161,14 @@ namespace rac::rnd::marsaglia
             assert(min_inclusive < max_exclusive);
 
             f32 random_num = GetF32();
-            f32 diff = (max_exclusive - min_inclusive) + 1.0f;
+            f32 diff = max_exclusive - min_inclusive;
             return (random_num * diff) + min_inclusive;
         }
         INLINE static pf32 GetPF32() { return pf32(GetF32()); }
+        INLINE static pf32 GetPF32(f32 min_inclusive, f32 max_exclusive)
+        {
+            return pf32(GetF32(min_inclusive, max_exclusive));
+        }
 
         INLINE static f64 GetF64()
         {
@@ -229,9 +191,59 @@ namespace rac::rnd::marsaglia
             assert(min_inclusive < max_exclusive);
 
             f64 random_num = GetF64();
-            f64 diff = (max_exclusive - min_inclusive) + 1.0;
+            f64 diff = max_exclusive - min_inclusive;
             return (random_num * diff) + min_inclusive;
         }
         INLINE static pf64 GetPF64() { return pf64(GetF64()); }
+        INLINE static pf64 GetPF64(f64 min_inclusive, f64 max_exclusive)
+        {
+            return pf64(GetF64(min_inclusive, max_exclusive));
+        }
+
+        INLINE static u32 GetU32(u32 min_inclusive, u32 max_exclusive)
+        {
+            assert(min_inclusive < max_exclusive);
+
+            f32 rand_zero_to_one = GetF32();
+            f32 diff = (f32)max_exclusive - (f32)min_inclusive + 1.0f;
+            f32 res = rand_zero_to_one * diff;
+            return (i32)res + min_inclusive;
+        }
+        INLINE static i32 GetI32(i32 min_inclusive, i32 max_exclusive)
+        {
+            assert(min_inclusive < max_exclusive);
+
+            f32 rand_zero_to_one = GetF32();
+            f32 diff = (f32)max_exclusive - (f32)min_inclusive + 1.0f;
+            f32 res = rand_zero_to_one * diff;
+            return (i32)res + min_inclusive;
+        }
+        INLINE static p32 GetP32(i32 min_inclusive, i32 max_exclusive)
+        {
+            return p32(GetI32(min_inclusive, max_exclusive));
+        }
+
+        INLINE static u64 GetU64(u64 min_inclusive, u64 max_exclusive)
+        {
+            assert(min_inclusive < max_exclusive);
+
+            f64 rand_zero_to_one = GetF32();
+            f64 diff = (f64)max_exclusive - (f64)min_inclusive + 1.0;
+            f64 res = rand_zero_to_one * diff;
+            return (u64)res + min_inclusive;
+        }
+        INLINE static u64 GetI64(i64 min_inclusive, i64 max_exclusive)
+        {
+            assert(min_inclusive < max_exclusive);
+
+            f64 rand_zero_to_one = GetF32();
+            f64 diff = (f64)max_exclusive - (f64)min_inclusive + 1.0;
+            f64 res = rand_zero_to_one * diff;
+            return (i64)res + min_inclusive;
+        }
+        INLINE static p64 GetP64(i64 min_inclusive, i64 max_exclusive)
+        {
+            return p64(GetI64(min_inclusive, max_exclusive));
+        }
     };
 }
