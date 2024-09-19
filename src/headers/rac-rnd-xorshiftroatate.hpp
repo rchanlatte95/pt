@@ -288,5 +288,32 @@ namespace rac::rnd::XorShiftRotate
 
             return 2.32830643653869629E-10f * result;
         }
+
+        INLINE static u32 GetU32(u32 min_inclusive, u32 max_exclusive)
+        {
+            assert(!(min_inclusive >= max_exclusive));
+
+            f32 rand_zero_to_one = GetF32();
+            f32 diff = (f32)max_exclusive - (f32)min_inclusive;
+            f32 res = rand_zero_to_one * diff;
+            return (i32)res + min_inclusive;
+        }
+        INLINE static i32 GetI32(i32 min_inclusive, i32 max_exclusive)
+        {
+            assert(!(min_inclusive >= max_exclusive));
+
+            f32 rand_zero_to_one = GetF32();
+            f32 diff = (f32)max_exclusive - (f32)min_inclusive;
+            f32 res = rand_zero_to_one * diff;
+            return (i32)res + min_inclusive;
+        }
+        INLINE static f32 GetF32(f32 min_inclusive, f32 max_exclusive)
+        {
+            assert(!(min_inclusive >= max_exclusive));
+
+            f32 random_num = GetF32();
+            f32 diff = max_exclusive - min_inclusive;
+            return (random_num * diff) + min_inclusive;
+        }
     };
 }
