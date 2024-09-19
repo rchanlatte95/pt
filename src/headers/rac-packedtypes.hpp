@@ -130,6 +130,10 @@ namespace rac
         {
             return (uint16 << rotate_by) | (uint16 >> (16 - rotate_by));
         }
+        INLINE p16 RotateRight(i32 rotate_by)
+        {
+            return (uint16 >> rotate_by) | (uint16 << (16 - rotate_by));
+        }
     };
 
     INLINE p16 operator+(p16ref lhs, u16ref rhs)
@@ -342,6 +346,10 @@ namespace rac
         INLINE p32 RotateLeft(i32 rotate_by)
         {
             return (uint32 << rotate_by) | (uint32 >> (32 - rotate_by));
+        }
+        INLINE p32 RotateRight(i32 rotate_by)
+        {
+            return (uint32 >> rotate_by) | (uint32 << (32 - rotate_by));
         }
     };
 
@@ -598,6 +606,10 @@ namespace rac
         INLINE p64 RotateLeft(i32 rotate_by)
         {
             return (uint64 << rotate_by) | (uint64 >> (64 - rotate_by));
+        }
+        INLINE p64 RotateRight(i32 rotate_by)
+        {
+            return (uint64 >> rotate_by) | (uint64 << (64 - rotate_by));
         }
     };
 
