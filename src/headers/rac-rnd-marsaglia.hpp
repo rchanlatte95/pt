@@ -58,7 +58,7 @@ namespace rac::rnd::marsaglia
     {
     public:
 
-        MAY_INLINE static void InitRng()
+        MAY_INLINE static void Init()
         {
             std::random_device rand_dev;
             std::mt19937 generator(rand_dev());
@@ -115,18 +115,6 @@ namespace rac::rnd::marsaglia
             i32_seed = res;
             return res;
         }
-        INLINE static p32 GetP32()
-        {
-            // a = 13
-            // b = 17
-            // c = 5
-            mut_p32 res = u32_seed;
-            res.uint32 ^= res.uint32 >> 13;
-            res.uint32 ^= res.uint32 << 17;
-            res.uint32 ^= res.uint32 >> 5;
-            u32_seed = res.uint32;
-            return res;
-        }
 
         INLINE static u64 GetU64()
         {
@@ -150,18 +138,6 @@ namespace rac::rnd::marsaglia
             res ^= res << 41;
             res ^= res >> 5;
             i64_seed = res;
-            return res;
-        }
-        INLINE static p64 GetP64()
-        {
-            // a = 17
-            // b = 31
-            // c = 8
-            mut_p64 res = u64_seed;
-            res.uint64 ^= res.uint64 << 27;
-            res.uint64 ^= res.uint64 >> 11;
-            res.uint64 ^= res.uint64 << 16;
-            u64_seed = res.uint64;
             return res;
         }
 
@@ -199,11 +175,6 @@ namespace rac::rnd::marsaglia
             f32 diff = max_exclusive - min_inclusive;
             return (random_num * diff) + min_inclusive;
         }
-        INLINE static pf32 GetPF32() { return pf32(GetF32()); }
-        INLINE static pf32 GetPF32(f32 min_inclusive, f32 max_exclusive)
-        {
-            return pf32(GetF32(min_inclusive, max_exclusive));
-        }
 
         INLINE static f64 GetF64()
         {
@@ -233,11 +204,6 @@ namespace rac::rnd::marsaglia
             f64 diff = max_exclusive - min_inclusive;
             return (random_num * diff) + min_inclusive;
         }
-        INLINE static pf64 GetPF64() { return pf64(GetF64()); }
-        INLINE static pf64 GetPF64(f64 min_inclusive, f64 max_exclusive)
-        {
-            return pf64(GetF64(min_inclusive, max_exclusive));
-        }
 
         INLINE static u32 GetU32(u32 min_inclusive, u32 max_exclusive)
         {
@@ -256,10 +222,6 @@ namespace rac::rnd::marsaglia
             f32 diff = (f32)max_exclusive - (f32)min_inclusive + 1.0f;
             f32 res = rand_zero_to_one * diff;
             return (i32)res + min_inclusive;
-        }
-        INLINE static p32 GetP32(i32 min_inclusive, i32 max_exclusive)
-        {
-            return p32(GetI32(min_inclusive, max_exclusive));
         }
 
         INLINE static u64 GetU64(u64 min_inclusive, u64 max_exclusive)
@@ -280,12 +242,8 @@ namespace rac::rnd::marsaglia
             f64 res = rand_zero_to_one * diff;
             return (i64)res + min_inclusive;
         }
-        INLINE static p64 GetP64(i64 min_inclusive, i64 max_exclusive)
-        {
-            return p64(GetI64(min_inclusive, max_exclusive));
-        }
 
-        MAY_INLINE static void InitRng(i32 input_seed)
+        MAY_INLINE static void Init(i32 input_seed)
         {
             std::random_device rand_dev;
             std::mt19937 generator(rand_dev());
