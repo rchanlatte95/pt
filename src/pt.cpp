@@ -60,7 +60,9 @@ int main()
     for (int i = 0; i < 32; ++i)
     {
         //printf("    %lld \r\n", XsrRng::GetI64());
-        printf("    %f \r\n", XsrRng::GetF32());
+        //printf("    %llu \r\n", XsrRng::GetU64(0, 101));
+        printf("    %lld \r\n", XsrRng::GetI64(-100, 101));
+        //printf("    %f \r\n", XsrRng::GetF32());
     }
 
     return EXIT_SUCCESS;
