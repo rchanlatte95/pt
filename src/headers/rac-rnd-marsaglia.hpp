@@ -10,6 +10,55 @@ namespace rac::rnd::marsaglia
     typedef const mut_XorRng* XorRng_ptr;
     typedef const mut_XorRng& XorRng_ref;
 
+    typedef struct mut_xor_state128
+    {
+        mut_p64 x[2];
+        mut_xor_state128()
+        {
+            x[0] = 0;
+            x[1] = 0;
+        }
+        mut_xor_state128(u64 high, u64 low)
+        {
+            x[0] = low;
+            x[1] = high;
+        }
+    }mut_xor_state128;
+    typedef struct mut_xor_state128* mut_xor_state128ptr;
+    typedef struct mut_xor_state128& mut_xor_state128ref;
+    typedef const struct mut_xor_state128 xor_state128;
+    typedef const struct mut_xor_state128* xor_state128ptr;
+    typedef const struct mut_xor_state128& xor_state128ref;
+
+    typedef struct mut_xor_state256
+    {
+        mut_p64 x[4];
+        mut_xor_state256()
+        {
+            x[0] = 0xFFFF;
+            x[1] = 0xFFFFFFFF;
+            x[2] = 0xFFFFFFFFFFFF;
+            x[3] = 0xFFFFFFFFFFFFFFFF;
+        }
+        mut_xor_state256(u64 u0, u64 u1, u64 u2, u64 u3)
+        {
+            x[0] = u0;
+            x[1] = u1;
+            x[2] = u2;
+            x[3] = u3;
+        }
+    }mut_xor_state256;
+    typedef struct mut_xor_state256* mut_xor_state256ptr;
+    typedef struct mut_xor_state256& mut_xor_state256ref;
+    typedef const struct mut_xor_state256 xor_state256;
+    typedef const struct mut_xor_state256* xor_state256ptr;
+    typedef const struct mut_xor_state256& xor_state256ref;
+
+    static INLINE uint64_t rotl(u64 x, i32 k)
+    {
+        return (x << k) | (x >> (64 - k));
+    }
+
     // NOTE(RYAN_2024-09-14): Cryptographically generated random
     // numbers being used to select super primes
     // (https://en.wikipedia.org/wiki/Super-prime):
@@ -17,6 +66,16 @@ namespace rac::rnd::marsaglia
     static mut_u32 seeds[MAX_SEED_CT] = { 81013, 81043, 81077, 81203, 81233, 81371, 81707, 81919, 81931, 81973, 82217, 82361, 82463, 82549, 82657, 82757, 82763, 82799, 82903, 83059, 83101, 83219, 83443, 83617, 192767, 192853, 193009, 193031, 193183, 193373, 193433, 193619, 193703, 193763, 193813, 193873, 193883, 193957, 194101, 194263, 194591, 194723, 194933, 194989, 318211, 318443, 318467, 318569, 318817, 319049, 319061, 319169, 319201, 319339, 319679, 319687, 320027, 320081, 320237, 320431, 320521, 320791, 321017, 321037, 321109, 451499, 451681, 451753, 451859, 451939, 452041, 452213, 452329, 452531, 453199, 453269, 453329, 453377, 453683, 453737, 453797, 453847, 454021, 454379, 454507, 593573, 593627, 594023, 594047, 594203, 594359, 594401, 594421, 595073, 595087, 595267, 595319, 595363, 595453, 595687, 595709, 595807, 595963, 596081, 596179, 737843, 737929, 738107, 738197, 738301, 738383, 738509, 738539, 738877, 738917, 738953, 739027, 739183, 739217, 739253, 739511, 739649, 739751, 740099, 740359, 740429, 891557, 891577 };
     static mut_u32ptr SEEDS_BEGIN = seeds;
     static mut_u32ptr SEEDS_END = seeds + MAX_SEED_CT;
+
+    //https://prng.di.unimi.it/xoroshiro128plusplus.c
+    static mut_xor_state128 u32_state_(seeds[0], seeds[1]);
+    static mut_xor_state128 i32_state_(seeds[2], seeds[3]);
+    static mut_xor_state128 f32_state_(seeds[4], seeds[5]);
+
+    //https://prng.di.unimi.it/xoshiro256plusplus.c
+    static mut_xor_state256 u64_state_(seeds[6], seeds[7], seeds[8], seeds[9]);
+    static mut_xor_state256 i64_state_(seeds[10], seeds[11], seeds[12], seeds[13]);
+    static mut_xor_state256 f64_state_(seeds[14], seeds[15], seeds[16], seeds[17]);
 
     static mut_u32 u32_seed = seeds[0];
     static mut_i32 i32_seed = seeds[1];
