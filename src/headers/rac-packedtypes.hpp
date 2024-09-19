@@ -125,6 +125,11 @@ namespace rac
 
         INLINE u8 High() const noexcept { return ubytes[HIGH]; }
         INLINE u8 Low() const noexcept { return ubytes[LOW]; }
+
+        INLINE p16 RotateLeft(i32 rotate_by)
+        {
+            return (uint16 << rotate_by) | (uint16 >> (16 - rotate_by));
+        }
     };
 
     INLINE p16 operator+(p16ref lhs, u16ref rhs)
@@ -333,6 +338,11 @@ namespace rac
         INLINE u16 LowWord() const noexcept { return Low(); }
         INLINE p16 PackedHigh() const noexcept { return packed16[HIGH]; }
         INLINE p16 PackedLow() const noexcept { return packed16[LOW]; }
+
+        INLINE p32 RotateLeft(i32 rotate_by)
+        {
+            return (uint32 << rotate_by) | (uint32 >> (32 - rotate_by));
+        }
     };
 
     INLINE p32 operator+(p32ref lhs, u32ref rhs)
@@ -584,6 +594,11 @@ namespace rac
         INLINE u32 LowDword() const noexcept { return Low(); }
         INLINE p32 PackedHigh() const noexcept { return packed32[HIGH]; }
         INLINE p32 PackedLow() const noexcept { return packed32[LOW]; }
+
+        INLINE p64 RotateLeft(i32 rotate_by)
+        {
+            return (uint64 << rotate_by) | (uint64 >> (64 - rotate_by));
+        }
     };
 
     INLINE p64 operator+(p64ref lhs, u64ref rhs)

@@ -15,8 +15,8 @@ namespace rac::rnd::marsaglia
         mut_p64 x[2];
         mut_xor_state128()
         {
-            x[0] = 0;
-            x[1] = 0;
+            x[0] = 0xFFFF;
+            x[1] = 0xFFFFFFFF;
         }
         mut_xor_state128(u64 high, u64 low)
         {
