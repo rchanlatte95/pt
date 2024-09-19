@@ -479,7 +479,7 @@ namespace rac
         return !(lhs < rhs);
     }
 
-    class mut_p64
+    class alignas(8) mut_p64
     {
     public:
         union
@@ -739,7 +739,7 @@ namespace rac
         return !(lhs < rhs);
     }
 
-    class mut_p128
+    class alignas(16) mut_p128
     {
     public:
         union
@@ -756,16 +756,15 @@ namespace rac
 
             __m128i int128;
 
-            mut_p16 packed16[sizeof(uint16)];
-            mut_p32 packed32[sizeof(uint32)];
-            mut_p64 packed64[sizeof(uint64)];
+            mut_p16 packed16[sizeof(__m128i) / sizeof(p16)];
+            mut_p32 packed32[sizeof(__m128i) / sizeof(p32)];
+            mut_p64 packed64[sizeof(__m128i) / sizeof(p64)];
         };
 
         mut_p128() { int128 = _mm_setzero_si128(); }
 
         mut_p128(__m128i i128) { int128 = _mm_loadu_si128(&i128); }
 
-        mut_p128(i64 i64_all) { int128 = _mm_set1_epi64x(i64_all); }
         mut_p128(i64 Low, i64 High)
         {
             int128 = _mm_set_epi64x(High, Low);
@@ -777,7 +776,6 @@ namespace rac
             int128 = _mm_set_epi32(i32_3, i32_2, i32_1, i32_0);
         }
 
-        mut_p128(i16 i16_all) { int128 = _mm_set1_epi16(i16_all); }
         mut_p128(i16 i16_0, i16 i16_1, i16 i16_2, i16 i16_3,
                 i16 i16_4, i16 i16_5, i16 i16_6, i16 i16_7)
         {
@@ -785,7 +783,6 @@ namespace rac
                                 i16_3, i16_2, i16_1, i16_0);
         }
 
-        mut_p128(i8 b_all) { int128 = _mm_set1_epi8(b_all); }
         mut_p128(i8 b0, i8 b1, i8 b2, i8 b3,
                 i8 b4, i8 b5, i8 b6, i8 b7,
                 i8 b8, i8 b9, i8 b10, i8 b11,
@@ -896,8 +893,9 @@ namespace rac
         }
     };
 
-    class mut_p256
+    class alignas(32) mut_p256
     {
+    public:
         union
         {
             mut_i8 bytes[sizeof(__m256i)];
@@ -913,26 +911,21 @@ namespace rac
             __m128i int128[sizeof(__m256i) / sizeof(__m128i)];
             __m256i int256;
 
-            mut_p16 packed16[sizeof(uint16)];
-            mut_p32 packed32[sizeof(uint32)];
-            mut_p64 packed64[sizeof(uint64)];
-            mut_p128 packed128[sizeof(int128)];
+            mut_p16 packed16[sizeof(__m256i) / sizeof(p16)];
+            mut_p32 packed32[sizeof(__m256i) / sizeof(p32)];
+            mut_p64 packed64[sizeof(__m256i) / sizeof(p64)];
+            mut_p128 packed128[sizeof(__m256i) / sizeof(p128)];
         };
 
         mut_p256() { int256 = _mm256_setzero_si256(); }
 
         mut_p256(const __m256i& i256) { int256 = _mm256_loadu_si256(&i256); }
 
-        mut_p256(const __m128i& i128_all)
-        {
-            int256 = _mm256_set_m128i(i128_all, i128_all);
-        }
         mut_p256(const __m128i& high, const __m128i& low)
         {
             int256 = _mm256_set_m128i(high, low);
         }
 
-        mut_p256(i64 i64_all) { int256 = _mm256_set1_epi64x(i64_all); }
         mut_p256(i64 i64_0, i64 i64_1, i64 i64_2, i64 i64_3)
         {
             //__m256i _mm256_set_epi64x(__int64 e3, __int64 e2, __int64 e1, __int64 e0)
@@ -949,7 +942,6 @@ namespace rac
                                     i32_3, i32_2, i32_1, i32_0);
         }
 
-        mut_p256(i16 i16_all) { int256 = _mm256_set1_epi16(i16_all); }
         mut_p256(i16 i16_15, i16 i16_14, i16 i16_13, i16 i16_12,
                 i16 i16_11, i16 i16_10, i16 i16_9, i16 i16_8,
                 i16 i16_7, i16 i16_6, i16 i16_5, i16 i16_4,
@@ -961,8 +953,6 @@ namespace rac
                                     i16_7, i16_6, i16_5, i16_4,
                                     i16_3, i16_2, i16_1, i16_0);
         }
-
-        mut_p256(i8 i8_all) { int256 = _mm256_set1_epi8(i8_all); }
 
         INLINE mut_p256 operator-() const noexcept
         {
@@ -1054,14 +1044,14 @@ namespace rac
         }
     };
 
-    class mut_pf64
+    class alignas(8) mut_pf64
     {
     public:
         union
         {
             mut_i8 bytes[sizeof(f64)];
 
-            mut_pf32 packedf32[sizeof(p64) / sizeof(p32)];
+            mut_pf32 packedf32[sizeof(u64) / sizeof(pf32)];
 
             mut_f32 float32[sizeof(p64) / sizeof(f32)];
             mut_f64 float64;
@@ -1110,8 +1100,9 @@ namespace rac
         INLINE pf32 PackedLow() const noexcept { return packedf32[LOW]; }
     };
 
-    class mut_pf128
+    class alignas(16) mut_pf128
     {
+    public:
         union
         {
             mut_i8 bytes[sizeof(__m128)];
@@ -1119,8 +1110,8 @@ namespace rac
             mut_f32 float32[sizeof(__m128) / sizeof(f32)];
             mut_f64 float64[sizeof(__m128) / sizeof(f64)];
 
-            mut_pf32 packedf32[sizeof(__m128) / sizeof(f32)];
-            mut_pf64 packedf64[sizeof(__m128) / sizeof(f64)];
+            mut_pf32 packedf32[sizeof(__m128) / sizeof(pf32)];
+            mut_pf64 packedf64[sizeof(__m128) / sizeof(pf64)];
 
             __m128 float128;
         };
@@ -1131,8 +1122,9 @@ namespace rac
         INLINE pf64 PackedLow() const noexcept { return packedf64[LOW]; }
     };
 
-    class mut_pf256
+    class alignas(32) mut_pf256
     {
+    public:
         union
         {
             mut_i8 bytes[sizeof(__m256)];
@@ -1141,9 +1133,9 @@ namespace rac
             mut_f64 float64[sizeof(__m256) / sizeof(f64)];
             __m128 float128[sizeof(__m256) / sizeof(__m128)];
 
-            mut_pf32 packedf32[sizeof(__m256) / sizeof(f32)];
-            mut_pf64 packedf64[sizeof(__m256) / sizeof(f64)];
-            mut_pf128 packedf128[sizeof(__m256) / sizeof(__m128)];
+            mut_pf32 packedf32[sizeof(__m256) / sizeof(pf32)];
+            mut_pf64 packedf64[sizeof(__m256) / sizeof(pf64)];
+            mut_pf128 packedf128[sizeof(__m256) / sizeof(pf128)];
 
             __m256 float256;
         };

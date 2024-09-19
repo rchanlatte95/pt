@@ -10,49 +10,21 @@ namespace rac::rnd::marsaglia
     typedef const mut_XorRng* XorRng_ptr;
     typedef const mut_XorRng& XorRng_ref;
 
-    typedef struct mut_xor_state128
+    typedef struct mut_xoshiro512p_state
     {
-        mut_p64 x[2];
-        mut_xor_state128()
-        {
-            x[0] = 0xFFFF;
-            x[1] = 0xFFFFFFFF;
-        }
-        mut_xor_state128(u64 high, u64 low)
-        {
-            x[0] = low;
-            x[1] = high;
-        }
-    }mut_xor_state128;
-    typedef struct mut_xor_state128* mut_xor_state128ptr;
-    typedef struct mut_xor_state128& mut_xor_state128ref;
-    typedef const struct mut_xor_state128 xor_state128;
-    typedef const struct mut_xor_state128* xor_state128ptr;
-    typedef const struct mut_xor_state128& xor_state128ref;
+        mut_p256 x[2];
 
-    typedef struct mut_xor_state256
-    {
-        mut_p64 x[4];
-        mut_xor_state256()
+        mut_xoshiro512p_state()
         {
-            x[0] = 0xFFFF;
-            x[1] = 0xFFFFFFFF;
-            x[2] = 0xFFFFFFFFFFFF;
-            x[3] = 0xFFFFFFFFFFFFFFFF;
+            x[0] = p256(0);
+            x[1] = p256(0);
         }
-        mut_xor_state256(u64 u0, u64 u1, u64 u2, u64 u3)
-        {
-            x[0] = u0;
-            x[1] = u1;
-            x[2] = u2;
-            x[3] = u3;
-        }
-    }mut_xor_state256;
-    typedef struct mut_xor_state256* mut_xor_state256ptr;
-    typedef struct mut_xor_state256& mut_xor_state256ref;
-    typedef const struct mut_xor_state256 xor_state256;
-    typedef const struct mut_xor_state256* xor_state256ptr;
-    typedef const struct mut_xor_state256& xor_state256ref;
+    }mut_xoshiro512p_state;
+    typedef struct mut_xoshiro512p_state* mut_xoshiro512p_stateptr;
+    typedef struct mut_xoshiro512p_state& mut_xoshiro512p_stateref;
+    typedef const struct mut_xoshiro512p_state xoshiro512p_state;
+    typedef const struct mut_xoshiro512p_state* xoshiro512p_stateptr;
+    typedef const struct mut_xoshiro512p_state& xoshiro512p_stateref;
 
     static INLINE uint64_t rotl(u64 x, i32 k)
     {
@@ -67,15 +39,10 @@ namespace rac::rnd::marsaglia
     static mut_u32ptr SEEDS_BEGIN = seeds;
     static mut_u32ptr SEEDS_END = seeds + MAX_SEED_CT;
 
-    //https://prng.di.unimi.it/xoroshiro128plusplus.c
-    static mut_xor_state128 u32_state_(seeds[0], seeds[1]);
-    static mut_xor_state128 i32_state_(seeds[2], seeds[3]);
-    static mut_xor_state128 f32_state_(seeds[4], seeds[5]);
-
-    //https://prng.di.unimi.it/xoshiro256plusplus.c
-    static mut_xor_state256 u64_state_(seeds[6], seeds[7], seeds[8], seeds[9]);
-    static mut_xor_state256 i64_state_(seeds[10], seeds[11], seeds[12], seeds[13]);
-    static mut_xor_state256 f64_state_(seeds[14], seeds[15], seeds[16], seeds[17]);
+    // https://prng.di.unimi.it/xoshiro512plus.c
+    static mut_xoshiro512p_state u32_state_;
+    static mut_xoshiro512p_state i32_state_;
+    static mut_xoshiro512p_state f32_state_;
 
     static mut_u32 u32_seed = seeds[0];
     static mut_i32 i32_seed = seeds[1];
