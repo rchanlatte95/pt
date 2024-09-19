@@ -104,12 +104,7 @@ namespace rac::rnd::XorShiftRotate
         }
         MAY_INLINE static void Init(u64 input_seed)
         {
-            std::random_device rand_dev;
-            std::mt19937 generator(rand_dev());
-            std::uniform_int_distribution<int> distr(0, MAX_SEED_CT);
-            std::shuffle(SEEDS_BEGIN, SEEDS_END, generator);
-
-            mut_u64 transformed_seed = input_seed ^ seeds[distr(generator)];
+            mut_u64 transformed_seed = input_seed;
             transformed_seed ^= transformed_seed << 21;
             transformed_seed ^= transformed_seed >> 35;
             transformed_seed ^= transformed_seed << 4;
