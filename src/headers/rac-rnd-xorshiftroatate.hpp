@@ -40,9 +40,9 @@ namespace rac::rnd::XorShiftRotate
     static mut_u64ptr SEEDS_END = seeds + MAX_SEED_CT;
 
     // https://prng.di.unimi.it/xoshiro512plus.c
-    static mut_xoshiro512p_state u32_state;
-    static mut_xoshiro512p_state i32_state;
-    static mut_xoshiro512p_state f32_state;
+    static mut_xoshiro512p_state unsigned_state;
+    static mut_xoshiro512p_state signed_state;
+    static mut_xoshiro512p_state float_state;
 
     class mut_XorRng
     {
