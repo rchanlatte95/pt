@@ -59,7 +59,8 @@ int main()
     XsrRng::Init();
     for (int i = 0; i < 32; ++i)
     {
-        printf("    %lld \r\n", XsrRng::GetI64());
+        //printf("    %lld \r\n", XsrRng::GetI64());
+        printf("    %f \r\n", XsrRng::GetF32());
     }
 
     return EXIT_SUCCESS;

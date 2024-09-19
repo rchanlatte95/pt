@@ -14,6 +14,7 @@ namespace rac::rnd::XorShiftRotate
     {
         union
         {
+            mut_u32 s32[16];
             mut_u64 s[8];
             mut_p256 x[2];
         };
@@ -156,7 +157,7 @@ namespace rac::rnd::XorShiftRotate
         }
         INLINE static i64 GetI64()
         {
-            i64 result = (u64)(signed_state.s[0] + signed_state.s[2]);
+            i64 result = (i64)(signed_state.s[0] + signed_state.s[2]);
             u64 t = signed_state.s[1] << 11;
 
             signed_state.s[2] ^= signed_state.s[0];
@@ -199,13 +200,66 @@ namespace rac::rnd::XorShiftRotate
 
         INLINE static u32 GetU32()
         {
-            p64 res = GetU64();
-            return res.High();
+            u32 result = unsigned_state.s32[0];
+            u64 t = unsigned_state.s[1] << 11;
+
+            unsigned_state.s[2] ^= unsigned_state.s[0];
+            unsigned_state.s[5] ^= unsigned_state.s[1];
+            unsigned_state.s[1] ^= unsigned_state.s[2];
+            unsigned_state.s[7] ^= unsigned_state.s[3];
+
+            unsigned_state.s[3] ^= unsigned_state.s[4];
+            unsigned_state.s[4] ^= unsigned_state.s[5];
+            unsigned_state.s[0] ^= unsigned_state.s[6];
+            unsigned_state.s[6] ^= unsigned_state.s[7];
+
+            unsigned_state.s[6] ^= t;
+
+            unsigned_state.s[7] = rotl(unsigned_state.s[7], 21);
+
+            return result;
         }
         INLINE static i32 GetI32()
         {
-            p64 res = GetU64();
-            return res.High();
+            i32 result = (i32)signed_state.s32[0];
+            u64 t = signed_state.s[1] << 11;
+
+            signed_state.s[2] ^= signed_state.s[0];
+            signed_state.s[5] ^= signed_state.s[1];
+            signed_state.s[1] ^= signed_state.s[2];
+            signed_state.s[7] ^= signed_state.s[3];
+
+            signed_state.s[3] ^= signed_state.s[4];
+            signed_state.s[4] ^= signed_state.s[5];
+            signed_state.s[0] ^= signed_state.s[6];
+            signed_state.s[6] ^= signed_state.s[7];
+
+            signed_state.s[6] ^= t;
+
+            signed_state.s[7] = rotl(signed_state.s[7], 21);
+
+            return result;
+        }
+        INLINE static f32 GetF32()
+        {
+            f32 result = (f32)float_state.s32[0];
+            u64 t = float_state.s[1] << 11;
+
+            float_state.s[2] ^= float_state.s[0];
+            float_state.s[5] ^= float_state.s[1];
+            float_state.s[1] ^= float_state.s[2];
+            float_state.s[7] ^= float_state.s[3];
+
+            float_state.s[3] ^= float_state.s[4];
+            float_state.s[4] ^= float_state.s[5];
+            float_state.s[0] ^= float_state.s[6];
+            float_state.s[6] ^= float_state.s[7];
+
+            float_state.s[6] ^= t;
+
+            float_state.s[7] = rotl(float_state.s[7], 21);
+
+            return 2.32830643653869629E-10f * result;
         }
     };
 }
