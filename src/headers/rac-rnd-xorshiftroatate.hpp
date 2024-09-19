@@ -12,12 +12,29 @@ namespace rac::rnd::XorShiftRotate
 
     typedef struct mut_xoshiro512p_state
     {
-        mut_p256 x[2];
+        union
+        {
+            mut_u64 s[8];
+            mut_p256 x[2];
+        };
 
         mut_xoshiro512p_state()
         {
             x[0] = p256(0xFEEDC0DE);
             x[1] = p256(0xFEEDC0DE);
+        }
+        mut_xoshiro512p_state(u64 u64_0, u64 u64_1, u64 u64_2, u64 u64_3,
+                            u64 u64_4, u64 u64_5, u64 u64_6, u64 u64_7)
+        {
+            s[0] = u64_0;
+            s[1] = u64_1;
+            s[2] = u64_2;
+            s[3] = u64_3;
+
+            s[4] = u64_4;
+            s[5] = u64_5;
+            s[6] = u64_6;
+            s[7] = u64_7;
         }
     }mut_xoshiro512p_state;
     typedef struct mut_xoshiro512p_state* mut_xoshiro512p_stateptr;
