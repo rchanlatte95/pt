@@ -3,12 +3,12 @@
 
 namespace rac::rnd::XorShiftRotate
 {
-    class mut_XorRng;
-    typedef mut_XorRng* mut_XorRng_ptr;
-    typedef mut_XorRng& mut_XorRng_ref;
-    typedef const mut_XorRng XsrRng;
-    typedef const mut_XorRng* XorRng_ptr;
-    typedef const mut_XorRng& XorRng_ref;
+    class mut_XsrRng;
+    typedef mut_XsrRng* mut_XsrRng_ptr;
+    typedef mut_XsrRng& mut_XsrRng_ref;
+    typedef const mut_XsrRng XsrRng;
+    typedef const mut_XsrRng* XsrRng_ptr;
+    typedef const mut_XsrRng& XsrRng_ref;
 
     typedef struct mut_xoshiro512p_state
     {
@@ -57,14 +57,15 @@ namespace rac::rnd::XorShiftRotate
     static mut_u64ptr SEEDS_BEGIN = seeds;
     static mut_u64ptr SEEDS_END = seeds + MAX_SEED_CT;
 
-    static mut_u64 seed_state = 0xFEEDC0DEFEEDC0DE;
+    static mut_u64 seed_state = 0xFEDDEADC0DE;
 
     // https://prng.di.unimi.it/xoshiro512plus.c
+    enum XsrRngState { Unsigned = 0, Signed, Float };
     static mut_xoshiro512p_state unsigned_state;
     static mut_xoshiro512p_state signed_state;
     static mut_xoshiro512p_state float_state;
 
-    class mut_XorRng
+    class mut_XsrRng
     {
     private:
         INLINE static u64 GetSeed(void)
@@ -314,6 +315,42 @@ namespace rac::rnd::XorShiftRotate
             f32 random_num = GetF32();
             f32 diff = max_exclusive - min_inclusive;
             return (random_num * diff) + min_inclusive;
+        }
+
+        INLINE static u8 GetBit(void)
+        {
+            i64 v = GetI64();
+            return (v > 0) - (v < 0);
+        }
+        INLINE static bool GetBool(void)
+        {
+            i64 v = GetI64();
+            return (v > 0) - (v < 0);
+        }
+
+        MAY_INLINE static mut_xoshiro512p_state GetState(XsrRngState s)
+        {
+            switch (s)
+            {
+            case XsrRngState::Unsigned:
+                return unsigned_state;
+            case XsrRngState::Signed:
+                return signed_state;
+            case XsrRngState::Float:
+                return float_state;
+            default:
+                return mut_xoshiro512p_state();
+            }
+        }
+        MAY_INLINE static std::tuple<mut_xoshiro512p_state, mut_xoshiro512p_state, mut_xoshiro512p_state> GetStates()
+        {
+            return std::tuple<mut_xoshiro512p_state, mut_xoshiro512p_state, mut_xoshiro512p_state>{unsigned_state, signed_state, float_state};
+        }
+        MAY_INLINE static void SetState(std::tuple<mut_xoshiro512p_state, mut_xoshiro512p_state, mut_xoshiro512p_state> states)
+        {
+            unsigned_state = std::get<XsrRngState::Unsigned>(states);
+            signed_state = std::get<XsrRngState::Signed>(states);
+            float_state = std::get<XsrRngState::Float>(states);
         }
     };
 }
