@@ -56,6 +56,8 @@ namespace rac::rnd::XorShiftRotate
     static mut_u64ptr SEEDS_BEGIN = seeds;
     static mut_u64ptr SEEDS_END = seeds + MAX_SEED_CT;
 
+    static mut_u64 seed_state = 0xFEEDC0DEFEEDC0DE;
+
     // https://prng.di.unimi.it/xoshiro512plus.c
     static mut_xoshiro512p_state unsigned_state;
     static mut_xoshiro512p_state signed_state;
@@ -63,6 +65,16 @@ namespace rac::rnd::XorShiftRotate
 
     class mut_XorRng
     {
+    private:
+        INLINE static u64 GetSeed(void)
+        {
+            seed_state += 0x9e3779b97f4a7c15;
+            mut_u64 z = seed_state;
+            z = (z ^ (z >> 30)) * 0xbf58476d1ce4e5b9;
+            z = (z ^ (z >> 27)) * 0x94d049bb133111eb;
+            return z ^ (z >> 31);
+        }
+
     public:
 
         MAY_INLINE static void Init(void)
@@ -71,11 +83,25 @@ namespace rac::rnd::XorShiftRotate
             std::mt19937 generator(rand_dev());
             std::uniform_int_distribution<int> distr(0, MAX_SEED_CT - 1);
             std::shuffle(SEEDS_BEGIN, SEEDS_END, generator);
-            mut_u64 u32_seed = seeds[distr(generator)];
-            mut_u64 i32_seed = seeds[distr(generator)];
-            mut_u64 f32_seed = seeds[distr(generator)];
-        }
 
+            seed_state = seeds[distr(generator)];
+            unsigned_state = mut_xoshiro512p_state(GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed());
+
+            seed_state = seeds[distr(generator)];
+            signed_state = mut_xoshiro512p_state(GetSeed(), GetSeed(),
+                                            GetSeed(), GetSeed(),
+                                            GetSeed(), GetSeed(),
+                                            GetSeed(), GetSeed());
+
+            seed_state = seeds[distr(generator)];
+            float_state = mut_xoshiro512p_state(GetSeed(), GetSeed(),
+                                            GetSeed(), GetSeed(),
+                                            GetSeed(), GetSeed(),
+                                            GetSeed(), GetSeed());
+        }
         MAY_INLINE static void Init(u64 input_seed)
         {
             std::random_device rand_dev;
@@ -87,6 +113,29 @@ namespace rac::rnd::XorShiftRotate
             transformed_seed ^= transformed_seed << 21;
             transformed_seed ^= transformed_seed >> 35;
             transformed_seed ^= transformed_seed << 4;
+            seed_state = transformed_seed;
+            unsigned_state = mut_xoshiro512p_state(GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed());
+
+            transformed_seed ^= transformed_seed << 21;
+            transformed_seed ^= transformed_seed >> 35;
+            transformed_seed ^= transformed_seed << 4;
+            seed_state = transformed_seed;
+            signed_state = mut_xoshiro512p_state(GetSeed(), GetSeed(),
+                                            GetSeed(), GetSeed(),
+                                            GetSeed(), GetSeed(),
+                                            GetSeed(), GetSeed());
+
+            transformed_seed ^= transformed_seed << 21;
+            transformed_seed ^= transformed_seed >> 35;
+            transformed_seed ^= transformed_seed << 4;
+            seed_state = transformed_seed;
+            float_state = mut_xoshiro512p_state(GetSeed(), GetSeed(),
+                                            GetSeed(), GetSeed(),
+                                            GetSeed(), GetSeed(),
+                                            GetSeed(), GetSeed());
         }
     };
 }
