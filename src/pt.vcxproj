@@ -171,7 +171,8 @@
     <ClInclude Include="headers\rac-perfstamp.hpp" />
     <ClInclude Include="headers\rac-ppm.hpp" />
     <ClInclude Include="headers\rac-noise-blue.hpp" />
-    <ClInclude Include="headers\rac-rnd-marsaglia.hpp" />
+    <ClInclude Include="headers\rac-rnd-xorshiftroatate.hpp" />
+    <ClInclude Include="headers\rac-rnd-splitmix.hpp" />
     <ClInclude Include="headers\rac-sphere.hpp" />
     <ClInclude Include="headers\rac-ray.hpp" />
     <ClInclude Include="headers\rac-staticstr.hpp" />

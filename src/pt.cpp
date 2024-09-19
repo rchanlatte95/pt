@@ -6,7 +6,7 @@
 #include "headers\rac-ray.hpp"
 #include "headers\rac-sphere.hpp"
 #include "headers\rac-perfstamp.hpp"
-#include "headers\rac-rnd-marsaglia.hpp"
+#include "headers\rac-rnd-xorshiftroatate.hpp"
 
 using namespace rac;
 using namespace rac::static_strings;
@@ -14,7 +14,7 @@ using namespace rac::mth;
 using namespace rac::gfx;
 using namespace rac::img;
 using namespace rac::chronology;
-using namespace rac::rnd::marsaglia;
+using namespace rac::rnd::XorShiftRotate;
 
 mut_ppm render;
 mut_camera cam(ppm::WIDTH, ppm::HEIGHT);
@@ -54,7 +54,7 @@ static void RenderScene()
 
 int main()
 {
-    XorRng::InitRng();
+    XsrRng::Init();
     printf("Casting rays into scene...\r\n\r\n");
 
     perf_tracker.Start();

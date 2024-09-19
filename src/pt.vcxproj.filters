@@ -77,7 +77,10 @@
     <ClInclude Include="headers\rac-noise-blue.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\rac-rnd-marsaglia.hpp">
+    <ClInclude Include="headers\rac-rnd-xorshiftroatate.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\rac-rnd-splitmix.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
