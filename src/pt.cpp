@@ -20,6 +20,7 @@ mut_ppm render;
 mut_camera cam(ppm::WIDTH, ppm::HEIGHT);
 mut_PerfSample perf_tracker;
 
+/*
 static void RenderScene()
 {
     f32 invScanlineCt = 100.0f / (f32)ppm::HEIGHT;
@@ -51,10 +52,18 @@ static void RenderScene()
     }
     printf("\r\n");
 }
+*/
 
 int main()
 {
     XsrRng::Init();
+    for (int i = 0; i < 32; ++i)
+    {
+        printf("    %lld \r\n", XsrRng::GetI64());
+    }
+
+    return EXIT_SUCCESS;
+    /*
     printf("Casting rays into scene...\r\n\r\n");
 
     perf_tracker.Start();
@@ -76,4 +85,5 @@ int main()
     printf("\tCompleted write to disk in %.3fms (%.3f MiliCycles)\r\n", write_perf.Miliseconds(), write_perf.Milicycles());
 
     return EXIT_SUCCESS;
+    */
 }

@@ -132,5 +132,80 @@ namespace rac::rnd::XorShiftRotate
                                             GetSeed(), GetSeed(),
                                             GetSeed(), GetSeed());
         }
+
+        INLINE static u64 GetU64()
+        {
+            u64 result = unsigned_state.s[0] + unsigned_state.s[2];
+            u64 t = unsigned_state.s[1] << 11;
+
+            unsigned_state.s[2] ^= unsigned_state.s[0];
+            unsigned_state.s[5] ^= unsigned_state.s[1];
+            unsigned_state.s[1] ^= unsigned_state.s[2];
+            unsigned_state.s[7] ^= unsigned_state.s[3];
+
+            unsigned_state.s[3] ^= unsigned_state.s[4];
+            unsigned_state.s[4] ^= unsigned_state.s[5];
+            unsigned_state.s[0] ^= unsigned_state.s[6];
+            unsigned_state.s[6] ^= unsigned_state.s[7];
+
+            unsigned_state.s[6] ^= t;
+
+            unsigned_state.s[7] = rotl(unsigned_state.s[7], 21);
+
+            return result;
+        }
+        INLINE static i64 GetI64()
+        {
+            i64 result = (u64)(signed_state.s[0] + signed_state.s[2]);
+            u64 t = signed_state.s[1] << 11;
+
+            signed_state.s[2] ^= signed_state.s[0];
+            signed_state.s[5] ^= signed_state.s[1];
+            signed_state.s[1] ^= signed_state.s[2];
+            signed_state.s[7] ^= signed_state.s[3];
+
+            signed_state.s[3] ^= signed_state.s[4];
+            signed_state.s[4] ^= signed_state.s[5];
+            signed_state.s[0] ^= signed_state.s[6];
+            signed_state.s[6] ^= signed_state.s[7];
+
+            signed_state.s[6] ^= t;
+
+            signed_state.s[7] = rotl(signed_state.s[7], 21);
+
+            return result;
+        }
+        INLINE static f64 GetF64()
+        {
+            f64 result = (f64)(float_state.s[0] + float_state.s[2]);
+            u64 t = float_state.s[1] << 11;
+
+            float_state.s[2] ^= float_state.s[0];
+            float_state.s[5] ^= float_state.s[1];
+            float_state.s[1] ^= float_state.s[2];
+            float_state.s[7] ^= float_state.s[3];
+
+            float_state.s[3] ^= float_state.s[4];
+            float_state.s[4] ^= float_state.s[5];
+            float_state.s[0] ^= float_state.s[6];
+            float_state.s[6] ^= float_state.s[7];
+
+            float_state.s[6] ^= t;
+
+            float_state.s[7] = rotl(float_state.s[7], 21);
+
+            return 5.42101086242752217E-20 * result;
+        }
+
+        INLINE static u32 GetU32()
+        {
+            p64 res = GetU64();
+            return res.High();
+        }
+        INLINE static i32 GetI32()
+        {
+            p64 res = GetU64();
+            return res.High();
+        }
     };
 }
