@@ -57,11 +57,12 @@ static void RenderScene()
 int main()
 {
     XsrRng::Init();
-    for (int i = 0; i < 32; ++i)
+    for (int i = 0; i < 64; ++i)
     {
         //printf("    %lld \r\n", XsrRng::GetI64());
         //printf("    %llu \r\n", XsrRng::GetU64(0, 101));
-        printf("    %lld \r\n", XsrRng::GetI64(-100, 101));
+        //printf("    %lld \r\n", XsrRng::GetI64(-100, 101));
+        printf("    %lf \r\n", XsrRng::GetF64(-10.0, 10.0));
         //printf("    %f \r\n", XsrRng::GetF32());
     }
 

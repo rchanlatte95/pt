@@ -200,7 +200,7 @@ namespace rac::rnd::XorShiftRotate
 
         INLINE static u64 GetU64(u64 min_inclusive, u64 max_exclusive)
         {
-            assert(min_inclusive < max_exclusive && min_inclusive != max_exclusive);
+            assert(!(min_inclusive >= max_exclusive));
 
             f64 rand_zero_to_one = GetF64();
             f64 diff = (f64)max_exclusive - (f64)min_inclusive;
@@ -209,12 +209,20 @@ namespace rac::rnd::XorShiftRotate
         }
         INLINE static u64 GetI64(i64 min_inclusive, i64 max_exclusive)
         {
-            assert(min_inclusive < max_exclusive && min_inclusive != max_exclusive);
+            assert(!(min_inclusive >= max_exclusive));
 
             f64 rand_zero_to_one = GetF64();
             f64 diff = (f64)max_exclusive - (f64)min_inclusive;
             f64 res = rand_zero_to_one * diff;
             return (u64)res + min_inclusive;
+        }
+        INLINE static f64 GetF64(f64 min_inclusive, f64 max_exclusive)
+        {
+            assert(!(min_inclusive >= max_exclusive));
+
+            f64 random_num = GetF64();
+            f64 diff = max_exclusive - min_inclusive;
+            return (random_num * diff) + min_inclusive;
         }
 
         INLINE static u32 GetU32(void)
