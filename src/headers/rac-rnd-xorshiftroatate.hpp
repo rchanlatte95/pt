@@ -134,7 +134,7 @@ namespace rac::rnd::XorShiftRotate
                                             GetSeed(), GetSeed());
         }
 
-        INLINE static u64 GetU64()
+        INLINE static u64 GetU64(void)
         {
             u64 result = unsigned_state.s[0] + unsigned_state.s[2];
             u64 t = unsigned_state.s[1] << 11;
@@ -155,7 +155,7 @@ namespace rac::rnd::XorShiftRotate
 
             return result;
         }
-        INLINE static i64 GetI64()
+        INLINE static i64 GetI64(void)
         {
             i64 result = (i64)(signed_state.s[0] + signed_state.s[2]);
             u64 t = signed_state.s[1] << 11;
@@ -176,7 +176,7 @@ namespace rac::rnd::XorShiftRotate
 
             return result;
         }
-        INLINE static f64 GetF64()
+        INLINE static f64 GetF64(void)
         {
             f64 result = (f64)(float_state.s[0] + float_state.s[2]);
             u64 t = float_state.s[1] << 11;
@@ -198,7 +198,17 @@ namespace rac::rnd::XorShiftRotate
             return 5.42101086242752217E-20 * result;
         }
 
-        INLINE static u32 GetU32()
+        INLINE static u64 GetU64(u64 min_inclusive, u64 max_exclusive)
+        {
+            assert(min_inclusive < max_exclusive);
+
+            f64 rand_zero_to_one = GetF64();
+            f64 diff = (f64)max_exclusive - (f64)min_inclusive + 1.0;
+            f64 res = rand_zero_to_one * diff;
+            return (u64)res + min_inclusive;
+        }
+
+        INLINE static u32 GetU32(void)
         {
             u32 result = unsigned_state.s32[0];
             u64 t = unsigned_state.s[1] << 11;
@@ -219,7 +229,7 @@ namespace rac::rnd::XorShiftRotate
 
             return result;
         }
-        INLINE static i32 GetI32()
+        INLINE static i32 GetI32(void)
         {
             i32 result = (i32)signed_state.s32[0];
             u64 t = signed_state.s[1] << 11;
@@ -240,7 +250,7 @@ namespace rac::rnd::XorShiftRotate
 
             return result;
         }
-        INLINE static f32 GetF32()
+        INLINE static f32 GetF32(void)
         {
             f32 result = (f32)float_state.s32[0];
             u64 t = float_state.s[1] << 11;
