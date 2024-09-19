@@ -12,32 +12,12 @@ namespace rac::rnd::XorShiftRotate
 
     typedef struct mut_xoshiro512p_state
     {
-        union
-        {
-            mut_u64 uint64[8];
-            mut_p256 x[2];
-        };
+        mut_p256 x[2];
 
         mut_xoshiro512p_state()
         {
             x[0] = p256(0xFEEDC0DE);
             x[1] = p256(0xFEEDC0DE);
-        }
-
-        mut_xoshiro512p_state(u64 uint64_0, u64 uint64_1,
-                            u64 uint64_2, u64 uint64_3,
-                            u64 uint64_4, u64 uint64_5,
-                            u64 uint64_6, u64 uint64_7)
-        {
-            uint64[0] = uint64_0;
-            uint64[1] = uint64_1;
-            uint64[2] = uint64_2;
-            uint64[3] = uint64_3;
-
-            uint64[4] = uint64_4;
-            uint64[5] = uint64_5;
-            uint64[6] = uint64_6;
-            uint64[7] = uint64_7;
         }
     }mut_xoshiro512p_state;
     typedef struct mut_xoshiro512p_state* mut_xoshiro512p_stateptr;
@@ -63,9 +43,9 @@ namespace rac::rnd::XorShiftRotate
     static mut_u64 seed_state;
 
     // https://prng.di.unimi.it/xoshiro512plus.c
-    static mut_xoshiro512p_state unsigned_state;
-    static mut_xoshiro512p_state signed_state;
-    static mut_xoshiro512p_state float_state;
+    static mut_xoshiro512p_state u32_state;
+    static mut_xoshiro512p_state i32_state;
+    static mut_xoshiro512p_state f32_state;
 
     class mut_XorRng
     {
@@ -92,86 +72,30 @@ namespace rac::rnd::XorShiftRotate
             std::uniform_int_distribution<int> distr(0, PENULT_SEED_CT);
             std::shuffle(SEEDS_BEGIN, SEEDS_END, generator);
 
-            seed_state = seeds[distr(generator)];
-            unsigned_state = mut_xoshiro512p_state(GetSeed(), GetSeed(),
-                                                GetSeed(), GetSeed(),
-                                                GetSeed(), GetSeed(),
-                                                GetSeed(), GetSeed());
-
-            seed_state = seeds[distr(generator)];
-            signed_state = mut_xoshiro512p_state(GetSeed(), GetSeed(),
-                                            GetSeed(), GetSeed(),
-                                            GetSeed(), GetSeed(),
-                                            GetSeed(), GetSeed());
-
-            seed_state = seeds[distr(generator)];
-            float_state = mut_xoshiro512p_state(GetSeed(), GetSeed(),
-                                            GetSeed(), GetSeed(),
-                                            GetSeed(), GetSeed(),
-                                            GetSeed(), GetSeed());
+            mut_u32 u32_seed = GetSeed(seeds[distr(generator)]);
+            mut_u32 i32_seed = GetSeed(seeds[distr(generator)]);
+            mut_u32 f32_seed = GetSeed(seeds[distr(generator)]);
         }
-        MAY_INLINE static void Init(u64 input_seed, const std::mt19937& gen)
+        MAY_INLINE static void Init(u32 input_seed, const std::mt19937& gen)
         {
             std::uniform_int_distribution<int> distr(0, MAX_SEED_CT);
             std::shuffle(SEEDS_BEGIN, SEEDS_END, gen);
 
-            mut_u64 transformed_seed = input_seed ^ seeds[distr(gen)];
-            transformed_seed ^= transformed_seed << 21;
-            transformed_seed ^= transformed_seed >> 35;
-            transformed_seed ^= transformed_seed << 4;
-
+            mut_u32 transformed_seed = input_seed ^ seeds[distr(gen)];
+            transformed_seed ^= transformed_seed << 13;
+            transformed_seed ^= transformed_seed >> 17;
+            transformed_seed ^= transformed_seed << 5;
             seed_state = transformed_seed;
-            unsigned_state = mut_xoshiro512p_state(GetSeed(), GetSeed(),
-                                                GetSeed(), GetSeed(),
-                                                GetSeed(), GetSeed(),
-                                                GetSeed(), GetSeed());
 
-            transformed_seed ^= transformed_seed << 21;
-            transformed_seed ^= transformed_seed >> 35;
-            transformed_seed ^= transformed_seed << 4;
-            seed_state = transformed_seed;
-            signed_state = mut_xoshiro512p_state(GetSeed(), GetSeed(),
-                                            GetSeed(), GetSeed(),
-                                            GetSeed(), GetSeed(),
-                                            GetSeed(), GetSeed());
-
-            transformed_seed ^= transformed_seed << 21;
-            transformed_seed ^= transformed_seed >> 35;
-            transformed_seed ^= transformed_seed << 4;
-            seed_state = transformed_seed;
-            float_state = mut_xoshiro512p_state(GetSeed(), GetSeed(),
-                                            GetSeed(), GetSeed(),
-                                            GetSeed(), GetSeed(),
-                                            GetSeed(), GetSeed());
-
+            mut_u32 u32_seed = GetSeed();
+            mut_u32 i32_seed = GetSeed();
+            mut_u32 f32_seed = GetSeed();
         }
         MAY_INLINE static void Init(u32 input_seed)
         {
             std::random_device rnd_dev;
             std::mt19937 base_generator(rnd_dev());
             Init(input_seed, base_generator);
-        }
-
-        MAY_INLINE u64 Get(void)
-        {
-            u64 result = unsigned_state.uint64[0] + unsigned_state.uint64[2];
-            u64 t = unsigned_state.uint64[1] << 11;
-
-            unsigned_state.uint64[2] ^= unsigned_state.uint64[0];
-            unsigned_state.uint64[5] ^= unsigned_state.uint64[1];
-            unsigned_state.uint64[1] ^= unsigned_state.uint64[2];
-            unsigned_state.uint64[7] ^= unsigned_state.uint64[3];
-
-            unsigned_state.uint64[3] ^= unsigned_state.uint64[4];
-            unsigned_state.uint64[4] ^= unsigned_state.uint64[5];
-            unsigned_state.uint64[0] ^= unsigned_state.uint64[6];
-            unsigned_state.uint64[6] ^= unsigned_state.uint64[7];
-
-            unsigned_state.uint64[6] ^= t;
-
-            unsigned_state.uint64[7] = rotl(unsigned_state.uint64[7], 21);
-
-            return result;
         }
     };
 }
