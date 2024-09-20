@@ -159,6 +159,29 @@ namespace rac::rnd::XorShiftRotate
                                                 GetSeed(), GetSeed(),
                                                 GetSeed(), GetSeed());
         }
+        MAY_INLINE static void Init(std::mt19937& gen)
+        {
+            std::uniform_int_distribution<int> distr(0, MAX_SEED_CT - 1);
+            std::shuffle(SEEDS_BEGIN, SEEDS_END, gen);
+
+            XsrStateSeed = seeds[distr(gen)];
+            XsrState.Unsigned = mut_xoshiro512p_state(GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed());
+
+            XsrStateSeed = seeds[distr(gen)];
+            XsrState.Signed = mut_xoshiro512p_state(GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed());
+
+            XsrStateSeed = seeds[distr(gen)];
+            XsrState.Float = mut_xoshiro512p_state(GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed());
+        }
 
         INLINE static u64 GetU64(void)
         {

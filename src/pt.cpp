@@ -55,6 +55,7 @@ static void RenderScene()
 int main()
 {
     XsrRng::Init();
+
     printf("Casting rays into scene...\r\n\r\n");
 
     perf_tracker.Start();
