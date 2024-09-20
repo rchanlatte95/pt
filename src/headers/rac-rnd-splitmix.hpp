@@ -31,6 +31,12 @@ namespace rac::rnd::SplitMix
             std::shuffle(SEEDS_BEGIN, SEEDS_END, generator);
             splitmix_state = seeds[distr(generator)];
         }
+        MAY_INLINE static void Init(std::mt19937& gen)
+        {
+            std::uniform_int_distribution<int> distr(0, MAX_SEED_CT - 1);
+            std::shuffle(SEEDS_BEGIN, SEEDS_END, gen);
+            splitmix_state = seeds[distr(gen)];
+        }
         MAY_INLINE static void Init(u64 input_seed)
         {
             std::random_device rnd_dev;
