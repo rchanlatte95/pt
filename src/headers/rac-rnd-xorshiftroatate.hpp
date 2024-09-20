@@ -3,12 +3,21 @@
 
 namespace rac::rnd::XorShiftRotate
 {
+    enum XsrRngState { Unsigned = 0, Signed, Float };
+
     class mut_XsrRng;
     typedef mut_XsrRng* mut_XsrRng_ptr;
     typedef mut_XsrRng& mut_XsrRng_ref;
     typedef const mut_XsrRng XsrRng;
     typedef const mut_XsrRng* XsrRng_ptr;
     typedef const mut_XsrRng& XsrRng_ref;
+
+    class mut_XsrContext;
+    typedef mut_XsrContext* mut_XsrContextPtr;
+    typedef mut_XsrContext& mut_XsrContextRef;
+    typedef const mut_XsrContext XsrContext;
+    typedef const mut_XsrContext* XsrContextPtr;
+    typedef const mut_XsrContext& XsrContextRef;
 
     typedef struct mut_xoshiro512p_state
     {
@@ -44,6 +53,26 @@ namespace rac::rnd::XorShiftRotate
     typedef const struct mut_xoshiro512p_state* xoshiro512p_stateptr;
     typedef const struct mut_xoshiro512p_state& xoshiro512p_stateref;
 
+    class mut_XsrContext
+    {
+    public:
+        mut_xoshiro512p_state Unsigned;
+        mut_xoshiro512p_state Signed;
+        mut_xoshiro512p_state Float;
+
+        mut_XsrContext()
+        {
+            Unsigned = mut_xoshiro512p_state();
+            Signed = mut_xoshiro512p_state();
+            Float = mut_xoshiro512p_state();
+        }
+
+        INLINE mut_xoshiro512p_state operator[](XsrRngState s) noexcept
+        {
+            return *(&Unsigned + s);
+        }
+    };
+
     static INLINE uint64_t rotl(u64 x, i32 k)
     {
         return (x << k) | (x >> (64 - k));
@@ -60,10 +89,7 @@ namespace rac::rnd::XorShiftRotate
     static mut_u64 seed_state = 0xFEDDEADC0DE;
 
     // https://prng.di.unimi.it/xoshiro512plus.c
-    enum XsrRngState { Unsigned = 0, Signed, Float };
-    static mut_xoshiro512p_state unsigned_state;
-    static mut_xoshiro512p_state signed_state;
-    static mut_xoshiro512p_state float_state;
+    static mut_XsrContext XsrState;
 
     class mut_XsrRng
     {
@@ -87,22 +113,22 @@ namespace rac::rnd::XorShiftRotate
             std::shuffle(SEEDS_BEGIN, SEEDS_END, generator);
 
             seed_state = seeds[distr(generator)];
-            unsigned_state = mut_xoshiro512p_state(GetSeed(), GetSeed(),
+            XsrState.Unsigned = mut_xoshiro512p_state(GetSeed(), GetSeed(),
                                                 GetSeed(), GetSeed(),
                                                 GetSeed(), GetSeed(),
                                                 GetSeed(), GetSeed());
 
             seed_state = seeds[distr(generator)];
-            signed_state = mut_xoshiro512p_state(GetSeed(), GetSeed(),
-                                            GetSeed(), GetSeed(),
-                                            GetSeed(), GetSeed(),
-                                            GetSeed(), GetSeed());
+            XsrState.Signed = mut_xoshiro512p_state(GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed());
 
             seed_state = seeds[distr(generator)];
-            float_state = mut_xoshiro512p_state(GetSeed(), GetSeed(),
-                                            GetSeed(), GetSeed(),
-                                            GetSeed(), GetSeed(),
-                                            GetSeed(), GetSeed());
+            XsrState.Float = mut_xoshiro512p_state(GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed());
         }
         MAY_INLINE static void Init(u64 input_seed)
         {
@@ -111,7 +137,7 @@ namespace rac::rnd::XorShiftRotate
             transformed_seed ^= transformed_seed >> 35;
             transformed_seed ^= transformed_seed << 4;
             seed_state = transformed_seed;
-            unsigned_state = mut_xoshiro512p_state(GetSeed(), GetSeed(),
+            XsrState.Unsigned = mut_xoshiro512p_state(GetSeed(), GetSeed(),
                                                 GetSeed(), GetSeed(),
                                                 GetSeed(), GetSeed(),
                                                 GetSeed(), GetSeed());
@@ -120,81 +146,81 @@ namespace rac::rnd::XorShiftRotate
             transformed_seed ^= transformed_seed >> 35;
             transformed_seed ^= transformed_seed << 4;
             seed_state = transformed_seed;
-            signed_state = mut_xoshiro512p_state(GetSeed(), GetSeed(),
-                                            GetSeed(), GetSeed(),
-                                            GetSeed(), GetSeed(),
-                                            GetSeed(), GetSeed());
+            XsrState.Signed = mut_xoshiro512p_state(GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed());
 
             transformed_seed ^= transformed_seed << 21;
             transformed_seed ^= transformed_seed >> 35;
             transformed_seed ^= transformed_seed << 4;
             seed_state = transformed_seed;
-            float_state = mut_xoshiro512p_state(GetSeed(), GetSeed(),
-                                            GetSeed(), GetSeed(),
-                                            GetSeed(), GetSeed(),
-                                            GetSeed(), GetSeed());
+            XsrState.Float = mut_xoshiro512p_state(GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed(),
+                                                GetSeed(), GetSeed());
         }
 
         INLINE static u64 GetU64(void)
         {
-            u64 result = unsigned_state.s[0] + unsigned_state.s[2];
-            u64 t = unsigned_state.s[1] << 11;
+            u64 result = XsrState.Unsigned.s[0] + XsrState.Unsigned.s[2];
+            u64 t = XsrState.Unsigned.s[1] << 11;
 
-            unsigned_state.s[2] ^= unsigned_state.s[0];
-            unsigned_state.s[5] ^= unsigned_state.s[1];
-            unsigned_state.s[1] ^= unsigned_state.s[2];
-            unsigned_state.s[7] ^= unsigned_state.s[3];
+            XsrState.Unsigned.s[2] ^= XsrState.Unsigned.s[0];
+            XsrState.Unsigned.s[5] ^= XsrState.Unsigned.s[1];
+            XsrState.Unsigned.s[1] ^= XsrState.Unsigned.s[2];
+            XsrState.Unsigned.s[7] ^= XsrState.Unsigned.s[3];
 
-            unsigned_state.s[3] ^= unsigned_state.s[4];
-            unsigned_state.s[4] ^= unsigned_state.s[5];
-            unsigned_state.s[0] ^= unsigned_state.s[6];
-            unsigned_state.s[6] ^= unsigned_state.s[7];
+            XsrState.Unsigned.s[3] ^= XsrState.Unsigned.s[4];
+            XsrState.Unsigned.s[4] ^= XsrState.Unsigned.s[5];
+            XsrState.Unsigned.s[0] ^= XsrState.Unsigned.s[6];
+            XsrState.Unsigned.s[6] ^= XsrState.Unsigned.s[7];
 
-            unsigned_state.s[6] ^= t;
+            XsrState.Unsigned.s[6] ^= t;
 
-            unsigned_state.s[7] = rotl(unsigned_state.s[7], 21);
+            XsrState.Unsigned.s[7] = rotl(XsrState.Unsigned.s[7], 21);
 
             return result;
         }
         INLINE static i64 GetI64(void)
         {
-            i64 result = (i64)(signed_state.s[0] + signed_state.s[2]);
-            u64 t = signed_state.s[1] << 11;
+            i64 result = (i64)(XsrState.Signed.s[0] + XsrState.Signed.s[2]);
+            u64 t = XsrState.Signed.s[1] << 11;
 
-            signed_state.s[2] ^= signed_state.s[0];
-            signed_state.s[5] ^= signed_state.s[1];
-            signed_state.s[1] ^= signed_state.s[2];
-            signed_state.s[7] ^= signed_state.s[3];
+            XsrState.Signed.s[2] ^= XsrState.Signed.s[0];
+            XsrState.Signed.s[5] ^= XsrState.Signed.s[1];
+            XsrState.Signed.s[1] ^= XsrState.Signed.s[2];
+            XsrState.Signed.s[7] ^= XsrState.Signed.s[3];
 
-            signed_state.s[3] ^= signed_state.s[4];
-            signed_state.s[4] ^= signed_state.s[5];
-            signed_state.s[0] ^= signed_state.s[6];
-            signed_state.s[6] ^= signed_state.s[7];
+            XsrState.Signed.s[3] ^= XsrState.Signed.s[4];
+            XsrState.Signed.s[4] ^= XsrState.Signed.s[5];
+            XsrState.Signed.s[0] ^= XsrState.Signed.s[6];
+            XsrState.Signed.s[6] ^= XsrState.Signed.s[7];
 
-            signed_state.s[6] ^= t;
+            XsrState.Signed.s[6] ^= t;
 
-            signed_state.s[7] = rotl(signed_state.s[7], 21);
+            XsrState.Signed.s[7] = rotl(XsrState.Signed.s[7], 21);
 
             return result;
         }
         INLINE static f64 GetF64(void)
         {
-            f64 result = (f64)(float_state.s[0] + float_state.s[2]);
-            u64 t = float_state.s[1] << 11;
+            f64 result = (f64)(XsrState.Float.s[0] + XsrState.Float.s[2]);
+            u64 t = XsrState.Float.s[1] << 11;
 
-            float_state.s[2] ^= float_state.s[0];
-            float_state.s[5] ^= float_state.s[1];
-            float_state.s[1] ^= float_state.s[2];
-            float_state.s[7] ^= float_state.s[3];
+            XsrState.Float.s[2] ^= XsrState.Float.s[0];
+            XsrState.Float.s[5] ^= XsrState.Float.s[1];
+            XsrState.Float.s[1] ^= XsrState.Float.s[2];
+            XsrState.Float.s[7] ^= XsrState.Float.s[3];
 
-            float_state.s[3] ^= float_state.s[4];
-            float_state.s[4] ^= float_state.s[5];
-            float_state.s[0] ^= float_state.s[6];
-            float_state.s[6] ^= float_state.s[7];
+            XsrState.Float.s[3] ^= XsrState.Float.s[4];
+            XsrState.Float.s[4] ^= XsrState.Float.s[5];
+            XsrState.Float.s[0] ^= XsrState.Float.s[6];
+            XsrState.Float.s[6] ^= XsrState.Float.s[7];
 
-            float_state.s[6] ^= t;
+            XsrState.Float.s[6] ^= t;
 
-            float_state.s[7] = rotl(float_state.s[7], 21);
+            XsrState.Float.s[7] = rotl(XsrState.Float.s[7], 21);
 
             return 5.42101086242752217E-20 * result;
         }
@@ -228,64 +254,64 @@ namespace rac::rnd::XorShiftRotate
 
         INLINE static u32 GetU32(void)
         {
-            u32 result = unsigned_state.s32[0];
-            u64 t = unsigned_state.s[1] << 11;
+            u32 result = XsrState.Unsigned.s32[0];
+            u64 t = XsrState.Unsigned.s[1] << 11;
 
-            unsigned_state.s[2] ^= unsigned_state.s[0];
-            unsigned_state.s[5] ^= unsigned_state.s[1];
-            unsigned_state.s[1] ^= unsigned_state.s[2];
-            unsigned_state.s[7] ^= unsigned_state.s[3];
+            XsrState.Unsigned.s[2] ^= XsrState.Unsigned.s[0];
+            XsrState.Unsigned.s[5] ^= XsrState.Unsigned.s[1];
+            XsrState.Unsigned.s[1] ^= XsrState.Unsigned.s[2];
+            XsrState.Unsigned.s[7] ^= XsrState.Unsigned.s[3];
 
-            unsigned_state.s[3] ^= unsigned_state.s[4];
-            unsigned_state.s[4] ^= unsigned_state.s[5];
-            unsigned_state.s[0] ^= unsigned_state.s[6];
-            unsigned_state.s[6] ^= unsigned_state.s[7];
+            XsrState.Unsigned.s[3] ^= XsrState.Unsigned.s[4];
+            XsrState.Unsigned.s[4] ^= XsrState.Unsigned.s[5];
+            XsrState.Unsigned.s[0] ^= XsrState.Unsigned.s[6];
+            XsrState.Unsigned.s[6] ^= XsrState.Unsigned.s[7];
 
-            unsigned_state.s[6] ^= t;
+            XsrState.Unsigned.s[6] ^= t;
 
-            unsigned_state.s[7] = rotl(unsigned_state.s[7], 21);
+            XsrState.Unsigned.s[7] = rotl(XsrState.Unsigned.s[7], 21);
 
             return result;
         }
         INLINE static i32 GetI32(void)
         {
-            i32 result = (i32)signed_state.s32[0];
-            u64 t = signed_state.s[1] << 11;
+            i32 result = (i32)XsrState.Signed.s32[0];
+            u64 t = XsrState.Signed.s[1] << 11;
 
-            signed_state.s[2] ^= signed_state.s[0];
-            signed_state.s[5] ^= signed_state.s[1];
-            signed_state.s[1] ^= signed_state.s[2];
-            signed_state.s[7] ^= signed_state.s[3];
+            XsrState.Signed.s[2] ^= XsrState.Signed.s[0];
+            XsrState.Signed.s[5] ^= XsrState.Signed.s[1];
+            XsrState.Signed.s[1] ^= XsrState.Signed.s[2];
+            XsrState.Signed.s[7] ^= XsrState.Signed.s[3];
 
-            signed_state.s[3] ^= signed_state.s[4];
-            signed_state.s[4] ^= signed_state.s[5];
-            signed_state.s[0] ^= signed_state.s[6];
-            signed_state.s[6] ^= signed_state.s[7];
+            XsrState.Signed.s[3] ^= XsrState.Signed.s[4];
+            XsrState.Signed.s[4] ^= XsrState.Signed.s[5];
+            XsrState.Signed.s[0] ^= XsrState.Signed.s[6];
+            XsrState.Signed.s[6] ^= XsrState.Signed.s[7];
 
-            signed_state.s[6] ^= t;
+            XsrState.Signed.s[6] ^= t;
 
-            signed_state.s[7] = rotl(signed_state.s[7], 21);
+            XsrState.Signed.s[7] = rotl(XsrState.Signed.s[7], 21);
 
             return result;
         }
         INLINE static f32 GetF32(void)
         {
-            f32 result = (f32)float_state.s32[0];
-            u64 t = float_state.s[1] << 11;
+            f32 result = (f32)XsrState.Float.s32[0];
+            u64 t = XsrState.Float.s[1] << 11;
 
-            float_state.s[2] ^= float_state.s[0];
-            float_state.s[5] ^= float_state.s[1];
-            float_state.s[1] ^= float_state.s[2];
-            float_state.s[7] ^= float_state.s[3];
+            XsrState.Float.s[2] ^= XsrState.Float.s[0];
+            XsrState.Float.s[5] ^= XsrState.Float.s[1];
+            XsrState.Float.s[1] ^= XsrState.Float.s[2];
+            XsrState.Float.s[7] ^= XsrState.Float.s[3];
 
-            float_state.s[3] ^= float_state.s[4];
-            float_state.s[4] ^= float_state.s[5];
-            float_state.s[0] ^= float_state.s[6];
-            float_state.s[6] ^= float_state.s[7];
+            XsrState.Float.s[3] ^= XsrState.Float.s[4];
+            XsrState.Float.s[4] ^= XsrState.Float.s[5];
+            XsrState.Float.s[0] ^= XsrState.Float.s[6];
+            XsrState.Float.s[6] ^= XsrState.Float.s[7];
 
-            float_state.s[6] ^= t;
+            XsrState.Float.s[6] ^= t;
 
-            float_state.s[7] = rotl(float_state.s[7], 21);
+            XsrState.Float.s[7] = rotl(XsrState.Float.s[7], 21);
 
             return 2.32830643653869629E-10f * result;
         }
@@ -328,29 +354,13 @@ namespace rac::rnd::XorShiftRotate
             return (v > 0) - (v < 0);
         }
 
-        MAY_INLINE static mut_xoshiro512p_state GetState(XsrRngState s)
+        MAY_INLINE static XsrContext GetContext(void)
         {
-            switch (s)
-            {
-            case XsrRngState::Unsigned:
-                return unsigned_state;
-            case XsrRngState::Signed:
-                return signed_state;
-            case XsrRngState::Float:
-                return float_state;
-            default:
-                return mut_xoshiro512p_state();
-            }
+            return XsrState;
         }
-        MAY_INLINE static std::tuple<mut_xoshiro512p_state, mut_xoshiro512p_state, mut_xoshiro512p_state> GetStates()
+        MAY_INLINE static void SetContext(XsrContextRef state)
         {
-            return std::tuple<mut_xoshiro512p_state, mut_xoshiro512p_state, mut_xoshiro512p_state>{unsigned_state, signed_state, float_state};
-        }
-        MAY_INLINE static void SetState(std::tuple<mut_xoshiro512p_state, mut_xoshiro512p_state, mut_xoshiro512p_state> states)
-        {
-            unsigned_state = std::get<XsrRngState::Unsigned>(states);
-            signed_state = std::get<XsrRngState::Signed>(states);
-            float_state = std::get<XsrRngState::Float>(states);
+            XsrState = state;
         }
     };
 }
