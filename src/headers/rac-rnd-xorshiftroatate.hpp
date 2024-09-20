@@ -19,6 +19,7 @@ namespace rac::rnd::XorShiftRotate
     typedef const mut_XsrContext* XsrContextPtr;
     typedef const mut_XsrContext& XsrContextRef;
 
+    // https://prng.di.unimi.it/xoshiro512plus.c
     typedef struct mut_xoshiro512p_state
     {
         union
@@ -86,9 +87,7 @@ namespace rac::rnd::XorShiftRotate
     static mut_u64ptr SEEDS_BEGIN = seeds;
     static mut_u64ptr SEEDS_END = seeds + MAX_SEED_CT;
 
-    static mut_u64 seed_state = 0xFEDDEADC0DE;
-
-    // https://prng.di.unimi.it/xoshiro512plus.c
+    static mut_u64 XsrStateSeed = 0xFEDDEADC0DE;
     static mut_XsrContext XsrState;
 
     class mut_XsrRng
@@ -96,8 +95,8 @@ namespace rac::rnd::XorShiftRotate
     private:
         INLINE static u64 GetSeed(void)
         {
-            seed_state += 0x9e3779b97f4a7c15;
-            mut_u64 z = seed_state;
+            XsrStateSeed += 0x9e3779b97f4a7c15;
+            mut_u64 z = XsrStateSeed;
             z = (z ^ (z >> 30)) * 0xbf58476d1ce4e5b9;
             z = (z ^ (z >> 27)) * 0x94d049bb133111eb;
             return z ^ (z >> 31);
@@ -112,19 +111,19 @@ namespace rac::rnd::XorShiftRotate
             std::uniform_int_distribution<int> distr(0, MAX_SEED_CT - 1);
             std::shuffle(SEEDS_BEGIN, SEEDS_END, generator);
 
-            seed_state = seeds[distr(generator)];
+            XsrStateSeed = seeds[distr(generator)];
             XsrState.Unsigned = mut_xoshiro512p_state(GetSeed(), GetSeed(),
                                                 GetSeed(), GetSeed(),
                                                 GetSeed(), GetSeed(),
                                                 GetSeed(), GetSeed());
 
-            seed_state = seeds[distr(generator)];
+            XsrStateSeed = seeds[distr(generator)];
             XsrState.Signed = mut_xoshiro512p_state(GetSeed(), GetSeed(),
                                                 GetSeed(), GetSeed(),
                                                 GetSeed(), GetSeed(),
                                                 GetSeed(), GetSeed());
 
-            seed_state = seeds[distr(generator)];
+            XsrStateSeed = seeds[distr(generator)];
             XsrState.Float = mut_xoshiro512p_state(GetSeed(), GetSeed(),
                                                 GetSeed(), GetSeed(),
                                                 GetSeed(), GetSeed(),
@@ -136,7 +135,7 @@ namespace rac::rnd::XorShiftRotate
             transformed_seed ^= transformed_seed << 21;
             transformed_seed ^= transformed_seed >> 35;
             transformed_seed ^= transformed_seed << 4;
-            seed_state = transformed_seed;
+            XsrStateSeed = transformed_seed;
             XsrState.Unsigned = mut_xoshiro512p_state(GetSeed(), GetSeed(),
                                                 GetSeed(), GetSeed(),
                                                 GetSeed(), GetSeed(),
@@ -145,7 +144,7 @@ namespace rac::rnd::XorShiftRotate
             transformed_seed ^= transformed_seed << 21;
             transformed_seed ^= transformed_seed >> 35;
             transformed_seed ^= transformed_seed << 4;
-            seed_state = transformed_seed;
+            XsrStateSeed = transformed_seed;
             XsrState.Signed = mut_xoshiro512p_state(GetSeed(), GetSeed(),
                                                 GetSeed(), GetSeed(),
                                                 GetSeed(), GetSeed(),
@@ -154,7 +153,7 @@ namespace rac::rnd::XorShiftRotate
             transformed_seed ^= transformed_seed << 21;
             transformed_seed ^= transformed_seed >> 35;
             transformed_seed ^= transformed_seed << 4;
-            seed_state = transformed_seed;
+            XsrStateSeed = transformed_seed;
             XsrState.Float = mut_xoshiro512p_state(GetSeed(), GetSeed(),
                                                 GetSeed(), GetSeed(),
                                                 GetSeed(), GetSeed(),
