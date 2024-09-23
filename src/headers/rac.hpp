@@ -167,17 +167,6 @@ namespace rac
     u64 GiB = GB * BITS_IN_BYTE;
     u64 TiB = TB * BITS_IN_BYTE;
 
-    f32 PI = 3.14159265358979323846f;
-    f32 INV_PI = 1.0f / PI;
-    f32 SIXTH_PI = PI / 6.0f;
-    f32 FOURTH_PI = PI / 4.0f;
-    f32 THIRD_PI = PI / 3.0f;
-    f32 HALF_PI = PI / 2.0f;
-    f32 TAU = 2.0f * PI;
-
-    f32 DEG2RAD = PI / 180.0f;
-    f32 RAD2DEG = 180.0f / PI;
-
     i8 I8_MAX = INT8_MAX;
     i16 I16_MAX = INT16_MAX;
     i32 I32_MAX = INT32_MAX;

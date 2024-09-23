@@ -1,4 +1,6 @@
 ﻿#include "rac-rnd-xorshiftroatate.hpp"
+#include "rac-v2.hpp"
+#include "rac-ppm.hpp"
 
 namespace rac::noise::blue
 {
