@@ -156,16 +156,21 @@ namespace rac
     u32 AVX256_ALIGNMENT_BYTE_SIZE = 32;
     u32 AVX512_ALIGNMENT_BYTE_SIZE = 64;
 
-    u64 BITS_IN_BYTE = 8;
     u64 KB = 1024;
     u64 MB = KB * 1024;
     u64 GB = MB * 1024;
     u64 TB = GB * 1024;
 
+    u64 BITS_IN_BYTE = 8;
     u64 KiB = KB * BITS_IN_BYTE;
     u64 MiB = MB * BITS_IN_BYTE;
     u64 GiB = GB * BITS_IN_BYTE;
     u64 TiB = TB * BITS_IN_BYTE;
+
+    f64 BYTES_TO_KB = 1.0 / (f64)KB;
+    f64 BYTES_TO_MB = 1.0 / (f64)MB;
+    f64 BYTES_TO_GB = 1.0 / (f64)GB;
+    f64 BYTES_TO_TB = 1.0 / (f64)TB;
 
     i8 I8_MAX = INT8_MAX;
     i16 I16_MAX = INT16_MAX;

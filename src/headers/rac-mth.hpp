@@ -20,6 +20,8 @@ namespace rac::mth
 		return x >= min && x <= max;
 	}
 
+
+
 	f32 PI = 3.14159265f;
 	f32 INV_PI = 1.0f / PI;
 	f32 SIXTH_PI = PI / 6.0f;

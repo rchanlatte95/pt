@@ -74,7 +74,10 @@ int main()
 
     PerfSampleResult write_perf = perf_tracker.End();
 
-    printf("\tCompleted write to disk in %.3fms (%.3f MiliCycles)\r\n", write_perf.Miliseconds(), write_perf.Milicycles());
+    f64 MB_Written = (f64)render.ByteCount() * BYTES_TO_MB;
+    f64 byteRate = MB_Written / write_perf.Seconds();
+    f64 cycleRate = MB_Written / write_perf.Milicycles();
+    printf("\tCompleted write to disk in %.3fms (%.3f MiliCycles) | %.3f MB/s (%.3f MB/MiliCycle)\r\n", write_perf.Miliseconds(), write_perf.Milicycles(), byteRate, cycleRate);
 
     return EXIT_SUCCESS;
 }
