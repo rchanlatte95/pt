@@ -3,6 +3,7 @@
 #include "rac-v2.hpp"
 #include "rac-staticstr.hpp"
 #include "rac-cachestr.hpp"
+#include "rac-packedtypes.hpp"
 
 namespace rac::mth
 {
@@ -124,6 +125,9 @@ namespace rac::mth
             f32 invMag = this->InvMag();
             return v3(x * invMag, y * invMag, z * invMag);
         }
+
+        INLINE pf128 Pack128() const noexcept { return pf128(x, y, z, 0.0f); }
+        INLINE pf256 Pack() const noexcept { return pf256(x, y, z, 0.0f); }
 
         INLINE static_strings::mut_cachestr ToStr(u32 decimal_places = 4) const noexcept
         {

@@ -1138,7 +1138,31 @@ namespace rac
             mut_pf128 packedf128[sizeof(__m256) / sizeof(pf128)];
 
             __m256 float256;
+            __m256i int256;
         };
+
+        mut_pf256(f32 f0, f32 f1, f32 f2, f32 f3, f32 f4, f32 f5, f32 f6, f32 f7)
+        {
+
+        }
+
+        INLINE mut_p256 operator-() const noexcept
+        {
+            const __m256i mask = _mm256_set1_epi32(-1);
+            return _mm256_sign_epi32(int256, mask);
+        }
+        INLINE const mut_p256& operator+=(__m256 u) noexcept
+        {
+            float256 = _mm256_add_ps(float256, u);
+        }
+        INLINE const mut_p256& operator-=(__m256 u) noexcept
+        {
+            float256 = _mm256_sub_ps(float256, u);
+        }
+        INLINE const mut_p256& operator*=(__m256 u) noexcept
+        {
+            float256 = _mm256_mul_ps(float256, u);
+        }
 
         INLINE __m128 High() const noexcept { return float128[HIGH]; }
         INLINE __m128 Low() const noexcept { return float128[LOW]; }
