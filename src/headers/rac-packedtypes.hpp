@@ -1141,9 +1141,27 @@ namespace rac
             __m256i int256;
         };
 
+        mut_pf256() { float256 = _mm256_setzero_ps(); }
+        mut_pf256(const __m256& all)
+        {
+            float256 = _mm256_broadcast_ps((__m128*)all.m256_f32);
+        }
+        mut_pf256(pf256ref all)
+        {
+            float256 = _mm256_broadcast_ps(all.float128);
+        }
+        mut_pf256(const __m128& high, const __m128& low)
+        {
+            float256 = _mm256_setr_m128(low, high);
+        }
+        mut_pf256(const pf128& high, const pf128& low)
+        {
+            float256 = _mm256_setr_m128(low.float128, high.float128);
+        }
+        mut_pf256(f32 f_all) { float256 = _mm256_set1_ps(f_all); }
         mut_pf256(f32 f0, f32 f1, f32 f2, f32 f3, f32 f4, f32 f5, f32 f6, f32 f7)
         {
-
+            float256 = _mm256_set_ps(f7, f6, f5, f4, f3, f2, f1, f0);
         }
 
         INLINE mut_p256 operator-() const noexcept
@@ -1162,6 +1180,10 @@ namespace rac
         INLINE const mut_p256& operator*=(__m256 u) noexcept
         {
             float256 = _mm256_mul_ps(float256, u);
+        }
+        INLINE const mut_p256& operator/=(__m256 u) noexcept
+        {
+            float256 = _mm256_div_ps(float256, u);
         }
 
         INLINE __m128 High() const noexcept { return float128[HIGH]; }
