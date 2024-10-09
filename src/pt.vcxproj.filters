@@ -83,5 +83,8 @@
     <ClInclude Include="headers\rac-rnd-splitmix.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="headers\rac-rnd-dist-uniform.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

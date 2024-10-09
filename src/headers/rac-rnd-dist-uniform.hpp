@@ -1,16 +1,16 @@
 #pragma once
 #include "rac-packedtypes.hpp"
 
-namespace rac::rnd::SplitMix
+namespace rac::rnd::distribution::uniform
 {
-    class mut_SmRng;
-    typedef mut_SmRng* mut_SmRng_ptr;
-    typedef mut_SmRng& mut_SmRng_ref;
-    typedef const mut_SmRng SmRng;
-    typedef const mut_SmRng* SmRng_ptr;
-    typedef const mut_SmRng& SmRng_ref;
+    class mut_UniformDist;
+    typedef mut_UniformDist* mut_UniformDist_ptr;
+    typedef mut_UniformDist& mut_UniformDist_ref;
+    typedef const mut_UniformDist UniformDist;
+    typedef const mut_UniformDist* UniformDist_ptr;
+    typedef const mut_UniformDist& UniformDist_ref;
 
-    class mut_SmRng
+    class mut_UniformDist
     {
     public:
     };
