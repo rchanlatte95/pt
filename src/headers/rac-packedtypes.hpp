@@ -1116,6 +1116,18 @@ namespace rac
             __m128 float128;
         };
 
+        mut_pf128() { float128 = _mm_setzero_ps(); }
+        mut_pf128(f32 f0, f32 f1, f32 f2, f32 f3)
+        {
+
+            float128 = _mm_set_ps(f3, f2, f1, f0);
+        }
+        mut_pf128(f32ptr all)
+        {
+
+            float128 = _mm_set_ps(*all + 3, *all + 2, *all + 1, *all);
+        }
+
         INLINE f64 High() const noexcept { return float64[HIGH]; }
         INLINE f64 Low() const noexcept { return float64[LOW]; }
         INLINE pf64 PackedHigh() const noexcept { return packedf64[HIGH]; }

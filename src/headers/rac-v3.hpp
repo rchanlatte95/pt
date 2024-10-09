@@ -126,12 +126,10 @@ namespace rac::mth
             return v3(x * invMag, y * invMag, z * invMag);
         }
 
-        /*
         INLINE pf128 Pack128() const noexcept
         {
-            mut_pf128 k = pf128(x, y, z, 0.0f);
-            return k;
-        }*/
+            return pf128(x, y, z, 0.0f);
+        }
 
         INLINE static_strings::mut_cachestr ToStr(u32 decimal_places = 4) const noexcept
         {
