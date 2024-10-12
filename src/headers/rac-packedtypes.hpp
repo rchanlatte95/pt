@@ -885,10 +885,9 @@ namespace rac
         INLINE p64 PackedHigh() const noexcept { return packed64[HIGH]; }
         INLINE p64 PackedLow() const noexcept { return packed64[LOW]; }
 
-        // (~this & b)
+        // (~this & against)
         INLINE __m128i AndNot(const __m128i& against) const noexcept
         {
-            //__m128i _mm_andnot_si128(__m128i a, __m128i b)
             return _mm_andnot_si128(int128, against);
         }
     };
