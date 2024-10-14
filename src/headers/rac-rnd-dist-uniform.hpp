@@ -22,7 +22,7 @@ namespace rac::rnd::distribution::uniform
     {
     private:
 
-        MAY_INLINE static void FillScratch(u64 scratch_len)
+        MAY_INLINE static void FillF32Scratch(u64 scratch_len)
         {
             using namespace rac::rnd::XorShiftRotate;
             if (scratch.capacity() < scratch_len)
@@ -30,7 +30,7 @@ namespace rac::rnd::distribution::uniform
                 scratch.reserve(scratch_len);
             }
 
-            f32 X_MAX = 5.0f;
+            f32 X_MAX = F32_MAX_X;
             f32 X_MIN = -X_MAX;
             for (int i = 0; i < scratch_len; ++i)
             {
@@ -42,10 +42,18 @@ namespace rac::rnd::distribution::uniform
 
     public:
 
+        // Get f(x) where f(x) is a non-parameterized gaussian
+        // distribution function.
+        INLINE f32 Get(f32 x)
+        {
+            f32 half_x2 = x * x * 0.5f;
+            return std::expf(SIGN_HALF_LN_2PI - half_x2);
+        }
+
         MAY_INLINE static std::vector<f32> Convert(u32 len)
         {
             u64 SCRATCH_CT = (u64)len * 2ULL;
-            FillScratch(SCRATCH_CT);
+            FillF32Scratch(SCRATCH_CT);
 
             std::vector<f32> res;
             res.reserve(len);
