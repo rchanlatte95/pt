@@ -1,9 +1,12 @@
 #pragma once
 #include "rac-packedtypes.hpp"
 #include "rac-rnd-xorshiftroatate.hpp"
+#include "rac-v2.hpp"
 
 namespace rac::rnd::distribution::uniform
 {
+    using namespace rac::mth;
+
     class mut_UniformDist;
     typedef mut_UniformDist* mut_UniformDist_ptr;
     typedef mut_UniformDist& mut_UniformDist_ref;
@@ -11,7 +14,7 @@ namespace rac::rnd::distribution::uniform
     typedef const mut_UniformDist* UniformDist_ptr;
     typedef const mut_UniformDist& UniformDist_ref;
 
-    static std::vector<mut_f64> scratch;
+    static std::vector<mut_v2> scratch;
     class mut_UniformDist
     {
     private:
@@ -24,9 +27,13 @@ namespace rac::rnd::distribution::uniform
                 scratch.reserve(scratch_len);
             }
 
+            f32 X_MAX = 5.0f;
+            f32 X_MIN = -X_MAX;
             for (int i = 0; i < scratch_len; ++i)
             {
-                scratch[i] = XsrRng::GetF64();
+                f32 x = XsrRng::GetF32(X_MIN, X_MAX);
+                f32 y = XsrRng::GetF32();
+                scratch[i] = v2(x, y);
             }
         }
 
@@ -34,7 +41,8 @@ namespace rac::rnd::distribution::uniform
 
         MAY_INLINE static std::vector<f32> Convert(u32 len)
         {
-            FillScratch((u64)len * 16ULL);
+            u64 SCRATCH_CT = (u64)len * 2ULL;
+            FillScratch(SCRATCH_CT);
 
             std::vector<f32> res;
             res.reserve(len);
