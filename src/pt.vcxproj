@@ -166,6 +166,7 @@
     <ClInclude Include="headers\rac-camera.hpp" />
     <ClInclude Include="headers\rac-color.hpp" />
     <ClInclude Include="headers\rac-counter.hpp" />
+    <ClInclude Include="headers\rac-mth-statistics.hpp" />
     <ClInclude Include="headers\rac-mth.hpp" />
     <ClInclude Include="headers\rac-packedtypes.hpp" />
     <ClInclude Include="headers\rac-perfstamp.hpp" />

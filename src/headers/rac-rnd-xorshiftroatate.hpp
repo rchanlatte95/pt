@@ -113,21 +113,21 @@ namespace rac::rnd::XorShiftRotate
 
             XsrStateSeed = seeds[distr(generator)];
             XsrState.Unsigned = mut_xoshiro512p_state(GetSeed(), GetSeed(),
-                                                GetSeed(), GetSeed(),
-                                                GetSeed(), GetSeed(),
-                                                GetSeed(), GetSeed());
+                                                    GetSeed(), GetSeed(),
+                                                    GetSeed(), GetSeed(),
+                                                    GetSeed(), GetSeed());
 
             XsrStateSeed = seeds[distr(generator)];
             XsrState.Signed = mut_xoshiro512p_state(GetSeed(), GetSeed(),
-                                                GetSeed(), GetSeed(),
-                                                GetSeed(), GetSeed(),
-                                                GetSeed(), GetSeed());
+                                                    GetSeed(), GetSeed(),
+                                                    GetSeed(), GetSeed(),
+                                                    GetSeed(), GetSeed());
 
             XsrStateSeed = seeds[distr(generator)];
             XsrState.Float = mut_xoshiro512p_state(GetSeed(), GetSeed(),
-                                                GetSeed(), GetSeed(),
-                                                GetSeed(), GetSeed(),
-                                                GetSeed(), GetSeed());
+                                                    GetSeed(), GetSeed(),
+                                                    GetSeed(), GetSeed(),
+                                                    GetSeed(), GetSeed());
         }
         MAY_INLINE static void Init(u64 input_seed)
         {

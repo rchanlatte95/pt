@@ -86,5 +86,8 @@
     <ClInclude Include="headers\rac-rnd-dist-uniform.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="headers\rac-mth-statistics.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

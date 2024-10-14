@@ -41,16 +41,11 @@ namespace rac::img
         PortablePixelMap(Color color_code)
         {
             u32 code = color_code.GetU32();
-            i32 MASK = 0xFFFFFFFF;
-            const __m256i code_vec = _mm256_set_epi32(code, code, code, code, code, code, code, code);
-            const __m256i MASK_VEC = _mm256_set_epi32(MASK, MASK, MASK, MASK, MASK, MASK, MASK, MASK);
-
             mut_i32ptr p = (mut_i32ptr)pixels;
             mut_i64 ct = (i64)(HEIGHT * WIDTH) >> 3;
             while (--ct > -1)
             {
-                //_mm256_set1_epi32(code);
-                _mm256_maskstore_epi32(p, MASK_VEC, code_vec);
+                _mm256_set1_epi32(code);
                 p += 8;
             }
         }
@@ -69,15 +64,11 @@ namespace rac::img
         MAY_INLINE void Fill(Color color_code) const noexcept
         {
             u32 code = color_code.GetU32();
-            i32 MASK = 0xFFFFFFFF;
-            const __m256i code_vec = _mm256_set_epi32(code, code, code, code, code, code, code, code);
-            const __m256i MASK_VEC = _mm256_set_epi32(MASK, MASK, MASK, MASK, MASK, MASK, MASK, MASK);
-
             mut_i32ptr p = (mut_i32ptr)pixels;
             mut_i64 ct = (i64)(HEIGHT * WIDTH) >> 3;
             while (--ct > -1)
             {
-                _mm256_maskstore_epi32(p, MASK_VEC, code_vec);
+                _mm256_set1_epi32(code);
                 p += 8;
             }
         }

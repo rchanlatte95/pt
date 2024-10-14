@@ -13,5 +13,13 @@ namespace rac::rnd::distribution::uniform
     class mut_UniformDist
     {
     public:
+
+        MAY_INLINE static std::vector<f32> Convert(u64 len, u64 X_MAX)
+        {
+            std::vector<f32> res;
+            res.reserve(len);
+
+            return res;
+        }
     };
 }
