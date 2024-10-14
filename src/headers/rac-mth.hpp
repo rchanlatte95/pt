@@ -20,8 +20,6 @@ namespace rac::mth
 		return x >= min && x <= max;
 	}
 
-
-
 	f32 PI = 3.14159265f;
 	f32 INV_PI = 1.0f / PI;
 	f32 SIXTH_PI = PI / 6.0f;
@@ -51,4 +49,7 @@ namespace rac::mth
 	f32 INV_180 = 1.0f / 180.0f;
 	f32 DEG2RAD = PI / 180.0f;
 	f32 RAD2DEG = 180.0f / PI;
+
+	f32 LN_2PI = 1.83787706641f;
+	f32 HALF_LN_2PI = LN_2PI * 0.5f;
 }

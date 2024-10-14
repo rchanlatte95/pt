@@ -1,6 +1,7 @@
 #pragma once
 #include "rac-packedtypes.hpp"
 #include "rac-rnd-xorshiftroatate.hpp"
+#include "rac-mth.hpp"
 #include "rac-v2.hpp"
 
 namespace rac::rnd::distribution::uniform
@@ -15,6 +16,7 @@ namespace rac::rnd::distribution::uniform
     typedef const mut_UniformDist& UniformDist_ref;
 
     static std::vector<mut_v2> scratch;
+    static f32 SIGN_HALF_LN_2PI = -HALF_LN_2PI;
     class mut_UniformDist
     {
     private:
