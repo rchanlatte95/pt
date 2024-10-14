@@ -40,6 +40,9 @@ namespace rac::rnd::distribution::uniform
             }
         }
 
+        // Check if value is inside
+        INLINE bool Normal_Helper_(v2_ref v) { return v.y <= Get(v.x); }
+
     public:
 
         // Get f(x) where f(x) is a non-parameterized gaussian
@@ -48,6 +51,22 @@ namespace rac::rnd::distribution::uniform
         {
             f32 half_x2 = x * x * 0.5f;
             return std::expf(SIGN_HALF_LN_2PI - half_x2);
+        }
+
+        // Check if value is possibly a non-parameterized gaussian
+        // distribution function.
+        INLINE bool Normal(f32 input_x, f32 input_y)
+        {
+            const bool x_in_range = input_x >= F32_EPSILON && input_x <= F32_MAX_X;
+            return x_in_range && input_y <= Get(input_x);
+        }
+
+        // Check if value is possibly a non-parameterized gaussian
+        // distribution function.
+        INLINE bool Normal(v2_ref v)
+        {
+            const bool x_in_range = v.x >= F32_EPSILON && v.x <= F32_MAX_X;
+            return x_in_range && v.y <= Get(v.x);
         }
 
         MAY_INLINE static std::vector<f32> Convert(u32 len)
