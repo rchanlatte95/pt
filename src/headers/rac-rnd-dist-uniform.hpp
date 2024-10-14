@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "rac-packedtypes.hpp"
 #include "rac-rnd-xorshiftroatate.hpp"
 #include "rac-mth.hpp"
@@ -17,6 +17,7 @@ namespace rac::rnd::distribution::uniform
 
     static std::vector<mut_v2> scratch;
     static f32 SIGN_HALF_LN_2PI = -HALF_LN_2PI;
+    static f32 F32_MAX_X = 4.60303963306f; // √(2k + 10 * ln(10))
     class mut_UniformDist
     {
     private:
