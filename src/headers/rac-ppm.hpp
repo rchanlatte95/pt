@@ -148,17 +148,17 @@ namespace rac::img
             return saved_successfully;
         }
 
-        MAY_INLINE void DrawQuad(i32 center_x, i32 center_y, Color_ref quad_color, i32 width = 3) const noexcept
+        MAY_INLINE void DrawQuad(i32 center_x, i32 center_y, Color_ref quad_color, i32 width = 3) noexcept
         {
-            i32 topleft_x = center_x - width;
-            i32 topleft_y = center_y - width;
+            mut_u32 topleft_x = center_x - width;
+            mut_u32 topleft_y = center_y - width;
             if (topleft_x < WIDTH || topleft_y < HEIGHT) { return; }
 
-            for (int y = 0; y < width; ++y)
+            for (mut_i32 y = 0; y < width && topleft_y < HEIGHT; ++y, ++topleft_y)
             {
-                for (int x = 0; x < width; ++x)
+                for (mut_i32 x = 0; x < width && topleft_x < WIDTH; ++x, topleft_x)
                 {
-
+                    pixels[topleft_y][topleft_x] = quad_color;
                 }
             }
         }
@@ -181,7 +181,6 @@ namespace rac::img
         {
             return pixels[HEIGHT - 1][WIDTH - 1];
         }
-
     };
 
     INLINE bool operator==(ppm_ref lhs, ppm_ref rhs)

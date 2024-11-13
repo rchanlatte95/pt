@@ -7,6 +7,7 @@
 #include "headers\rac-sphere.hpp"
 #include "headers\rac-perfstamp.hpp"
 #include "headers\rac-rnd-xorshiftroatate.hpp"
+#include "headers\rac-rnd-dist-uniform.hpp"
 
 using namespace rac;
 using namespace rac::static_strings;
@@ -15,11 +16,13 @@ using namespace rac::gfx;
 using namespace rac::img;
 using namespace rac::chronology;
 using namespace rac::rnd::XorShiftRotate;
+using namespace rac::rnd::distribution::uniform;
 
 mut_ppm render;
 mut_camera cam(ppm::WIDTH, ppm::HEIGHT);
 mut_PerfSample perf_tracker;
 
+/*
 static void RenderScene()
 {
     f32 invScanlineCt = 100.0f / (f32)ppm::HEIGHT;
@@ -51,8 +54,8 @@ static void RenderScene()
     }
     printf("\r\n");
 }
-
-static void Plot(const std::vector<v2>& data_pts, Color_ref pt_color, Color_ref background_color = Color::WHITE)
+*/
+static void Plot(std::vector<mut_v2>& data_pts, Color_ref pt_color, Color_ref background_color = Color::WHITE)
 {
     render.Fill(background_color);
 
@@ -61,13 +64,13 @@ static void Plot(const std::vector<v2>& data_pts, Color_ref pt_color, Color_ref 
     mut_f32 pts_drawn = 0.0f;
     for (mut_u32 i = 0; i < pt_ct; ++i)
     {
-        i32 center_x = data_pts[i].x * ppm::INV_WIDTH;
-        i32 center_y = data_pts[i].y * ppm::INV_HEIGHT;
+        i32 center_x = (i32)(data_pts[i].x * ppm::INV_WIDTH);
+        i32 center_y = (i32)(data_pts[i].y * ppm::INV_HEIGHT);
         render.DrawQuad(center_x, center_y, pt_color);
 
         pts_drawn += 1.0f;
         f32 pct_done = pts_drawn * inv_pt_ct;
-        printf("\r\tPLOTTING:\t%4d / %4d data points (%.2f%% PLOTTED).", (i32)pct_done, pt_ct, pct_done);
+        printf("\r\tPLOTTING:\t%4d / %4llu data points (%.2f%% PLOTTED).", (i32)pts_drawn, pt_ct, pct_done);
     }
     printf("\r\n");
 }
@@ -80,7 +83,10 @@ int main()
 
     perf_tracker.Start();
 
-    RenderScene();
+    //RenderScene();
+    std::vector<mut_v2> points = std::vector<mut_v2>(2048);
+    UniformDist::Fill(points, 2048);
+    Plot(points, Color::RED);
 
     PerfSampleResult render_perf = perf_tracker.End();
 
