@@ -25,8 +25,8 @@ namespace rac::rnd::distribution::uniform
         // distribution function.
         INLINE static f32 Get(f32 x)
         {
-            f32 half_x2 = x * x * 0.5f;
-            return std::expf(SIGN_HALF_LN_2PI - half_x2);
+            f32 half_x_sqrd = x * x * 0.5f;
+            return std::expf(SIGN_HALF_LN_2PI - half_x_sqrd);
         }
 
         // Check if value is possibly a non-parameterized gaussian
