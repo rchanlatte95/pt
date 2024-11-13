@@ -56,22 +56,19 @@ static void Plot(const std::vector<v2>& data_pts, const Color& pt_color, const C
 {
     render.Fill(background_color);
 
-    f32 invScanlineCt = 100.0f / (f32)ppm::HEIGHT;
-    mut_f32 scanlinesDone = 0.0f;
+    const size_t pt_ct = data_pts.size();
+    const f32 inv_pt_ct = 100.0f / pt_ct;
+    mut_f32 pts_drawn = 0.0f;
     for (mut_u32 y = 0; y < ppm::HEIGHT; ++y)
     {
         f32 factor = (f32)y / (f32)ppm::HEIGHT;
-        for (mut_u32 x = 0; x < ppm::WIDTH; ++x)
-        {
 
-        }
-        scanlinesDone += 1.0f;
-        f32 pct_done = scanlinesDone * invScanlineCt;
-        printf("\r\tPROCESSING:\t%4d / %4d scanlines (%.2f%% RENDERED).", (i32)scanlinesDone, ppm::HEIGHT, pct_done);
+        pts_drawn += 1.0f;
+        f32 pct_done = pts_drawn * inv_pt_ct;
+        printf("\r\tPLOTTING:\t%4d / %4d data points (%.2f%% PLOTTED).", (i32)pct_done, pt_ct, pct_done);
     }
     printf("\r\n");
 }
-
 
 int main()
 {
