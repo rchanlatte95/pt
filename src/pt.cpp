@@ -52,16 +52,18 @@ static void RenderScene()
     printf("\r\n");
 }
 
-static void Plot(const std::vector<v2>& data_pts, const Color& pt_color, const Color& background_color = Color::WHITE)
+static void Plot(const std::vector<v2>& data_pts, Color_ref pt_color, Color_ref background_color = Color::WHITE)
 {
     render.Fill(background_color);
 
     const size_t pt_ct = data_pts.size();
     const f32 inv_pt_ct = 100.0f / pt_ct;
     mut_f32 pts_drawn = 0.0f;
-    for (mut_u32 y = 0; y < ppm::HEIGHT; ++y)
+    for (mut_u32 i = 0; i < pt_ct; ++i)
     {
-        f32 factor = (f32)y / (f32)ppm::HEIGHT;
+        i32 center_x = data_pts[i].x * ppm::INV_WIDTH;
+        i32 center_y = data_pts[i].y * ppm::INV_HEIGHT;
+        render.DrawQuad(center_x, center_y, pt_color);
 
         pts_drawn += 1.0f;
         f32 pct_done = pts_drawn * inv_pt_ct;

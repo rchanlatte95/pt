@@ -148,6 +148,21 @@ namespace rac::img
             return saved_successfully;
         }
 
+        MAY_INLINE void DrawQuad(i32 center_x, i32 center_y, Color_ref quad_color, i32 width = 3) const noexcept
+        {
+            i32 topleft_x = center_x - width;
+            i32 topleft_y = center_y - width;
+            if (topleft_x < WIDTH || topleft_y < HEIGHT) { return; }
+
+            for (int y = 0; y < width; ++y)
+            {
+                for (int x = 0; x < width; ++x)
+                {
+
+                }
+            }
+        }
+
         INLINE ptr ToPtr() const noexcept { return (ptr)pixels; }
         INLINE Color_ptr Begin() const noexcept
         {
