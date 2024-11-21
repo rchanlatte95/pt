@@ -21,9 +21,32 @@ namespace rac::mth
 	}
 	constexpr f32 Min(const std::vector<f32> nums)
 	{
-		f32 res = nums[0];
-
-		return res;
+		const i64 len = nums.size();
+		switch (len)
+		{
+		case 0: return 0.0f;
+		case 1: return nums[0];
+		case 2: return nums[0] < nums[1] ? nums[0] : nums[1];
+		case 3:
+			if (nums[0] < nums[1])
+			{
+				return nums[0] < nums[2] ? nums[0] : nums[2];
+			}
+			else
+			{
+				return nums[1] < nums[2] ? nums[1] : nums[2];
+			}
+		default:
+			mut_f32 min = nums[0];
+			for (mut_i64 i = 1; i < len; ++i)
+			{
+				if (nums[i] < min)
+				{
+					min = nums[i];
+				}
+			}
+			return min;
+		}
 	}
 
 	f32 PI = 3.14159265f; // π
