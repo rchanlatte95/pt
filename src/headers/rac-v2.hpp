@@ -125,4 +125,80 @@ namespace rac::mth
     v2 v2::UP = v2(0.0f, 1.0f);
     v2 v2::LEFT = -RIGHT;
     v2 v2::DOWN = -UP;
+
+    v2 Min(const std::vector<mut_v2>& nums)
+    {
+        i64 len = nums.size();
+        if (len < 1)
+        {
+            return v2::ZERO;
+        }
+
+        switch (len)
+        {
+        case 0: return v2::ZERO;
+        case 1: return nums[0];
+        case 2:
+            return v2(nums[0].x < nums[1].x ? nums[0].x : nums[1].x,
+                nums[0].y < nums[1].y ? nums[0].y : nums[1].y);
+
+        default:
+            mut_v2 min = nums[0];
+            for (mut_i64 i = 1; i < len; ++i)
+            {
+                if (nums[i].x < min.x)
+                {
+                    min.x = nums[i].x;
+                }
+                if (nums[i].y < min.y)
+                {
+                    min.y = nums[i].y;
+                }
+            }
+            return min;
+        }
+    }
+    v2 Max(const std::vector<mut_v2>& nums)
+    {
+        i64 len = nums.size();
+        if (len < 1)
+        {
+            return v2::ZERO;
+        }
+
+        switch (len)
+        {
+        case 0: return v2::ZERO;
+        case 1: return nums[0];
+        case 2:
+            return v2(nums[0].x > nums[1].x ? nums[0].x : nums[1].x,
+                nums[0].y > nums[1].y ? nums[0].y : nums[1].y);
+
+        default:
+            mut_v2 max = nums[0];
+            for (mut_i64 i = 1; i < len; ++i)
+            {
+                if (nums[i].x > max.x)
+                {
+                    max.x = nums[i].x;
+                }
+                if (nums[i].y > max.y)
+                {
+                    max.y = nums[i].y;
+                }
+            }
+            return max;
+        }
+    }
+    void MapTo01(std::vector<mut_v2>& vec2remap)
+    {
+        v2 MIN = Min(vec2remap);
+        v2 MAX = Max(vec2remap);
+        v2 DELTA = v2(1.0f / (MAX.x - MIN.x), 1.0f / (MAX.y - MIN.y));
+        for (int i = 0; i < vec2remap.size(); ++i)
+        {
+            vec2remap[i].x *= DELTA.x;
+            vec2remap[i].y *= DELTA.y;
+        }
+    }
 }

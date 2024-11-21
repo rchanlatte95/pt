@@ -53,14 +53,11 @@ namespace rac::rnd::distribution::uniform
 
             f32 X_MAX = F32_MAX_X;
             f32 X_MIN = -X_MAX;
-            mut_f32 y = 0.0f;
             mut_i32 i = -1;
             while(++i < len)
             {
                 f32 x = XsrRng::GetF32(X_MIN, X_MAX);
-                y = UniformDist::Get(x);
-                res.push_back(v2(x, y));
-                ++i;
+                res.push_back(v2(x, UniformDist::Get(x)));
             }
         }
     };
