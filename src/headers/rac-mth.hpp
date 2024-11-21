@@ -19,7 +19,7 @@ namespace rac::mth
 	{
 		return x >= min && x <= max;
 	}
-	constexpr f32 Min(const std::vector<f32> nums)
+	constexpr f32 Min(const std::vector<mut_f32>& nums)
 	{
 		const i64 len = nums.size();
 		switch (len)
@@ -48,7 +48,7 @@ namespace rac::mth
 			return min;
 		}
 	}
-	constexpr f32 Max(const std::vector<f32> nums)
+	constexpr f32 Max(const std::vector<mut_f32>& nums)
 	{
 		const i64 len = nums.size();
 		switch (len)
@@ -75,6 +75,16 @@ namespace rac::mth
 				}
 			}
 			return max;
+		}
+	}
+	MAY_INLINE void MapTo01(std::vector<mut_f32>& vec2remap)
+	{
+		f32 MIN = Min(vec2remap);
+		f32 MAX = Max(vec2remap);
+		f32 DELTA = 1.0f / (MAX - MIN);
+		for (int i = 0; i < vec2remap.size(); ++i)
+		{
+			vec2remap[i] *= DELTA;
 		}
 	}
 
