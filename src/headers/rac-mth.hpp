@@ -48,6 +48,35 @@ namespace rac::mth
 			return min;
 		}
 	}
+	constexpr f32 Max(const std::vector<f32> nums)
+	{
+		const i64 len = nums.size();
+		switch (len)
+		{
+		case 0: return 0.0f;
+		case 1: return nums[0];
+		case 2: return nums[0] > nums[1] ? nums[0] : nums[1];
+		case 3:
+			if (nums[0] > nums[1])
+			{
+				return nums[0] > nums[2] ? nums[0] : nums[2];
+			}
+			else
+			{
+				return nums[1] > nums[2] ? nums[1] : nums[2];
+			}
+		default:
+			mut_f32 max = nums[0];
+			for (mut_i64 i = 1; i < len; ++i)
+			{
+				if (nums[i] > max)
+				{
+					max = nums[i];
+				}
+			}
+			return max;
+		}
+	}
 
 	f32 PI = 3.14159265f; // π
 	f32 INV_PI = 1.0f / PI; // 1.0f / π
