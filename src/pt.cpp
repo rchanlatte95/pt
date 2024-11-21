@@ -25,6 +25,8 @@ mut_PerfSample perf_tracker;
 /*
 static void RenderScene()
 {
+    printf("Casting rays into scene...\r\n\r\n");
+
     f32 invScanlineCt = 100.0f / (f32)ppm::HEIGHT;
     mut_f32 scanlinesDone = 0.0f;
     primitives::sphere test_sphere(v3(0.0f, 0.0f, -1.0f), 0.5f);
@@ -64,8 +66,8 @@ static void Plot(std::vector<mut_v2>& data_pts, Color_ref pt_color, Color_ref ba
     mut_f32 pts_drawn = 0.0f;
     for (mut_u32 i = 0; i < pt_ct; ++i)
     {
-        i32 center_x = (i32)(data_pts[i].x * ppm::INV_WIDTH);
-        i32 center_y = (i32)(data_pts[i].y * ppm::INV_HEIGHT);
+        i32 center_x = (i32)(data_pts[i].x * ppm::WIDTH);
+        i32 center_y = (i32)(data_pts[i].y * ppm::HEIGHT);
         render.DrawQuad(center_x, center_y, pt_color);
 
         pts_drawn += 1.0f;
@@ -79,12 +81,10 @@ int main()
 {
     XsrRng::Init();
 
-    printf("Casting rays into scene...\r\n\r\n");
-
     perf_tracker.Start();
 
     //RenderScene();
-    std::vector<mut_v2> points = std::vector<mut_v2>(2048);
+    std::vector<mut_v2> points = std::vector<mut_v2>();
     UniformDist::Fill(points, 2048);
     Plot(points, Color::RED);
 

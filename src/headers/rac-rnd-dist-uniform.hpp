@@ -45,7 +45,7 @@ namespace rac::rnd::distribution::uniform
             return x_in_range && v.y <= Get(v.x);
         }
 
-        MAY_INLINE static void Fill(std::vector<mut_v2>& res, u32 len)
+        MAY_INLINE static void Fill(std::vector<mut_v2>& res, i32 len)
         {
             using namespace rac::rnd::XorShiftRotate;
 
@@ -54,16 +54,13 @@ namespace rac::rnd::distribution::uniform
             f32 X_MAX = F32_MAX_X;
             f32 X_MIN = -X_MAX;
             mut_f32 y = 0.0f;
-            mut_u32 i = 0;
-            while(i < len)
+            mut_i32 i = -1;
+            while(++i < len)
             {
                 f32 x = XsrRng::GetF32(X_MIN, X_MAX);
-                y = XsrRng::GetF32();
-                if (Normal(x, y))
-                {
-                    res.push_back(v2(x, y));
-                    ++i;
-                }
+                y = UniformDist::Get(x);
+                res.push_back(v2(x, y));
+                ++i;
             }
         }
     };

@@ -148,17 +148,19 @@ namespace rac::img
             return saved_successfully;
         }
 
-        MAY_INLINE void DrawQuad(i32 center_x, i32 center_y, Color_ref quad_color, i32 width = 3) noexcept
+        MAY_INLINE void DrawQuad(i32 center_x, i32 center_y, Color_ref quad_color, i32 width = 4) noexcept
         {
             mut_u32 topleft_x = center_x - width;
             mut_u32 topleft_y = center_y - width;
-            if (topleft_x < WIDTH || topleft_y < HEIGHT) { return; }
-
-            for (mut_i32 y = 0; y < width && topleft_y < HEIGHT; ++y, ++topleft_y)
+            for (mut_i32 y = 0;
+                y < width && topleft_y < HEIGHT && topleft_y > 0;
+                ++y, ++topleft_y)
             {
-                for (mut_i32 x = 0; x < width && topleft_x < WIDTH; ++x, topleft_x)
+                for (mut_i32 x = 0, curr_x = topleft_x;
+                    x < width && topleft_x < WIDTH && topleft_x > 0;
+                    ++x, ++curr_x)
                 {
-                    pixels[topleft_y][topleft_x] = quad_color;
+                    pixels[topleft_y][curr_x] = quad_color;
                 }
             }
         }

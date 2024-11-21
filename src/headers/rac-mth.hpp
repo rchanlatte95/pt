@@ -19,6 +19,12 @@ namespace rac::mth
 	{
 		return x >= min && x <= max;
 	}
+	constexpr f32 Min(const std::vector<f32> nums)
+	{
+		f32 res = nums[0];
+
+		return res;
+	}
 
 	f32 PI = 3.14159265f; // π
 	f32 INV_PI = 1.0f / PI; // 1.0f / π
