@@ -16,7 +16,8 @@ namespace rac::rnd::distribution::uniform
     typedef const mut_UniformDist& UniformDist_ref;
 
     static f32 SIGN_HALF_LN_2PI = -HALF_LN_2PI;
-    static f32 F32_MAX_X = 4.60303963306f; // √(2k + 10 * ln(10))
+    static f32 F32_DIST_MAX_X = 4.60303963306f; // √(2k + 10 * ln(10))
+    static f32 F32_DIST_MIN_X = -F32_DIST_MAX_X; // -(√(2k + 10 * ln(10)))
     class mut_UniformDist
     {
     public:
@@ -33,7 +34,7 @@ namespace rac::rnd::distribution::uniform
         // distribution function.
         INLINE static bool Normal(f32 input_x, f32 input_y)
         {
-            const bool x_in_range = input_x >= F32_EPSILON && input_x <= F32_MAX_X;
+            const bool x_in_range = input_x >= F32_EPSILON && input_x <= F32_DIST_MAX_X;
             return x_in_range && input_y <= Get(input_x);
         }
 
@@ -41,7 +42,7 @@ namespace rac::rnd::distribution::uniform
         // distribution function.
         INLINE static bool Normal(v2_ref v)
         {
-            const bool x_in_range = v.x >= F32_EPSILON && v.x <= F32_MAX_X;
+            const bool x_in_range = v.x >= F32_EPSILON && v.x <= F32_DIST_MAX_X;
             return x_in_range && v.y <= Get(v.x);
         }
 
@@ -51,12 +52,10 @@ namespace rac::rnd::distribution::uniform
 
             res.reserve(len);
 
-            f32 X_MAX = F32_MAX_X;
-            f32 X_MIN = -X_MAX;
             mut_i32 i = -1;
             while(++i < len)
             {
-                f32 x = XsrRng::GetF32(X_MIN, X_MAX);
+                f32 x = XsrRng::GetF32(F32_DIST_MIN_X, F32_DIST_MAX_X);
                 res.push_back(v2(x, UniformDist::Get(x)));
             }
         }
