@@ -23,6 +23,11 @@ namespace rac::mth
 	constexpr f32 Min(const std::vector<mut_f32>& nums)
 	{
 		const i64 len = nums.size();
+		if (len < 1)
+		{
+			return 0.0f;
+		}
+
 		switch (len)
 		{
 		case 0: return 0.0f;
@@ -52,6 +57,11 @@ namespace rac::mth
 	constexpr f32 Max(const std::vector<mut_f32>& nums)
 	{
 		const i64 len = nums.size();
+		if (len < 1)
+		{
+			return 0.0f;
+		}
+
 		switch (len)
 		{
 		case 0: return 0.0f;
@@ -89,36 +99,39 @@ namespace rac::mth
 		}
 	}
 
-	constexpr v2 Min(const std::vector<mut_v2>& nums)
+	MAY_INLINE v2 Min(const std::vector<mut_v2>& nums)
 	{
-		const i64 len = nums.size();
+		i64 len = nums.size();
+		if (len < 1)
+		{
+			return v2::ZERO;
+		}
+
 		switch (len)
 		{
-		case 0: return 0.0f;
+		case 0: return v2::ZERO;
 		case 1: return nums[0];
-		case 2: return nums[0] < nums[1] ? nums[0] : nums[1];
-		case 3:
-			if (nums[0] < nums[1])
-			{
-				return nums[0] < nums[2] ? nums[0] : nums[2];
-			}
-			else
-			{
-				return nums[1] < nums[2] ? nums[1] : nums[2];
-			}
+		case 2:
+			return v2(nums[0].x < nums[1].x ? nums[0].x : nums[1].x,
+					nums[0].y < nums[1].y ? nums[0].y : nums[1].y);
+
 		default:
-			mut_f32 min = nums[0];
-			for (mut_i64 i = 1; i < len; ++i)
+			mut_v2 min = nums[0];
+			for (mut_i64 i = 1; i < nums.size(); ++i)
 			{
-				if (nums[i] < min)
+				if (nums[i].x < min.x)
 				{
-					min = nums[i];
+					min.x = nums[i].x;
+				}
+				if (nums[i].y < min.y)
+				{
+					min.y = nums[i].y;
 				}
 			}
 			return min;
 		}
 	}
-	constexpr v2 Max(const std::vector<mut_v2>& nums)
+	MAY_INLINE v2 Max(const std::vector<mut_v2>& nums)
 	{
 		const i64 len = nums.size();
 		switch (len)
