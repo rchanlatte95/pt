@@ -133,28 +133,31 @@ namespace rac::mth
 	}
 	MAY_INLINE v2 Max(const std::vector<mut_v2>& nums)
 	{
-		const i64 len = nums.size();
+		i64 len = nums.size();
+		if (len < 1)
+		{
+			return v2::ZERO;
+		}
+
 		switch (len)
 		{
-		case 0: return 0.0f;
+		case 0: return v2::ZERO;
 		case 1: return nums[0];
-		case 2: return nums[0] > nums[1] ? nums[0] : nums[1];
-		case 3:
-			if (nums[0] > nums[1])
-			{
-				return nums[0] > nums[2] ? nums[0] : nums[2];
-			}
-			else
-			{
-				return nums[1] > nums[2] ? nums[1] : nums[2];
-			}
+		case 2:
+			return v2(nums[0].x > nums[1].x ? nums[0].x : nums[1].x,
+					nums[0].y > nums[1].y ? nums[0].y : nums[1].y);
+
 		default:
-			mut_f32 max = nums[0];
-			for (mut_i64 i = 1; i < len; ++i)
+			mut_v2 max = nums[0];
+			for (mut_i64 i = 1; i < nums.size(); ++i)
 			{
-				if (nums[i] > max)
+				if (nums[i].x > max.x)
 				{
-					max = nums[i];
+					max.x = nums[i].x;
+				}
+				if (nums[i].y > max.y)
+				{
+					max.y = nums[i].y;
 				}
 			}
 			return max;
