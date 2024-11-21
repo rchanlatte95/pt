@@ -165,12 +165,13 @@ namespace rac::mth
 	}
 	MAY_INLINE void MapTo01(std::vector<mut_v2>& vec2remap)
 	{
-		f32 MIN = Min(vec2remap);
-		f32 MAX = Max(vec2remap);
-		f32 DELTA = 1.0f / (MAX - MIN);
+		v2 MIN = Min(vec2remap);
+		v2 MAX = Max(vec2remap);
+		v2 DELTA = v2(1.0f / (MAX.x - MIN.x), 1.0f / (MAX.y - MIN.y));
 		for (int i = 0; i < vec2remap.size(); ++i)
 		{
-			vec2remap[i] *= DELTA;
+			vec2remap[i].x *= DELTA.x;
+			vec2remap[i].y *= DELTA.y;
 		}
 	}
 
