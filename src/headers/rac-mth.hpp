@@ -19,6 +19,7 @@ namespace rac::mth
 	{
 		return x >= min && x <= max;
 	}
+
 	constexpr f32 Min(const std::vector<mut_f32>& nums)
 	{
 		const i64 len = nums.size();
@@ -78,6 +79,75 @@ namespace rac::mth
 		}
 	}
 	MAY_INLINE void MapTo01(std::vector<mut_f32>& vec2remap)
+	{
+		f32 MIN = Min(vec2remap);
+		f32 MAX = Max(vec2remap);
+		f32 DELTA = 1.0f / (MAX - MIN);
+		for (int i = 0; i < vec2remap.size(); ++i)
+		{
+			vec2remap[i] *= DELTA;
+		}
+	}
+
+	constexpr v2 Min(const std::vector<mut_v2>& nums)
+	{
+		const i64 len = nums.size();
+		switch (len)
+		{
+		case 0: return 0.0f;
+		case 1: return nums[0];
+		case 2: return nums[0] < nums[1] ? nums[0] : nums[1];
+		case 3:
+			if (nums[0] < nums[1])
+			{
+				return nums[0] < nums[2] ? nums[0] : nums[2];
+			}
+			else
+			{
+				return nums[1] < nums[2] ? nums[1] : nums[2];
+			}
+		default:
+			mut_f32 min = nums[0];
+			for (mut_i64 i = 1; i < len; ++i)
+			{
+				if (nums[i] < min)
+				{
+					min = nums[i];
+				}
+			}
+			return min;
+		}
+	}
+	constexpr v2 Max(const std::vector<mut_v2>& nums)
+	{
+		const i64 len = nums.size();
+		switch (len)
+		{
+		case 0: return 0.0f;
+		case 1: return nums[0];
+		case 2: return nums[0] > nums[1] ? nums[0] : nums[1];
+		case 3:
+			if (nums[0] > nums[1])
+			{
+				return nums[0] > nums[2] ? nums[0] : nums[2];
+			}
+			else
+			{
+				return nums[1] > nums[2] ? nums[1] : nums[2];
+			}
+		default:
+			mut_f32 max = nums[0];
+			for (mut_i64 i = 1; i < len; ++i)
+			{
+				if (nums[i] > max)
+				{
+					max = nums[i];
+				}
+			}
+			return max;
+		}
+	}
+	MAY_INLINE void MapTo01(std::vector<mut_v2>& vec2remap)
 	{
 		f32 MIN = Min(vec2remap);
 		f32 MAX = Max(vec2remap);
