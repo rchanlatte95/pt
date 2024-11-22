@@ -86,8 +86,11 @@ int main()
 
     //RenderScene();
     std::vector<mut_v2> points = std::vector<mut_v2>();
-    UniformDist::Graph01(points, 2048);
+    UniformDist::Fill01(points, 1 << 15);
     Plot(points, Color::RED);
+
+    UniformDist::Graph01(points);
+    Plot(points, Color::GREEN);
 
     PerfSampleResult render_perf = perf_tracker.End();
 

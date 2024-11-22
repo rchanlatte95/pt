@@ -48,6 +48,30 @@ namespace rac::rnd::distribution::uniform
             return x_in_range && v.y <= Get(v.x);
         }
 
+        MAY_INLINE static void Graph(std::vector<mut_v2>& res)
+        {
+            using namespace rac::rnd::XorShiftRotate;
+
+            mut_i32 i = -1;
+            while (++i < res.size())
+            {
+                f32 x = XsrRng::GetF32(F32_DIST_MIN_X, F32_DIST_MAX_X);
+                res.push_back(v2(x, UniformDist::Get(x)));
+            }
+        }
+        MAY_INLINE static void Graph01(std::vector<mut_v2>& res)
+        {
+            using namespace rac::rnd::XorShiftRotate;
+
+            mut_i32 i = -1;
+            f32 DELTA = 1.0f / (F32_DIST_MAX_X - F32_DIST_MIN_X);
+            while (++i < res.size())
+            {
+                f32 x = XsrRng::GetF32(F32_DIST_MIN_X, F32_DIST_MAX_X);
+                f32 x01 = (x - F32_DIST_MIN_X) * DELTA;
+                res.push_back(v2(x01, UniformDist::Get(x)));
+            }
+        }
         MAY_INLINE static void Graph(std::vector<mut_v2>& res, i32 len)
         {
             using namespace rac::rnd::XorShiftRotate;
