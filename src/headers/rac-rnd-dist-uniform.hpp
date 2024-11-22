@@ -86,7 +86,8 @@ namespace rac::rnd::distribution::uniform
             while (++i < len)
             {
                 f32 x = XsrRng::GetF32(F32_DIST_MIN_X, F32_DIST_MAX_X);
-                res.push_back(v2(x, UniformDist::Get(x)));
+                f32 y_max = UniformDist::Get(x);
+                res.push_back(v2(x, XsrRng::GetF32(F32_EPSILON, y_max)));
             }
         }
         MAY_INLINE static void Fill01(std::vector<mut_v2>& res, i32 len)
