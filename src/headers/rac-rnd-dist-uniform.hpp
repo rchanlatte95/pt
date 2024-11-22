@@ -102,7 +102,8 @@ namespace rac::rnd::distribution::uniform
             {
                 f32 x = XsrRng::GetF32(F32_DIST_MIN_X, F32_DIST_MAX_X);
                 f32 x01 = (x - F32_DIST_MIN_X) * DELTA;
-                res.push_back(v2(x01, UniformDist::Get(x)));
+                f32 y_max = UniformDist::Get(x);
+                res.push_back(v2(x01, XsrRng::GetF32(F32_EPSILON, y_max)));
             }
         }
     };
