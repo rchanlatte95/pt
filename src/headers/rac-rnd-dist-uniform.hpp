@@ -56,7 +56,7 @@ namespace rac::rnd::distribution::uniform
             while (++i < res.size())
             {
                 f32 x = XsrRng::GetF32(F32_DIST_MIN_X, F32_DIST_MAX_X);
-                res.push_back(v2(x, UniformDist::Get(x)));
+                res[i] = v2(x, UniformDist::Get(x));
             }
         }
         MAY_INLINE static void Graph01(std::vector<mut_v2>& res)
@@ -69,7 +69,7 @@ namespace rac::rnd::distribution::uniform
             {
                 f32 x = XsrRng::GetF32(F32_DIST_MIN_X, F32_DIST_MAX_X);
                 f32 x01 = (x - F32_DIST_MIN_X) * DELTA;
-                res.push_back(v2(x01, UniformDist::Get(x)));
+                res[i] = v2(x01, UniformDist::Get(x));
             }
         }
         MAY_INLINE static void Graph(std::vector<mut_v2>& res, i32 len)
@@ -98,6 +98,33 @@ namespace rac::rnd::distribution::uniform
                 f32 x = XsrRng::GetF32(F32_DIST_MIN_X, F32_DIST_MAX_X);
                 f32 x01 = (x - F32_DIST_MIN_X) * DELTA;
                 res.push_back(v2(x01, UniformDist::Get(x)));
+            }
+        }
+
+        MAY_INLINE static void Fill(std::vector<mut_v2>& res)
+        {
+            using namespace rac::rnd::XorShiftRotate;
+
+            mut_i32 i = -1;
+            while (++i < res.size())
+            {
+                f32 x = XsrRng::GetF32(F32_DIST_MIN_X, F32_DIST_MAX_X);
+                f32 y_max = UniformDist::Get(x);
+                res[i] = v2(x, XsrRng::GetF32(F32_EPSILON, y_max));
+            }
+        }
+        MAY_INLINE static void Fill01(std::vector<mut_v2>& res)
+        {
+            using namespace rac::rnd::XorShiftRotate;
+
+            mut_i32 i = -1;
+            f32 DELTA = 1.0f / (F32_DIST_MAX_X - F32_DIST_MIN_X);
+            while (++i < res.size())
+            {
+                f32 x = XsrRng::GetF32(F32_DIST_MIN_X, F32_DIST_MAX_X);
+                f32 x01 = (x - F32_DIST_MIN_X) * DELTA;
+                f32 y_max = UniformDist::Get(x);
+                res[i] = v2(x01, XsrRng::GetF32(F32_EPSILON, y_max));
             }
         }
         MAY_INLINE static void Fill(std::vector<mut_v2>& res, i32 len)

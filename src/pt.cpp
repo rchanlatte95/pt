@@ -86,7 +86,7 @@ int main()
 
     //RenderScene();
     std::vector<mut_v2> points = std::vector<mut_v2>();
-    UniformDist::Fill01(points, 1 << 15);
+    UniformDist::Fill01(points, 1 << 14);
     Plot(points, Color::RED);
 
     UniformDist::Graph01(points);
