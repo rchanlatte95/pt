@@ -197,6 +197,7 @@ namespace rac::mth
         v2 DELTA = v2(1.0f / (MAX.x - MIN.x), 1.0f / (MAX.y - MIN.y));
         for (int i = 0; i < vec2remap.size(); ++i)
         {
+            f32 og = vec2remap[i].x;
             vec2remap[i].x = (vec2remap[i].x - MIN.x) * DELTA.x;
             vec2remap[i].y = (vec2remap[i].y - MIN.y) * DELTA.y;
         }
