@@ -67,7 +67,7 @@ static void Plot(std::vector<mut_v2>& data_pts, Color_ref pt_color, Color_ref ba
     for (mut_u32 i = 0; i < pt_ct; ++i)
     {
         i32 center_x = (i32)(data_pts[i].x * ppm::WIDTH);
-        i32 center_y = (i32)(data_pts[i].y * ppm::HEIGHT);
+        i32 center_y = (i32)((1.0f - data_pts[i].y) * ppm::HEIGHT);
 
         render.DrawQuad(center_x, center_y, pt_color);
 

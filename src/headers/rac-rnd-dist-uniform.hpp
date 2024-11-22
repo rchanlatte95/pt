@@ -16,7 +16,9 @@ namespace rac::rnd::distribution::uniform
     typedef const mut_UniformDist& UniformDist_ref;
 
     static f32 SIGN_HALF_LN_2PI = -HALF_LN_2PI;
-    static f32 F32_DIST_MAX_X = 4.60303963306f; // √(2k + 10 * ln(10))
+
+    // k = -( ln(2pi)/2 )
+    static f32 F32_DIST_MAX_X = 4.60303963306f - HALF_PI; // √(2k + 10 * ln(10))
     static f32 F32_DIST_MIN_X = -F32_DIST_MAX_X; // -(√(2k + 10 * ln(10)))
     class mut_UniformDist
     {
