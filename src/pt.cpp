@@ -86,8 +86,7 @@ int main()
 
     //RenderScene();
     std::vector<mut_v2> points = std::vector<mut_v2>();
-    UniformDist::Fill(points, 2048);
-    mth::MapTo01(points);
+    UniformDist::Fill01(points, 2048);
     Plot(points, Color::RED);
 
     PerfSampleResult render_perf = perf_tracker.End();

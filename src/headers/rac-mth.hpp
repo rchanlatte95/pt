@@ -95,7 +95,7 @@ namespace rac::mth
 		f32 DELTA = 1.0f / (MAX - MIN);
 		for (int i = 0; i < vec2remap.size(); ++i)
 		{
-			vec2remap[i] *= DELTA;
+			vec2remap[i] = (vec2remap[i] - MIN) * DELTA;
 		}
 	}
 
