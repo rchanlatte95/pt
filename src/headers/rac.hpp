@@ -246,18 +246,34 @@ namespace rac
     {
     public:
         bool Succeeded = false;
+        bool Failed = !Succeeded;
 
         mut_FileSaveResult() { }
-        mut_FileSaveResult(bool result) { Succeeded = result; }
-        mut_FileSaveResult(i8 result) { Succeeded = result != 0; }
-        mut_FileSaveResult(i16 result) { Succeeded = result != 0; }
-        mut_FileSaveResult(i32 result) { Succeeded = result != 0; }
-        mut_FileSaveResult(i64 result) { Succeeded = result != 0; }
-        mut_FileSaveResult(ptr result) { Succeeded = result != nullptr; }
-
-        constexpr bool Failed() const noexcept
+        mut_FileSaveResult(bool result)
         {
-            return !Succeeded;
+            Succeeded = result;
         }
+        mut_FileSaveResult(i8 result)
+        {
+            Succeeded = result != 0;
+        }
+        mut_FileSaveResult(i16 result)
+        {
+            Succeeded = result != 0;
+        }
+        mut_FileSaveResult(i32 result)
+        {
+            Succeeded = result != 0;
+        }
+        mut_FileSaveResult(i64 result)
+        {
+            Succeeded = result != 0;
+        }
+        mut_FileSaveResult(ptr result)
+        {
+            Succeeded = result != nullptr;
+        }
+
+        constexpr bool Failed() const noexcept { return !Succeeded; }
     };
 }

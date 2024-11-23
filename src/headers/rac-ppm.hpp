@@ -73,30 +73,30 @@ namespace rac::img
             }
         }
 
-        MAY_INLINE bool SaveToDesktop(cstr filename) const noexcept
+        MAY_INLINE FileSaveResult SaveToDesktop(cstr filename, std::string& desktop_path) const noexcept
         {
-            std::string desk_path = rac::GetDesktopPathStr() + '\\' + filename + PPM_EXT;
+            desktop_path = rac::GetDesktopPathStr() + '\\' + filename + PPM_EXT;
 
             mut_FilePtr file;
-            cstr desk_path_cstr = desk_path.c_str();
+            cstr desk_path_cstr = desktop_path.c_str();
             errno_t open_res = fopen_s(&file, desk_path_cstr, "w+");
             if (WIN_FAILED(open_res) || file == nullptr)
             {
-                return false;
+                return FileSaveResult(false);
             }
 
             // ensures result is of the right byte size before mmap
             errno_t resize_res = SetFileSize(file, PPM_FILE_SZ);
             if (WIN_FAILED(resize_res))
             {
-                return false;
+                return FileSaveResult(false);
             }
 
             ptr mmap_file = MapMem(file, PPM_FILE_SZ, 0);
 
             if (mmap_file == nullptr)
             {
-                return false;
+                return FileSaveResult(false);
             }
 
             fprintf(file, "P3\n%lu %lu\n255\n", WIDTH, HEIGHT);
@@ -129,15 +129,7 @@ namespace rac::img
                 printf("\r\tSERIALIZING:\t%4llu / %4lu scanlines (%.2f%% SERIALIZED).          ", scanlines_done, HEIGHT, pct_done);
             }
 
-            bool saved_successfully = std::filesystem::exists(desk_path);
-            if (saved_successfully)
-            {
-                printf("\r\n\tPath tracer result saved to: %s\r\n", desk_path_cstr);
-            }
-            else
-            {
-                printf("\r\n\tPath tracer result unable to save to: %s\r\n", desk_path_cstr);
-            }
+            FileSaveResult saveResult = FileSaveResult(std::filesystem::exists(desktop_path));
 
             bool unmap_failed = UnmapMem(mmap_file) == false;
             if (unmap_failed)
@@ -145,7 +137,7 @@ namespace rac::img
                 printf("\r\n\t*** WARNING: Failed to unmap memory!\r\n");
             }
 
-            return saved_successfully;
+            return saveResult;
         }
 
         MAY_INLINE void DrawQuad(i32 center_x, i32 center_y, Color_ref quad_color, i32 width = 4) noexcept

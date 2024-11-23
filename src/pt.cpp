@@ -99,15 +99,21 @@ int main()
 
     perf_tracker.Start();
 
-    bool write_failed = render.SaveToDesktop("rt_result") == false;
-    if (write_failed) { return EXIT_FAILURE; }
+    std::string output_path;
+    FileSaveResult writeResult = render.SaveToDesktop("rt_result", output_path);
+    if (writeResult.Failed())
+    {
+        printf("\r\n\tPath tracer result unable to save to: %s\r\n", output_path.c_str());
+        return EXIT_FAILURE;
+    }
 
     PerfSampleResult write_perf = perf_tracker.End();
 
     f64 MB_Written = (f64)render.ByteCount() * BYTES_TO_MB;
     f64 byteRate = MB_Written / write_perf.Seconds();
     f64 cycleRate = MB_Written / write_perf.Milicycles();
-    printf("\tCompleted write to disk in %.3fms (%.3f MiliCycles) | %.3f MB/s (%.3f MB/MiliCycle)\r\n", write_perf.Miliseconds(), write_perf.Milicycles(), byteRate, cycleRate);
+    printf("\r\n\tCompleted write to disk in %.3fms (%.3f MiliCycles) | %.3f MB/s (%.3f MB/MiliCycle)\r\n", write_perf.Miliseconds(), write_perf.Milicycles(), byteRate, cycleRate);
+    printf("\r\n\tPath tracer result saved to: %s\r\n", output_path.c_str());
 
     return EXIT_SUCCESS;
 }
