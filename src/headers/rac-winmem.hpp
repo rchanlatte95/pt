@@ -28,7 +28,7 @@ namespace rac::mem::windows
 		ReadWrite = Read | Write,
 		Execute = 0x4,
 
-		ExecuteRead = Read |	Execute,
+		ExecuteRead = Read | Execute,
 		ExecuteReadWrite = ReadWrite | Execute,
 		Full = ExecuteReadWrite
 	};
@@ -106,7 +106,8 @@ namespace rac::mem::windows
 
 		u64 addr = (u64)memory_handle;
 		u64 mod = addr & (pow2_alignment - 1);
-		if (mod == 0) { return memory_handle; }
+		const bool aligned = mod == 0;
+		if (aligned) { return memory_handle; }
 
 		u64 offset = pow2_alignment - mod;
 		mut_i8ptr aligned_ptr = (mut_i8ptr)memory_handle + offset;
@@ -124,7 +125,8 @@ namespace rac::mem::windows
 
 		u64 addr = (u64)memory_handle;
 		u64 mod = addr % alignment_multiple;
-		if (mod == 0) { return memory_handle; }
+		const bool aligned = mod == 0;
+		if (aligned) { return memory_handle; }
 
 		u64 offset = alignment_multiple - mod;
 		mut_i8ptr aligned_ptr = (mut_i8ptr)memory_handle + offset;
@@ -203,10 +205,10 @@ namespace rac::mem::windows
 	//		https://github.com/m-labs/uclibc-lm32/blob/master/utils/mmap-windows.c
 	//
 	MAY_INLINE ptr mmap(PageMemProtection prot,
-					MemoryMapType flags,
-					mut_FilePtr file,
-					ptr_offset file_ptr_offset,
-					u64 byte_len)
+						MemoryMapType flags,
+						mut_FilePtr file,
+						ptr_offset file_ptr_offset,
+						u64 byte_len)
 	{
 		if (InvalidFileSize(byte_len)) { return MAP_FAILED; }
 		if (prot & ~(PageMemProtection::Full)) { return MAP_FAILED; }
@@ -285,16 +287,16 @@ namespace rac::mem::windows
 		return mmap(PageMemProtection::None, flags, file, offset, length);
 	}
 	MAY_INLINE ptr MapPrivateMem(mut_FilePtr file,
-							u64 length,
-							ptr_offset offset,
-							PageMemProtection prot = PageMemProtection::None)
+								u64 length,
+								ptr_offset offset,
+								PageMemProtection prot = PageMemProtection::None)
 	{
 		return mmap(prot, MemoryMapType::Private, file, offset, length);
 	}
 	MAY_INLINE ptr MapSharedMem(mut_FilePtr file,
-							u64 length,
-							ptr_offset offset,
-							PageMemProtection prot = PageMemProtection::None)
+								u64 length,
+								ptr_offset offset,
+								PageMemProtection prot = PageMemProtection::None)
 	{
 		return mmap(prot, MemoryMapType::Shared, file, offset, length);
 	}
@@ -317,8 +319,8 @@ namespace rac::mem::windows
 		return mmap(prot, MemoryMapType::Private, file, 0, length);
 	}
 	MAY_INLINE ptr MapSharedMem(mut_FilePtr file,
-							u64 length,
-							PageMemProtection prot = PageMemProtection::None)
+								u64 length,
+								PageMemProtection prot = PageMemProtection::None)
 	{
 		return mmap(prot, MemoryMapType::Shared, file, 0, length);
 	}
