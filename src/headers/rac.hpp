@@ -246,7 +246,6 @@ namespace rac
     {
     public:
         bool Succeeded = false;
-        bool Failed = !Succeeded;
 
         mut_FileSaveResult() { }
         mut_FileSaveResult(bool result)

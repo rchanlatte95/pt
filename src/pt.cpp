@@ -1,4 +1,4 @@
-#include "headers\rac.hpp"
+﻿#include "headers\rac.hpp"
 #include "headers\rac-v3.hpp"
 #include "headers\rac-color.hpp"
 #include "headers\rac-ppm.hpp"
@@ -78,6 +78,16 @@ static void Plot(std::vector<mut_v2>& data_pts, Color_ref pt_color, Color_ref ba
     printf("\r\n");
 }
 
+f32 ALPHA = 1.16096404744f; //  log₄(5)
+f32 INV_ALPHA = 1.0f / ALPHA; //  1 / log₄(5)
+static void Pareto(std::vector<mut_v2>& data_pts)
+{
+    for (mut_v2 pt : data_pts)
+    {
+
+    }
+}
+
 int main()
 {
     XsrRng::Init();
@@ -87,10 +97,8 @@ int main()
     //RenderScene();
     std::vector<mut_v2> points = std::vector<mut_v2>();
     UniformDist::Fill01(points, 1 << 14);
+    Pareto(points);
     Plot(points, Color::RED);
-
-    UniformDist::Graph01(points);
-    Plot(points, Color::GREEN);
 
     PerfSampleResult render_perf = perf_tracker.End();
 
