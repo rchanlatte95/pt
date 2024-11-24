@@ -82,9 +82,11 @@ f32 ALPHA = 1.16096404744f; //  log₄(5)
 f32 INV_ALPHA = 1.0f / ALPHA; //  1 / log₄(5)
 static void Pareto(std::vector<mut_v2>& data_pts)
 {
-    for (mut_v2 pt : data_pts)
+    for (int i = 0; i < data_pts.size(); ++i)
     {
-
+        v2 pt = data_pts[i];
+        v2 new_pt = v2(std::powf(pt.x, -INV_ALPHA), std::powf(pt.y, -INV_ALPHA));
+        data_pts[i] = new_pt;
     }
 }
 
@@ -98,6 +100,7 @@ int main()
     std::vector<mut_v2> points = std::vector<mut_v2>();
     UniformDist::Fill01(points, 1 << 14);
     Pareto(points);
+    MapTo01(points);
     Plot(points, Color::RED);
 
     PerfSampleResult render_perf = perf_tracker.End();
