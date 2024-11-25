@@ -33,20 +33,20 @@ namespace rac::mth
         mut_v2(f32 v);
         mut_v2(f32 x_, f32 y_);
 
-        INLINE const mut_v2 operator-() const noexcept;
+        INLINE v2 operator-() const noexcept;
         INLINE f32 operator[](i32 i) const noexcept;
         INLINE mut_f32ref operator[](i32 i);
 
-        INLINE const mut_v2& operator+=(const mut_v2 v) noexcept;
-        INLINE const mut_v2& operator-=(const mut_v2 v) noexcept;
-        INLINE const mut_v2& operator*=(f32 v) noexcept;
-        INLINE const mut_v2& operator/=(f32 v) noexcept;
+        INLINE v2_ref operator+=(v2 v) noexcept;
+        INLINE v2_ref operator-=(v2 v) noexcept;
+        INLINE v2_ref operator*=(f32 v) noexcept;
+        INLINE v2_ref operator/=(f32 v) noexcept;
 
         INLINE f32 SqrMag() const noexcept;
         INLINE f32 InvSqrMag() const noexcept;
         INLINE f32 Mag() const noexcept;
         INLINE f32 InvMag() const noexcept;
-        INLINE const mut_v2 Norm() const noexcept;
+        INLINE v2 Norm() const noexcept;
     };
 
     INLINE v2 operator*(v2_ref u, f32 v);

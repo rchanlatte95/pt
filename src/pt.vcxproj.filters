@@ -21,6 +21,9 @@
     <ClCompile Include="rac-v2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="rac-v2i.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\rac.hpp">
@@ -90,6 +93,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="headers\rac-mth-statistics.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\rac-v2i.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
