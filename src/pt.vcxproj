@@ -159,6 +159,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="pt.cpp" />
+    <ClCompile Include="rac-v2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\rac-actions.hpp" />

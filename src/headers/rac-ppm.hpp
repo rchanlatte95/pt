@@ -140,7 +140,7 @@ namespace rac::img
             return saveResult;
         }
 
-        MAY_INLINE void DrawQuad(i32 center_x, i32 center_y, Color_ref quad_color, i32 width = 4) noexcept
+        MAY_INLINE void DrawSquare(i32 center_x, i32 center_y, Color_ref quad_color, i32 width = 4) noexcept
         {
             mut_u32 topleft_x = center_x - width;
             mut_u32 topleft_y = center_y - width;

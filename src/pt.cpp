@@ -69,25 +69,13 @@ static void Plot(std::vector<mut_v2>& data_pts, Color_ref pt_color, Color_ref ba
         i32 center_x = (i32)(data_pts[i].x * ppm::WIDTH);
         i32 center_y = (i32)((1.0f - data_pts[i].y) * ppm::HEIGHT);
 
-        render.DrawQuad(center_x, center_y, pt_color);
+        render.DrawSquare(center_x, center_y, pt_color);
 
         pts_drawn += 1.0f;
         f32 pct_done = pts_drawn * inv_pt_ct;
         printf("\r\tPLOTTING:\t%4d / %4llu data points (%.2f%% PLOTTED).", (i32)pts_drawn, pt_ct, pct_done);
     }
     printf("\r\n");
-}
-
-f32 ALPHA = 1.16096404744f; //  log₄(5)
-f32 INV_ALPHA = 1.0f / ALPHA; //  1 / log₄(5)
-static void Pareto(std::vector<mut_v2>& data_pts)
-{
-    for (int i = 0; i < data_pts.size(); ++i)
-    {
-        v2 pt = data_pts[i];
-        v2 new_pt = v2(std::powf(pt.x, -INV_ALPHA), std::powf(pt.y, -INV_ALPHA));
-        data_pts[i] = new_pt;
-    }
 }
 
 int main()
@@ -98,9 +86,7 @@ int main()
 
     //RenderScene();
     std::vector<mut_v2> points = std::vector<mut_v2>();
-    UniformDist::Fill01(points, 1 << 14);
-    Pareto(points);
-    MapTo01(points);
+    UniformDist::Fill01(points, 8192);
     Plot(points, Color::RED);
 
     PerfSampleResult render_perf = perf_tracker.End();
