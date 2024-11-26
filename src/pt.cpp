@@ -1,4 +1,5 @@
 ﻿#include "headers\rac.hpp"
+#include "headers\rac-io.hpp"
 #include "headers\rac-v3.hpp"
 #include "headers\rac-color.hpp"
 #include "headers\rac-ppm.hpp"
@@ -10,6 +11,7 @@
 #include "headers\rac-rnd-dist-uniform.hpp"
 
 using namespace rac;
+using namespace rac::io;
 using namespace rac::static_strings;
 using namespace rac::mth;
 using namespace rac::gfx;

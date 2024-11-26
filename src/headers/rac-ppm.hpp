@@ -2,6 +2,7 @@
 #include "rac-color.hpp"
 #include "rac-v2.hpp"
 #include "rac-winmem.hpp"
+#include "rac-io.hpp"
 
 namespace rac::img
 {
@@ -13,6 +14,7 @@ namespace rac::img
     typedef const PortablePixelMap* ppm_ptr;
     typedef const PortablePixelMap& ppm_ref;
 
+    using namespace rac::io;
     using namespace rac::gfx;
     using namespace rac::mth;
     using namespace rac::mem::windows;

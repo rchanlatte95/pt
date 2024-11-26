@@ -39,6 +39,12 @@
     <ClCompile Include="rac-camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="rac-winmem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rac-io.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\rac.hpp">
@@ -111,6 +117,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="headers\rac-v2i.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\rac-io.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
