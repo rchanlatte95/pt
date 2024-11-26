@@ -159,6 +159,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="pt.cpp" />
+    <ClCompile Include="rac-camera.cpp" />
     <ClCompile Include="rac-color.cpp" />
     <ClCompile Include="rac-ppm.cpp" />
     <ClCompile Include="rac-ray.cpp" />
