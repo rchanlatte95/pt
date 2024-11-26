@@ -1,5 +1,7 @@
 ﻿#include "headers\rac.hpp"
 #include "headers\rac-io.hpp"
+#include "headers\rac-winmem.hpp"
+#include "headers\rac-v2.hpp"
 #include "headers\rac-v3.hpp"
 #include "headers\rac-color.hpp"
 #include "headers\rac-ppm.hpp"

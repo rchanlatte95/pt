@@ -30,7 +30,6 @@
 #include <filesystem>
 #include <random>
 
-
 // Windows Headers
 #ifdef _MSC_VER
 #define NOMINMAX 0

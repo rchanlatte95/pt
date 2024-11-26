@@ -24,9 +24,6 @@
     <ClCompile Include="rac-v2i.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="rac-ppm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="rac-color.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -37,12 +34,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="rac-camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="rac-winmem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="rac-io.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

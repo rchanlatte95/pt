@@ -161,13 +161,10 @@
     <ClCompile Include="pt.cpp" />
     <ClCompile Include="rac-camera.cpp" />
     <ClCompile Include="rac-color.cpp" />
-    <ClCompile Include="rac-io.cpp" />
-    <ClCompile Include="rac-ppm.cpp" />
     <ClCompile Include="rac-ray.cpp" />
     <ClCompile Include="rac-v2.cpp" />
     <ClCompile Include="rac-v2i.cpp" />
     <ClCompile Include="rac-v3.cpp" />
-    <ClCompile Include="rac-winmem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\rac-actions.hpp" />
