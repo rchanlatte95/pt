@@ -1,4 +1,4 @@
-#include "rac-mth.hpp"
+#pragma once
 #include "rac-v3.hpp"
 
 namespace rac::mth
@@ -23,18 +23,10 @@ namespace rac::mth
         mut_v3 origin;
         mut_v3 direction;
 
-        mut_ray()
-        {
-            origin = v3::ZERO;
-            direction = v3::ZERO;
-        }
-        mut_ray(v3 origin_, v3 direction_)
-        {
-            origin = origin_;
-            direction = direction_;
-        }
+        mut_ray();
+        mut_ray(v3 origin_, v3 direction_);
 
-        INLINE v3 At(f32 t) const noexcept { return origin + t * direction; }
+        INLINE v3 At(f32 t) const noexcept;
     };
 
     class mut_rayhit
@@ -44,17 +36,8 @@ namespace rac::mth
         mut_v3 normal;
         mut_f32 t;
 
-        mut_rayhit()
-        {
-            pos = v3::ZERO;
-            normal = v3::ZERO;
-            t = 0.0f;
-        }
+        mut_rayhit();
 
-        INLINE void SetNormal(ray_ref raycast, v3_ref face_normal)
-        {
-            const bool front_face = Dot(raycast.direction, normal) < F32_EPSILON;
-            normal = front_face ? face_normal : -face_normal;
-        }
+        INLINE void SetNormal(ray_ref raycast, v3_ref face_normal);
     };
 }

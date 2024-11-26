@@ -33,6 +33,9 @@
     <ClCompile Include="rac-v3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="rac-ray.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\rac.hpp">
