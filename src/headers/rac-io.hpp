@@ -3,8 +3,6 @@
 
 namespace rac::io
 {
-    std::string EMPTY_STD_STRING = std::string("");
-
     MAY_INLINE std::filesystem::path GetDesktopPath();
     MAY_INLINE std::string GetDesktopPathStr();
 
@@ -19,32 +17,14 @@ namespace rac::io
     public:
         bool Succeeded = false;
 
-        mut_FileSaveResult() {}
-        mut_FileSaveResult(bool result)
-        {
-            Succeeded = result;
-        }
-        mut_FileSaveResult(i8 result)
-        {
-            Succeeded = result != 0;
-        }
-        mut_FileSaveResult(i16 result)
-        {
-            Succeeded = result != 0;
-        }
-        mut_FileSaveResult(i32 result)
-        {
-            Succeeded = result != 0;
-        }
-        mut_FileSaveResult(i64 result)
-        {
-            Succeeded = result != 0;
-        }
-        mut_FileSaveResult(ptr result)
-        {
-            Succeeded = result != nullptr;
-        }
+        mut_FileSaveResult();
+        mut_FileSaveResult(bool result);
+        mut_FileSaveResult(i8 result);
+        mut_FileSaveResult(i16 result);
+        mut_FileSaveResult(i32 result);
+        mut_FileSaveResult(i64 result);
+        mut_FileSaveResult(ptr result);
 
-        constexpr bool Failed() const noexcept { return !Succeeded; }
+        constexpr bool Failed() const noexcept;
     };
 }

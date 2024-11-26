@@ -7,7 +7,7 @@ namespace rac::io
         wchar_t* p;
         if (S_OK != SHGetKnownFolderPath(FOLDERID_Desktop, 0, NULL, &p))
         {
-            return EMPTY_STD_STRING;
+            return "";
         }
         std::filesystem::path result = p;
         CoTaskMemFree(p);

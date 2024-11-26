@@ -56,7 +56,7 @@ namespace rac::img
 
     MAY_INLINE FileSaveResult PortablePixelMap::SaveToDesktop(cstr filename, std::string& desktop_path) const noexcept
     {
-        desktop_path = rac::GetDesktopPathStr() + '\\' + filename + PPM_EXT;
+        desktop_path = rac::io::GetDesktopPathStr() + '\\' + filename + PPM_EXT;
 
         mut_FilePtr file;
         cstr desk_path_cstr = desktop_path.c_str();
