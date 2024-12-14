@@ -12,14 +12,14 @@ namespace rac::gfx
     typedef const mut_Color* Color_ptr;
     typedef const mut_Color& Color_ref;
 
-    class mut_Colorf;
+    class alignas(4) mut_Colorf;
     typedef mut_Colorf* mut_Colorf_ptr;
     typedef mut_Colorf& mut_Colorf_ref;
     typedef const mut_Colorf Colorf;
     typedef const mut_Colorf* Colorf_ptr;
     typedef const mut_Colorf& Colorf_ref;
 
-    class mut_Oklab;
+    class alignas(4) mut_Oklab;
     typedef mut_Oklab* mut_Oklab_ptr;
     typedef mut_Oklab& mut_Oklab_ref;
     typedef const mut_Oklab Oklab;
@@ -274,13 +274,32 @@ namespace rac::gfx
         mut_f32 L = 0.0f;
         mut_f32 a = 0.0f;
         mut_f32 b = 0.0f;
+        mut_f32 opacity = 0.0f;
 
         mut_Oklab() {}
-        mut_Oklab(f32 _l, f32 _a, f32 _b)
+        mut_Oklab(f32 _l, f32 _a, f32 _b, f32 _opacity = 1.0f)
         {
             L = _l;
             a = _a;
             b = _b;
+            opacity = _opacity;
+        }
+
+        INLINE v3 ToRGB() const noexcept
+        {
+            f32 l_ = L + 0.3963377774f * a + 0.2158037573f * b;
+            f32 m_ = L - 0.1055613458f * a - 0.0638541728f * b;
+            f32 s_ = L - 0.0894841775f * a - 1.2914855480f * b;
+
+            f32 l = l_ * l_ * l_;
+            f32 m = m_ * m_ * m_;
+            f32 s = s_ * s_ * s_;
+
+            return {
+                +4.0767416621f * l - 3.3077115913f * m + 0.2309699292f * s,
+                -1.2684380046f * l + 2.6097574011f * m - 0.3413193965f * s,
+                -0.0041960863f * l - 0.7034186147f * m + 1.7076147010f * s,
+            };
         }
     };
 
@@ -332,12 +351,27 @@ namespace rac::gfx
             b = norm_v.z;
             opacity = _a;
         }
-
-        INLINE static Oklab ToOklab(Colorf_ref rgb)
+        mut_Colorf(Oklab_ref oklab)
         {
-            f32 l = 0.4122214708f * rgb.r + 0.5363325363f * rgb.g + 0.0514459929f * rgb.b;
-            f32 m = 0.2119034982f * rgb.r + 0.6806995451f * rgb.g + 0.1073969566f * rgb.b;
-            f32 s = 0.0883024619f * rgb.r + 0.2817188376f * rgb.g + 0.6299787005f * rgb.b;
+            f32 l_ = oklab.L + 0.3963377774f * oklab.a + 0.2158037573f * oklab.b;
+            f32 m_ = oklab.L - 0.1055613458f * oklab.a - 0.0638541728f * oklab.b;
+            f32 s_ = oklab.L - 0.0894841775f * oklab.a - 1.2914855480f * oklab.b;
+
+            f32 l = l_ * l_ * l_;
+            f32 m = m_ * m_ * m_;
+            f32 s = s_ * s_ * s_;
+
+            r = +4.0767416621f * l - 3.3077115913f * m + 0.2309699292f * s;
+            g = -1.2684380046f * l + 2.6097574011f * m - 0.3413193965f * s;
+            b = -0.0041960863f * l - 0.7034186147f * m + 1.7076147010f * s;
+            opacity = oklab.opacity;
+        }
+
+        INLINE Oklab ToOklab() const noexcept
+        {
+            f32 l = 0.4122214708f * r + 0.5363325363f * g + 0.0514459929f * b;
+            f32 m = 0.2119034982f * r + 0.6806995451f * g + 0.1073969566f * b;
+            f32 s = 0.0883024619f * r + 0.2817188376f * g + 0.6299787005f * b;
 
             f32 l_ = cbrtf(l);
             f32 m_ = cbrtf(m);
@@ -350,7 +384,7 @@ namespace rac::gfx
             };
         }
 
-        INLINE static Colorf ToRGB(Oklab_ref oklab)
+        INLINE Colorf ToRGB(Oklab_ref oklab)
         {
             f32 l_ = oklab.L + 0.3963377774f * oklab.a + 0.2158037573f * oklab.b;
             f32 m_ = oklab.L - 0.1055613458f * oklab.a - 0.0638541728f * oklab.b;
@@ -378,14 +412,15 @@ namespace rac::gfx
         }
 
         // Linearly interpolate from one color to another based on a
-        MAY_INLINE static Colorf Mix(Colorf from, Colorf to, f32 a)
+        MAY_INLINE static Colorf Mix(Oklab_ref from, Oklab_ref to, f32 a)
         {
             f32 one_minus_a = 1.0f - a;
-            f32 new_r = from.r * one_minus_a + to.r * a;
-            f32 new_g = from.g * one_minus_a + to.g * a;
-            f32 new_b = from.b * one_minus_a + to.b * a;
+            f32 new_L = from.L * one_minus_a + to.L * a;
+            f32 new_A = from.a * one_minus_a + to.a * a;
+            f32 new_B = from.b * one_minus_a + to.b * a;
             f32 new_a = from.opacity * one_minus_a + to.opacity * a;
-            return Colorf(new_r, new_g, new_b, new_a);
+            Oklab oklab = mut_Oklab(new_L, new_A, new_B, new_a);
+            return Colorf(oklab.ToRGB(), oklab.opacity);
         }
 
         INLINE f32 LinearToGamma(f32 linear_color_component) const noexcept

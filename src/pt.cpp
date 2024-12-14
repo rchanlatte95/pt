@@ -41,7 +41,7 @@ static void RenderScene()
 
             if (test_sphere.Hit(r, hit_info))
             {
-                render(x, y) = Color(hit_info.normal);
+                render(x, y) = Color(Colorf(hit_info.normal));
             }
             else
             {
