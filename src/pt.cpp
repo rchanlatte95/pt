@@ -22,7 +22,6 @@ mut_ppm render;
 mut_camera cam(ppm::WIDTH, ppm::HEIGHT);
 mut_PerfSample perf_tracker;
 
-/*
 static void RenderScene()
 {
     printf("Casting rays into scene...\r\n\r\n");
@@ -56,7 +55,6 @@ static void RenderScene()
     }
     printf("\r\n");
 }
-*/
 static void Plot(std::vector<mut_v2>& data_pts, Color_ref pt_color, Color_ref background_color = Color::WHITE)
 {
     render.Fill(background_color);
@@ -99,8 +97,7 @@ int main()
     //RenderScene();
     std::vector<mut_v2> points = std::vector<mut_v2>();
     UniformDist::Fill01(points, 1 << 14);
-    Pareto(points);
-    MapTo01(points);
+    //MapTo01(points);
     Plot(points, Color::RED);
 
     PerfSampleResult render_perf = perf_tracker.End();
