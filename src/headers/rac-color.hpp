@@ -19,6 +19,13 @@ namespace rac::gfx
     typedef const mut_Colorf* Colorf_ptr;
     typedef const mut_Colorf& Colorf_ref;
 
+    class mut_Oklab;
+    typedef mut_Oklab* mut_Oklab_ptr;
+    typedef mut_Oklab& mut_Oklab_ref;
+    typedef const mut_Oklab Oklab;
+    typedef const mut_Oklab* Oklab_ptr;
+    typedef const mut_Oklab& Oklab_ref;
+
     // these factors are grabbed from: https://en.wikipedia.org/wiki/Luma_(video)
     // under the section: Rec. 601 luma versus Rec. 709 luma coefficients
     // I am assuming most monitors in circulation are digital HD monitors.
@@ -260,7 +267,24 @@ namespace rac::gfx
         }
     };
 
-    class mut_Colorf
+    class alignas(4) mut_Oklab
+    {
+    public:
+
+        mut_f32 L = 0.0f;
+        mut_f32 a = 0.0f;
+        mut_f32 b = 0.0f;
+
+        mut_Oklab() {}
+        mut_Oklab(f32 _l, f32 _a, f32 _b)
+        {
+            L = _l;
+            a = _a;
+            b = _b;
+        }
+    };
+
+    class alignas(4) mut_Colorf
     {
     public:
 
@@ -307,6 +331,40 @@ namespace rac::gfx
             g = norm_v.y;
             b = norm_v.z;
             opacity = _a;
+        }
+
+        INLINE static Oklab ToOklab(Colorf_ref rgb)
+        {
+            f32 l = 0.4122214708f * rgb.r + 0.5363325363f * rgb.g + 0.0514459929f * rgb.b;
+            f32 m = 0.2119034982f * rgb.r + 0.6806995451f * rgb.g + 0.1073969566f * rgb.b;
+            f32 s = 0.0883024619f * rgb.r + 0.2817188376f * rgb.g + 0.6299787005f * rgb.b;
+
+            f32 l_ = cbrtf(l);
+            f32 m_ = cbrtf(m);
+            f32 s_ = cbrtf(s);
+
+            return {
+                0.2104542553f * l_ + 0.7936177850f * m_ - 0.0040720468f * s_,
+                1.9779984951f * l_ - 2.4285922050f * m_ + 0.4505937099f * s_,
+                0.0259040371f * l_ + 0.7827717662f * m_ - 0.8086757660f * s_,
+            };
+        }
+
+        INLINE static Colorf ToRGB(Oklab_ref oklab)
+        {
+            f32 l_ = oklab.L + 0.3963377774f * oklab.a + 0.2158037573f * oklab.b;
+            f32 m_ = oklab.L - 0.1055613458f * oklab.a - 0.0638541728f * oklab.b;
+            f32 s_ = oklab.L - 0.0894841775f * oklab.a - 1.2914855480f * oklab.b;
+
+            f32 l = l_ * l_ * l_;
+            f32 m = m_ * m_ * m_;
+            f32 s = s_ * s_ * s_;
+
+            return {
+                +4.0767416621f * l - 3.3077115913f * m + 0.2309699292f * s,
+                -1.2684380046f * l + 2.6097574011f * m - 0.3413193965f * s,
+                -0.0041960863f * l - 0.7034186147f * m + 1.7076147010f * s,
+            };
         }
 
         MAY_INLINE static Colorf Lerp(Colorf from, Colorf to, f32 a)
