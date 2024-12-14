@@ -150,6 +150,26 @@ namespace rac::gfx
             opacity = _a;
         }
 
+        MAY_INLINE static Color Lerp(Color from, Color to, f32 f)
+        {
+            f32 from_rf = from.r;
+            f32 from_gf = from.b;
+            f32 from_bf = from.b;
+            f32 from_a = from.opacity;
+
+            f32 to_rf = to.r;
+            f32 to_gf = to.b;
+            f32 to_bf = to.b;
+            f32 to_a = to.opacity;
+
+            f32 one_minus_a = 1.0f - f;
+            u8 new_r = (u8)(from_rf * one_minus_a + to_rf * f);
+            u8 new_g = (u8)(from_gf * one_minus_a + to_gf * f);
+            u8 new_b = (u8)(from_bf * one_minus_a + to_bf * f);
+            u8 new_a = (u8)(from_a * one_minus_a + to_a * f);
+            return Color(new_r, new_g, new_b, new_a);
+        }
+
         // Linearly interpolate from one color to another based on a
         MAY_INLINE static Color Mix(Color from, Color to, f32 f)
         {
@@ -287,6 +307,16 @@ namespace rac::gfx
             g = norm_v.y;
             b = norm_v.z;
             opacity = _a;
+        }
+
+        MAY_INLINE static Colorf Lerp(Colorf from, Colorf to, f32 a)
+        {
+            f32 one_minus_a = 1.0f - a;
+            f32 new_r = from.r * one_minus_a + to.r * a;
+            f32 new_g = from.g * one_minus_a + to.g * a;
+            f32 new_b = from.b * one_minus_a + to.b * a;
+            f32 new_a = from.opacity * one_minus_a + to.opacity * a;
+            return Colorf(new_r, new_g, new_b, new_a);
         }
 
         // Linearly interpolate from one color to another based on a
