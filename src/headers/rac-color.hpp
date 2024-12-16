@@ -32,8 +32,37 @@ namespace rac::gfx
     f32 LUMA_REC709_R = 0.2126f;
     f32 LUMA_REC709_G = 0.7152f;
     f32 LUMA_REC709_B = 0.0722f;
-    f32 GAMMA = 2.2222222f;
+    f32 GAMMA = 2.4f;
     f32 INV_GAMMA = 1.0f / GAMMA;
+
+    f32 GAMMA_CORRECTION_FACTOR = 1.055f;
+    f32 INV_GAMMA_CORRECTION_FACTOR = 1.0f / GAMMA_CORRECTION_FACTOR;
+    f32 SMALL_GAMMA_CORRECTION_FACTOR = 12.92f;
+    f32 INV_SMALL_GAMMA_CORRECTION_FACTOR = 1.0f / SMALL_GAMMA_CORRECTION_FACTOR;
+
+    // https://bottosson.github.io/posts/colorwrong/#what-can-we-do%3F
+    INLINE f32 LinearToGamma(f32 linear_color_component) noexcept
+    {
+        if (linear_color_component >= 0.0031308f)
+        {
+            return GAMMA_CORRECTION_FACTOR * powf(linear_color_component, INV_GAMMA) - 0.055f;
+        }
+        else
+        {
+            return SMALL_GAMMA_CORRECTION_FACTOR * linear_color_component;
+        }
+    }
+    INLINE f32 GammaToLinear(f32 gamma_color_component) noexcept
+    {
+        if (gamma_color_component >= 0.04045f)
+        {
+            return powf((gamma_color_component + 0.055) * INV_GAMMA_CORRECTION_FACTOR, GAMMA);
+        }
+        else
+        {
+            return gamma_color_component * INV_SMALL_GAMMA_CORRECTION_FACTOR;
+        }
+    }
 
     class alignas(4) mut_Color
     {
@@ -198,15 +227,6 @@ namespace rac::gfx
             return Color(new_r, new_g, new_b, new_a);
         }
 
-        INLINE f32 LinearToGamma(f32 linear_color_component) const noexcept
-        {
-            return powf((f32)linear_color_component * INV_U8_MAX, INV_GAMMA);
-        }
-        INLINE f32 GammaToLinear(f32 gamma_color_component) const noexcept
-        {
-            return powf((f32)gamma_color_component * INV_U8_MAX, GAMMA);
-        }
-
         INLINE Color Luminance() const noexcept
         {
             f32 rY = LUMA_REC709_R * LinearToGamma(r);
@@ -352,11 +372,9 @@ namespace rac::gfx
         }
         mut_Oklab(Color_ref c)
         {
-            opacity = c.opacity * INV_U8_MAX;
-
-            f32 rf = c.r * INV_U8_MAX;
-            f32 gf = c.g * INV_U8_MAX;
-            f32 bf = c.b * INV_U8_MAX;
+            mut_f32 rf = c.r * INV_U8_MAX;
+            mut_f32 gf = c.g * INV_U8_MAX;
+            mut_f32 bf = c.b * INV_U8_MAX;
 
             f32 l = 0.4122214708f * rf + 0.5363325363f * gf + 0.0514459929f * bf;
             f32 m = 0.2119034982f * rf + 0.6806995451f * gf + 0.1073969566f * bf;
@@ -369,6 +387,7 @@ namespace rac::gfx
             L = 0.2104542553f * l_ + 0.7936177850f * m_ - 0.0040720468f * s_;
             a = 1.9779984951f * l_ - 2.4285922050f * m_ + 0.4505937099f * s_;
             b = 0.0259040371f * l_ + 0.7827717662f * m_ - 0.8086757660f * s_;
+            opacity = c.opacity * INV_U8_MAX;
         }
 
         INLINE v3 ToRGB() const noexcept

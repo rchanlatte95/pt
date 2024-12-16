@@ -41,7 +41,7 @@ static void RenderScene()
 
             if (test_sphere.Hit(r, hit_info))
             {
-                render(x, y) = Colorf(hit_info.normal).ToColor();
+                render(x, y) = Colorf(hit_info.normal);
             }
             else
             {
@@ -91,6 +91,9 @@ static void Pareto(std::vector<mut_v2>& data_pts)
 int main()
 {
     XsrRng::Init();
+
+    mut_Colorf linear_misali = Color::MISALI;
+    Oklab misali_test = Oklab(linear_misali);
 
     perf_tracker.Start();
 
