@@ -41,11 +41,11 @@ static void RenderScene()
 
             if (test_sphere.Hit(r, hit_info))
             {
-                render(x, y) = Color(Colorf(hit_info.normal));
+                render(x, y) = Colorf(hit_info.normal).ToColor();
             }
             else
             {
-                render(x, y) = Color::Mix(Color::MISALI, Color::WHITE, factor);
+                render(x, y) = Colorf::Mix(Oklab::MISALI, Oklab::WHITE, factor);
             }
         }
 
@@ -94,11 +94,11 @@ int main()
 
     perf_tracker.Start();
 
-    //RenderScene();
-    std::vector<mut_v2> points = std::vector<mut_v2>();
-    UniformDist::Fill01(points, 1 << 14);
+    RenderScene();
+    //std::vector<mut_v2> points = std::vector<mut_v2>();
+    //UniformDist::Fill01(points, 1 << 14);
     //MapTo01(points);
-    Plot(points, Color::RED);
+    //Plot(points, Color::RED);
 
     PerfSampleResult render_perf = perf_tracker.End();
 

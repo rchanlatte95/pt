@@ -534,7 +534,7 @@ namespace rac::gfx
             return Colorf(rY, gY, bY, opacity);
         }
 
-        INLINE Color ToColor() const noexcept { return Color(*this); }
+        INLINE Color ToColor() const noexcept { return Color(r, g, b, opacity); }
         INLINE operator Color() const noexcept { return ToColor(); }
 
         INLINE Colorf_ref operator=(Colorf_ref rhs) noexcept
