@@ -56,7 +56,7 @@ namespace rac::gfx
     {
         if (gamma_color_component >= 0.04045f)
         {
-            return powf((gamma_color_component + 0.055) * INV_GAMMA_CORRECTION_FACTOR, GAMMA);
+            return powf((gamma_color_component + 0.055f) * INV_GAMMA_CORRECTION_FACTOR, GAMMA);
         }
         else
         {
@@ -372,9 +372,9 @@ namespace rac::gfx
         }
         mut_Oklab(Color_ref c)
         {
-            mut_f32 rf = c.r * INV_U8_MAX;
-            mut_f32 gf = c.g * INV_U8_MAX;
-            mut_f32 bf = c.b * INV_U8_MAX;
+            mut_f32 rf = GammaToLinear(c.r * INV_U8_MAX);
+            mut_f32 gf = GammaToLinear(c.g * INV_U8_MAX);
+            mut_f32 bf = GammaToLinear(c.b * INV_U8_MAX);
 
             f32 l = 0.4122214708f * rf + 0.5363325363f * gf + 0.0514459929f * bf;
             f32 m = 0.2119034982f * rf + 0.6806995451f * gf + 0.1073969566f * bf;

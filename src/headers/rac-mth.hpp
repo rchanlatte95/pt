@@ -126,8 +126,8 @@ namespace rac::mth
 	f32 HALF_ROOT_12 = ROOT_12 / 2.0f;
 
 	f32 INV_180 = 1.0f / 180.0f;
-	f32 DEG2RAD = PI / 180.0f; // π / 180
-	f32 RAD2DEG = 180.0f / PI; // 180 / π
+	f32 DEGREE_TO_RADIAN = PI / 180.0f; // π / 180
+	f32 RADIAN_TO_DEGREE = 180.0f / PI; // 180 / π
 
 	f32 LN_2PI = 1.83787706641f; // ln(2π)
 	f32 LN_10 = 2.30258509299f; // ln(10)

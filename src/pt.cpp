@@ -95,6 +95,10 @@ int main()
     mut_Colorf linear_misali = Color::MISALI;
     Oklab misali_test = Oklab(linear_misali);
 
+    f32 r = sqrtf(misali_test.a * misali_test.a + misali_test.b * misali_test.b);
+    f32 t = atan2f(misali_test.b, misali_test.a) * RADIAN_TO_DEGREE;
+    f32 theta = t >= F32_EPSILON ? t : t + 360.0f;
+
     perf_tracker.Start();
 
     RenderScene();
