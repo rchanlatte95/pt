@@ -271,6 +271,72 @@ namespace rac::gfx
     {
     public:
 
+        static Oklab BLACK;
+        static Oklab LIGHT_GRAY;
+        static Oklab GRAY;
+        static Oklab DARK_GRAY;
+        static Oklab WHITE;
+
+        static Oklab RED;
+        static Oklab GREEN;
+        static Oklab BLUE;
+        static Oklab CYAN;
+        static Oklab MAGENTA;
+        static Oklab YELLOW;
+
+        static Oklab ORANGE;
+        static Oklab PURPLE;
+        static Oklab LAVENDER;
+        static Oklab IVORY;
+        static Oklab BURGUNDY;
+        static Oklab SKY_BLUE;
+        static Oklab OLIVE;
+        static Oklab FOREST_GREEN;
+        static Oklab OXBLOOD;
+        static Oklab OXFORD_BLUE;
+        static Oklab TURQUOISE;
+        static Oklab CHARTREUSE;
+        static Oklab SALMON;
+        static Oklab BROWN;
+        static Oklab RUST;
+        static Oklab TEAL;
+        static Oklab COBALT;
+        static Oklab EGGPLANT;
+        static Oklab PINK;
+        static Oklab KEY_LIME;
+
+        static Oklab LILAC;
+        static Oklab MAROON;
+        static Oklab BEIGE;
+        static Oklab TAN;
+        static Oklab PEACH;
+        static Oklab LEMON;
+        static Oklab LIME;
+        static Oklab NAVY_BLUE;
+
+        // https://colornames.org/color/80c0ff
+        static Oklab MISALI;
+
+        static Oklab GOLD;
+        static Oklab SILVER;
+        static Oklab RUBY;
+        static Oklab SAPPHIRE;
+        static Oklab EMERALD;
+        static Oklab DIAMOND;
+        static Oklab PEARL;
+        static Oklab PLATINUM;
+        static Oklab CELADON;
+        static Oklab FUCHSIA;
+        static Oklab SAFFRON;
+        static Oklab CERULEAN;
+        static Oklab INDIGO;
+        static Oklab PEWTER;
+        static Oklab VIRIDIAN;
+        static Oklab GOLDENROD;
+        static Oklab MAHOGANY;
+        static Oklab VIOLET;
+        static Oklab CINNABAR;
+
         mut_f32 L = 0.0f;
         mut_f32 a = 0.0f;
         mut_f32 b = 0.0f;
@@ -283,6 +349,26 @@ namespace rac::gfx
             a = _a;
             b = _b;
             opacity = _opacity;
+        }
+        mut_Oklab(Color_ref c)
+        {
+            opacity = c.opacity * INV_U8_MAX;
+
+            f32 rf = c.r * INV_U8_MAX;
+            f32 gf = c.g * INV_U8_MAX;
+            f32 bf = c.b * INV_U8_MAX;
+
+            f32 l = 0.4122214708f * rf + 0.5363325363f * gf + 0.0514459929f * bf;
+            f32 m = 0.2119034982f * rf + 0.6806995451f * gf + 0.1073969566f * bf;
+            f32 s = 0.0883024619f * rf + 0.2817188376f * gf + 0.6299787005f * bf;
+
+            f32 l_ = cbrtf(l);
+            f32 m_ = cbrtf(m);
+            f32 s_ = cbrtf(s);
+
+            L = 0.2104542553f * l_ + 0.7936177850f * m_ - 0.0040720468f * s_;
+            a = 1.9779984951f * l_ - 2.4285922050f * m_ + 0.4505937099f * s_;
+            b = 0.0259040371f * l_ + 0.7827717662f * m_ - 0.8086757660f * s_;
         }
 
         INLINE v3 ToRGB() const noexcept
@@ -558,4 +644,68 @@ namespace rac::gfx
     Color Color::MAHOGANY = Color(0xc04000ff);
     Color Color::VIOLET = Color(0xee82eeff);
     Color Color::CINNABAR = Color(0xe34234ff);
+
+    // OKLAB COLORS ===================================================
+
+    Oklab Oklab::BLACK = Oklab(Color::BLACK);
+    Oklab Oklab::WHITE = Oklab(Color::WHITE);
+    Oklab Oklab::RED = Oklab(Color::RED);
+    Oklab Oklab::GREEN = Oklab(Color::GREEN);
+    Oklab Oklab::BLUE = Oklab(Color::BLUE);
+    Oklab Oklab::CYAN = Oklab(Color::CYAN);
+    Oklab Oklab::MAGENTA = Oklab(Color::MAGENTA);
+    Oklab Oklab::YELLOW = Oklab(Color::YELLOW);
+    Oklab Oklab::DARK_GRAY = Oklab(Color::DARK_GRAY);
+    Oklab Oklab::GRAY = Oklab(Color::GRAY);
+    Oklab Oklab::LIGHT_GRAY = Oklab(Color::LIGHT_GRAY);
+    Oklab Oklab::ORANGE = Oklab(Color::ORANGE);
+    Oklab Oklab::PURPLE = Oklab(Color::PURPLE);
+    Oklab Oklab::LAVENDER = Oklab(Color::LAVENDER);
+    Oklab Oklab::IVORY = Oklab(Color::IVORY);
+    Oklab Oklab::BURGUNDY = Oklab(Color::BURGUNDY);
+    Oklab Oklab::SKY_BLUE = Oklab(Color::SKY_BLUE);
+    Oklab Oklab::OLIVE = Oklab(Color::OLIVE);
+    Oklab Oklab::FOREST_GREEN = Oklab(Color::FOREST_GREEN);
+    Oklab Oklab::OXBLOOD = Oklab(Color::OXBLOOD);
+    Oklab Oklab::OXFORD_BLUE = Oklab(Color::OXFORD_BLUE);
+    Oklab Oklab::TURQUOISE = Oklab(Color::TURQUOISE);
+    Oklab Oklab::CHARTREUSE = Oklab(Color::CHARTREUSE);
+    Oklab Oklab::SALMON = Oklab(Color::SALMON);
+    Oklab Oklab::BROWN = Oklab(Color::BROWN);
+    Oklab Oklab::RUST = Oklab(Color::RUST);
+    Oklab Oklab::TEAL = Oklab(Color::TEAL);
+    Oklab Oklab::COBALT = Oklab(Color::COBALT);
+    Oklab Oklab::EGGPLANT = Oklab(Color::EGGPLANT);
+    Oklab Oklab::PINK = Oklab(Color::PINK);
+    Oklab Oklab::KEY_LIME = Oklab(Color::KEY_LIME);
+    Oklab Oklab::LILAC = Oklab(Color::LILAC);
+    Oklab Oklab::MAROON = Oklab(Color::MAROON);
+    Oklab Oklab::BEIGE = Oklab(Color::BEIGE);
+    Oklab Oklab::TAN = Oklab(Color::TAN);
+    Oklab Oklab::PEACH = Oklab(Color::PEACH);
+    Oklab Oklab::LEMON = Oklab(Color::LEMON);
+    Oklab Oklab::LIME = Oklab(Color::LIME);
+    Oklab Oklab::NAVY_BLUE = Oklab(Color::NAVY_BLUE);
+    Oklab Oklab::MISALI = Oklab(Color::MISALI);
+    Oklab Oklab::GOLD = Oklab(Color::GOLD);
+    Oklab Oklab::SILVER = Oklab(Color::SILVER);
+    Oklab Oklab::RUBY = Oklab(Color::RUBY);
+    Oklab Oklab::SAPPHIRE = Oklab(Color::SAPPHIRE);
+    Oklab Oklab::EMERALD = Oklab(Color::EMERALD);
+    Oklab Oklab::DIAMOND = Oklab(Color::DIAMOND);
+    Oklab Oklab::PEARL = Oklab(Color::PEARL);
+    Oklab Oklab::PLATINUM = Oklab(Color::PLATINUM);
+    Oklab Oklab::CELADON = Oklab(Color::CELADON);
+    Oklab Oklab::FUCHSIA = Oklab(Color::FUCHSIA);
+    Oklab Oklab::SAFFRON = Oklab(Color::SAFFRON);
+    Oklab Oklab::CERULEAN = Oklab(Color::CERULEAN);
+    Oklab Oklab::INDIGO = Oklab(Color::INDIGO);
+    Oklab Oklab::PEWTER = Oklab(Color::PEWTER);
+    Oklab Oklab::VIRIDIAN = Oklab(Color::VIRIDIAN);
+    Oklab Oklab::GOLDENROD = Oklab(Color::GOLDENROD);
+    Oklab Oklab::MAHOGANY = Oklab(Color::MAHOGANY);
+    Oklab Oklab::VIOLET = Oklab(Color::VIOLET);
+    Oklab Oklab::CINNABAR = Oklab(Color::CINNABAR);
+
+    // OKLAB COLORS ===================================================
 }
