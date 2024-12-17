@@ -398,6 +398,32 @@ namespace rac::gfx
             b = 0.0259040371f * l_ + 0.7827717662f * m_ - 0.8086757660f * s_;
             opacity = c.opacity * INV_U8_MAX;
         }
+        mut_Oklab(Color_ref c, bool linearize)
+        {
+            mut_f32 rf = c.r * INV_U8_MAX;
+            mut_f32 gf = c.g * INV_U8_MAX;
+            mut_f32 bf = c.b * INV_U8_MAX;
+
+            if (linearize)
+            {
+                rf = GammaToLinear(c.r * INV_U8_MAX);
+                gf = GammaToLinear(c.g * INV_U8_MAX);
+                bf = GammaToLinear(c.b * INV_U8_MAX);
+            }
+
+            f32 l = 0.4122214708f * rf + 0.5363325363f * gf + 0.0514459929f * bf;
+            f32 m = 0.2119034982f * rf + 0.6806995451f * gf + 0.1073969566f * bf;
+            f32 s = 0.0883024619f * rf + 0.2817188376f * gf + 0.6299787005f * bf;
+
+            f32 l_ = cbrtf(l);
+            f32 m_ = cbrtf(m);
+            f32 s_ = cbrtf(s);
+
+            L = 0.2104542553f * l_ + 0.7936177850f * m_ - 0.0040720468f * s_;
+            a = 1.9779984951f * l_ - 2.4285922050f * m_ + 0.4505937099f * s_;
+            b = 0.0259040371f * l_ + 0.7827717662f * m_ - 0.8086757660f * s_;
+            opacity = c.opacity * INV_U8_MAX;
+        }
 
         INLINE v3 ToRGB() const noexcept
         {
@@ -502,6 +528,7 @@ namespace rac::gfx
         }
         mut_Oklch(Oklab_ref oklab)
         {
+            L = oklab.L;
             c = sqrtf(oklab.a * oklab.a + oklab.b * oklab.b);
             f32 t = atan2f(oklab.b, oklab.a) * RADIAN_TO_DEGREE;
             h = t >= F32_EPSILON ? t : t + 360.0f;
@@ -771,65 +798,66 @@ namespace rac::gfx
 
     // OKLAB COLORS ===================================================
 
-    Oklab Oklab::BLACK = Oklab(Color::BLACK);
-    Oklab Oklab::WHITE = Oklab(Color::WHITE);
-    Oklab Oklab::RED = Oklab(Color::RED);
-    Oklab Oklab::GREEN = Oklab(Color::GREEN);
-    Oklab Oklab::BLUE = Oklab(Color::BLUE);
-    Oklab Oklab::CYAN = Oklab(Color::CYAN);
-    Oklab Oklab::MAGENTA = Oklab(Color::MAGENTA);
-    Oklab Oklab::YELLOW = Oklab(Color::YELLOW);
-    Oklab Oklab::DARK_GRAY = Oklab(Color::DARK_GRAY);
-    Oklab Oklab::GRAY = Oklab(Color::GRAY);
-    Oklab Oklab::LIGHT_GRAY = Oklab(Color::LIGHT_GRAY);
-    Oklab Oklab::ORANGE = Oklab(Color::ORANGE);
-    Oklab Oklab::PURPLE = Oklab(Color::PURPLE);
-    Oklab Oklab::LAVENDER = Oklab(Color::LAVENDER);
-    Oklab Oklab::IVORY = Oklab(Color::IVORY);
-    Oklab Oklab::BURGUNDY = Oklab(Color::BURGUNDY);
-    Oklab Oklab::SKY_BLUE = Oklab(Color::SKY_BLUE);
-    Oklab Oklab::OLIVE = Oklab(Color::OLIVE);
-    Oklab Oklab::FOREST_GREEN = Oklab(Color::FOREST_GREEN);
-    Oklab Oklab::OXBLOOD = Oklab(Color::OXBLOOD);
-    Oklab Oklab::OXFORD_BLUE = Oklab(Color::OXFORD_BLUE);
-    Oklab Oklab::TURQUOISE = Oklab(Color::TURQUOISE);
-    Oklab Oklab::CHARTREUSE = Oklab(Color::CHARTREUSE);
-    Oklab Oklab::SALMON = Oklab(Color::SALMON);
-    Oklab Oklab::BROWN = Oklab(Color::BROWN);
-    Oklab Oklab::RUST = Oklab(Color::RUST);
-    Oklab Oklab::TEAL = Oklab(Color::TEAL);
-    Oklab Oklab::COBALT = Oklab(Color::COBALT);
-    Oklab Oklab::EGGPLANT = Oklab(Color::EGGPLANT);
-    Oklab Oklab::PINK = Oklab(Color::PINK);
-    Oklab Oklab::KEY_LIME = Oklab(Color::KEY_LIME);
-    Oklab Oklab::LILAC = Oklab(Color::LILAC);
-    Oklab Oklab::MAROON = Oklab(Color::MAROON);
-    Oklab Oklab::BEIGE = Oklab(Color::BEIGE);
-    Oklab Oklab::TAN = Oklab(Color::TAN);
-    Oklab Oklab::PEACH = Oklab(Color::PEACH);
-    Oklab Oklab::LEMON = Oklab(Color::LEMON);
-    Oklab Oklab::LIME = Oklab(Color::LIME);
-    Oklab Oklab::NAVY_BLUE = Oklab(Color::NAVY_BLUE);
-    Oklab Oklab::MISALI = Oklab(Color::MISALI);
-    Oklab Oklab::GOLD = Oklab(Color::GOLD);
-    Oklab Oklab::SILVER = Oklab(Color::SILVER);
-    Oklab Oklab::RUBY = Oklab(Color::RUBY);
-    Oklab Oklab::SAPPHIRE = Oklab(Color::SAPPHIRE);
-    Oklab Oklab::EMERALD = Oklab(Color::EMERALD);
-    Oklab Oklab::DIAMOND = Oklab(Color::DIAMOND);
-    Oklab Oklab::PEARL = Oklab(Color::PEARL);
-    Oklab Oklab::PLATINUM = Oklab(Color::PLATINUM);
-    Oklab Oklab::CELADON = Oklab(Color::CELADON);
-    Oklab Oklab::FUCHSIA = Oklab(Color::FUCHSIA);
-    Oklab Oklab::SAFFRON = Oklab(Color::SAFFRON);
-    Oklab Oklab::CERULEAN = Oklab(Color::CERULEAN);
-    Oklab Oklab::INDIGO = Oklab(Color::INDIGO);
-    Oklab Oklab::PEWTER = Oklab(Color::PEWTER);
-    Oklab Oklab::VIRIDIAN = Oklab(Color::VIRIDIAN);
-    Oklab Oklab::GOLDENROD = Oklab(Color::GOLDENROD);
-    Oklab Oklab::MAHOGANY = Oklab(Color::MAHOGANY);
-    Oklab Oklab::VIOLET = Oklab(Color::VIOLET);
-    Oklab Oklab::CINNABAR = Oklab(Color::CINNABAR);
+    static bool LINEARIZE = true;
+    Oklab Oklab::BLACK = Oklab(Color::BLACK, LINEARIZE);
+    Oklab Oklab::WHITE = Oklab(Color::WHITE, LINEARIZE);
+    Oklab Oklab::RED = Oklab(Color::RED, LINEARIZE);
+    Oklab Oklab::GREEN = Oklab(Color::GREEN, LINEARIZE);
+    Oklab Oklab::BLUE = Oklab(Color::BLUE, LINEARIZE);
+    Oklab Oklab::CYAN = Oklab(Color::CYAN, LINEARIZE);
+    Oklab Oklab::MAGENTA = Oklab(Color::MAGENTA, LINEARIZE);
+    Oklab Oklab::YELLOW = Oklab(Color::YELLOW, LINEARIZE);
+    Oklab Oklab::DARK_GRAY = Oklab(Color::DARK_GRAY, LINEARIZE);
+    Oklab Oklab::GRAY = Oklab(Color::GRAY, LINEARIZE);
+    Oklab Oklab::LIGHT_GRAY = Oklab(Color::LIGHT_GRAY, LINEARIZE);
+    Oklab Oklab::ORANGE = Oklab(Color::ORANGE, LINEARIZE);
+    Oklab Oklab::PURPLE = Oklab(Color::PURPLE, LINEARIZE);
+    Oklab Oklab::LAVENDER = Oklab(Color::LAVENDER, LINEARIZE);
+    Oklab Oklab::IVORY = Oklab(Color::IVORY, LINEARIZE);
+    Oklab Oklab::BURGUNDY = Oklab(Color::BURGUNDY, LINEARIZE);
+    Oklab Oklab::SKY_BLUE = Oklab(Color::SKY_BLUE, LINEARIZE);
+    Oklab Oklab::OLIVE = Oklab(Color::OLIVE, LINEARIZE);
+    Oklab Oklab::FOREST_GREEN = Oklab(Color::FOREST_GREEN, LINEARIZE);
+    Oklab Oklab::OXBLOOD = Oklab(Color::OXBLOOD, LINEARIZE);
+    Oklab Oklab::OXFORD_BLUE = Oklab(Color::OXFORD_BLUE, LINEARIZE);
+    Oklab Oklab::TURQUOISE = Oklab(Color::TURQUOISE, LINEARIZE);
+    Oklab Oklab::CHARTREUSE = Oklab(Color::CHARTREUSE, LINEARIZE);
+    Oklab Oklab::SALMON = Oklab(Color::SALMON, LINEARIZE);
+    Oklab Oklab::BROWN = Oklab(Color::BROWN, LINEARIZE);
+    Oklab Oklab::RUST = Oklab(Color::RUST, LINEARIZE);
+    Oklab Oklab::TEAL = Oklab(Color::TEAL, LINEARIZE);
+    Oklab Oklab::COBALT = Oklab(Color::COBALT, LINEARIZE);
+    Oklab Oklab::EGGPLANT = Oklab(Color::EGGPLANT, LINEARIZE);
+    Oklab Oklab::PINK = Oklab(Color::PINK, LINEARIZE);
+    Oklab Oklab::KEY_LIME = Oklab(Color::KEY_LIME, LINEARIZE);
+    Oklab Oklab::LILAC = Oklab(Color::LILAC, LINEARIZE);
+    Oklab Oklab::MAROON = Oklab(Color::MAROON, LINEARIZE);
+    Oklab Oklab::BEIGE = Oklab(Color::BEIGE, LINEARIZE);
+    Oklab Oklab::TAN = Oklab(Color::TAN, LINEARIZE);
+    Oklab Oklab::PEACH = Oklab(Color::PEACH, LINEARIZE);
+    Oklab Oklab::LEMON = Oklab(Color::LEMON, LINEARIZE);
+    Oklab Oklab::LIME = Oklab(Color::LIME, LINEARIZE);
+    Oklab Oklab::NAVY_BLUE = Oklab(Color::NAVY_BLUE, LINEARIZE);
+    Oklab Oklab::MISALI = Oklab(Color::MISALI, LINEARIZE);
+    Oklab Oklab::GOLD = Oklab(Color::GOLD, LINEARIZE);
+    Oklab Oklab::SILVER = Oklab(Color::SILVER, LINEARIZE);
+    Oklab Oklab::RUBY = Oklab(Color::RUBY, LINEARIZE);
+    Oklab Oklab::SAPPHIRE = Oklab(Color::SAPPHIRE, LINEARIZE);
+    Oklab Oklab::EMERALD = Oklab(Color::EMERALD, LINEARIZE);
+    Oklab Oklab::DIAMOND = Oklab(Color::DIAMOND, LINEARIZE);
+    Oklab Oklab::PEARL = Oklab(Color::PEARL, LINEARIZE);
+    Oklab Oklab::PLATINUM = Oklab(Color::PLATINUM, LINEARIZE);
+    Oklab Oklab::CELADON = Oklab(Color::CELADON, LINEARIZE);
+    Oklab Oklab::FUCHSIA = Oklab(Color::FUCHSIA, LINEARIZE);
+    Oklab Oklab::SAFFRON = Oklab(Color::SAFFRON, LINEARIZE);
+    Oklab Oklab::CERULEAN = Oklab(Color::CERULEAN, LINEARIZE);
+    Oklab Oklab::INDIGO = Oklab(Color::INDIGO, LINEARIZE);
+    Oklab Oklab::PEWTER = Oklab(Color::PEWTER, LINEARIZE);
+    Oklab Oklab::VIRIDIAN = Oklab(Color::VIRIDIAN, LINEARIZE);
+    Oklab Oklab::GOLDENROD = Oklab(Color::GOLDENROD, LINEARIZE);
+    Oklab Oklab::MAHOGANY = Oklab(Color::MAHOGANY, LINEARIZE);
+    Oklab Oklab::VIOLET = Oklab(Color::VIOLET, LINEARIZE);
+    Oklab Oklab::CINNABAR = Oklab(Color::CINNABAR, LINEARIZE);
 
     // OKLAB COLORS ===================================================
 

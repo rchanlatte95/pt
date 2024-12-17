@@ -93,14 +93,10 @@ int main()
     XsrRng::Init();
 
     Colorf misali = Color::MISALI;
-    mut_Colorf linear_misali = misali.ToLinear();
-    Oklab misali_test = Oklab(linear_misali);
+    Oklab misali_test = Oklab(misali, true);
     Colorf misali_conv = ToRGB(misali_test);
     Colorf misali_conv_GAMMA = misali_conv.ToGamma();
-
-    f32 r = sqrtf(misali_test.a * misali_test.a + misali_test.b * misali_test.b);
-    f32 t = atan2f(misali_test.b, misali_test.a) * RADIAN_TO_DEGREE;
-    f32 theta = t >= F32_EPSILON ? t : t + 360.0f;
+    Oklch misali_oklch = Oklch::MISALI;
 
     perf_tracker.Start();
 
