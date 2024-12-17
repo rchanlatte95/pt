@@ -46,6 +46,7 @@ static void RenderScene()
             else
             {
                 render(x, y) = Colorf::Mix(Oklab::MISALI, Oklab::WHITE, factor);
+                //render(x, y) = Colorf::Lerp(Color::MISALI, Color::WHITE, factor);
             }
         }
 
@@ -97,6 +98,8 @@ int main()
     Colorf misali_conv = ToRGB(misali_test);
     Colorf misali_conv_GAMMA = misali_conv.ToGamma();
     Oklch misali_oklch = Oklch::MISALI;
+
+    Oklch white = Oklch(Oklab::WHITE);
 
     perf_tracker.Start();
 

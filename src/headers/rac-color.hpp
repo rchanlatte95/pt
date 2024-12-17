@@ -48,26 +48,26 @@ namespace rac::gfx
     f32 INV_SMALL_GAMMA_CORRECTION_FACTOR = 1.0f / SMALL_GAMMA_CORRECTION_FACTOR;
 
     // https://bottosson.github.io/posts/colorwrong/#what-can-we-do%3F
-    INLINE f32 LinearToGamma(f32 linear_color_component) noexcept
+    INLINE f32 LinearToGamma(f32 linear_val) noexcept
     {
-        if (linear_color_component >= 0.0031308f)
+        if (linear_val >= 0.0031308f)
         {
-            return GAMMA_CORRECTION_FACTOR * powf(linear_color_component, INV_GAMMA) - 0.055f;
+            return GAMMA_CORRECTION_FACTOR * powf(linear_val, INV_GAMMA) - 0.055f;
         }
         else
         {
-            return SMALL_GAMMA_CORRECTION_FACTOR * linear_color_component;
+            return SMALL_GAMMA_CORRECTION_FACTOR * linear_val;
         }
     }
-    INLINE f32 GammaToLinear(f32 gamma_color_component) noexcept
+    INLINE f32 GammaToLinear(f32 gamma_val) noexcept
     {
-        if (gamma_color_component >= 0.04045f)
+        if (gamma_val >= 0.04045f)
         {
-            return powf((gamma_color_component + 0.055f) * INV_GAMMA_CORRECTION_FACTOR, GAMMA);
+            return powf((gamma_val + 0.055f) * INV_GAMMA_CORRECTION_FACTOR, GAMMA);
         }
         else
         {
-            return gamma_color_component * INV_SMALL_GAMMA_CORRECTION_FACTOR;
+            return gamma_val * INV_SMALL_GAMMA_CORRECTION_FACTOR;
         }
     }
 
@@ -299,7 +299,6 @@ namespace rac::gfx
     class alignas(4) mut_Oklab
     {
     public:
-
         static Oklab BLACK;
         static Oklab LIGHT_GRAY;
         static Oklab GRAY;
@@ -529,9 +528,19 @@ namespace rac::gfx
         mut_Oklch(Oklab_ref oklab)
         {
             L = oklab.L;
+
             c = sqrtf(oklab.a * oklab.a + oklab.b * oklab.b);
-            f32 t = atan2f(oklab.b, oklab.a) * RADIAN_TO_DEGREE;
-            h = t >= F32_EPSILON ? t : t + 360.0f;
+
+            if (fabsf(oklab.a) >= F32_EPSILON &&
+                fabsf(oklab.b) >= F32_EPSILON)
+            {
+                f32 t = atan2f(oklab.b, oklab.a) * RADIAN_TO_DEGREE;
+                h = t >= F32_EPSILON ? t : t + 360.0f;
+            }
+            else
+            {
+                h = 0.0f;
+            }
             opacity = oklab.opacity;
         }
         mut_Oklch(Color_ref color)
@@ -657,15 +666,22 @@ namespace rac::gfx
         }
 
         // Linearly interpolate from one color to another based on a
-        MAY_INLINE static Colorf Mix(Oklab_ref from, Oklab_ref to, f32 a)
+        MAY_INLINE static Colorf Mix(Oklab_ref from, Oklab_ref to, f32 t)
         {
-            f32 one_minus_a = 1.0f - a;
-            f32 new_L = from.L * one_minus_a + to.L * a;
-            f32 new_A = from.a * one_minus_a + to.a * a;
-            f32 new_B = from.b * one_minus_a + to.b * a;
-            f32 new_a = from.opacity * one_minus_a + to.opacity * a;
-            Oklab oklab = mut_Oklab(new_L, new_A, new_B, new_a);
-            return Colorf(oklab.ToRGB(), oklab.opacity);
+            if (t >= 0.1f)
+            {
+                int k = 0;
+            }
+            //v0 + t * (v1 - v0)
+            f32 one_minus_t = 1.0f - t;
+            f32 new_L = one_minus_t * from.L + t * to.L;
+            f32 new_A = one_minus_t * from.a + t * to.a;
+            f32 new_B = one_minus_t * from.b + t * to.b;
+            f32 new_opacity = one_minus_t * from.opacity + t * to.opacity;
+            Oklab oklab = mut_Oklab(new_L, new_A, new_B, new_opacity);
+            Colorf res = Colorf(oklab.ToRGB(), oklab.opacity).ToGamma();
+            Colorf ln = Colorf(oklab.ToRGB(), oklab.opacity);
+            return res;
         }
 
         INLINE Colorf ToLinear() const noexcept
