@@ -833,6 +833,70 @@ namespace rac::gfx
 
     // OKLAB COLORS ===================================================
 
+    // OKLCH COLORS ===================================================
+
+    Oklch Oklch::BLACK = Oklab::BLACK;
+    Oklch Oklch::WHITE = Oklab::WHITE;
+    Oklch Oklch::RED = Oklab::RED;
+    Oklch Oklch::GREEN = Oklab::GREEN;
+    Oklch Oklch::BLUE = Oklab::BLUE;
+    Oklch Oklch::CYAN = Oklab::CYAN;
+    Oklch Oklch::MAGENTA = Oklab::MAGENTA;
+    Oklch Oklch::YELLOW = Oklab::YELLOW;
+    Oklch Oklch::DARK_GRAY = Oklab::DARK_GRAY;
+    Oklch Oklch::GRAY = Oklab::GRAY;
+    Oklch Oklch::LIGHT_GRAY = Oklab::LIGHT_GRAY;
+    Oklch Oklch::ORANGE = Oklab::ORANGE;
+    Oklch Oklch::PURPLE = Oklab::PURPLE;
+    Oklch Oklch::LAVENDER = Oklab::LAVENDER;
+    Oklch Oklch::IVORY = Oklab::IVORY;
+    Oklch Oklch::BURGUNDY = Oklab::BURGUNDY;
+    Oklch Oklch::SKY_BLUE = Oklab::SKY_BLUE;
+    Oklch Oklch::OLIVE = Oklab::OLIVE;
+    Oklch Oklch::FOREST_GREEN = Oklab::FOREST_GREEN;
+    Oklch Oklch::OXBLOOD = Oklab::OXBLOOD;
+    Oklch Oklch::OXFORD_BLUE = Oklab::OXFORD_BLUE;
+    Oklch Oklch::TURQUOISE = Oklab::TURQUOISE;
+    Oklch Oklch::CHARTREUSE = Oklab::CHARTREUSE;
+    Oklch Oklch::SALMON = Oklab::SALMON;
+    Oklch Oklch::BROWN = Oklab::BROWN;
+    Oklch Oklch::RUST = Oklab::RUST;
+    Oklch Oklch::TEAL = Oklab::TEAL;
+    Oklch Oklch::COBALT = Oklab::COBALT;
+    Oklch Oklch::EGGPLANT = Oklab::EGGPLANT;
+    Oklch Oklch::PINK = Oklab::PINK;
+    Oklch Oklch::KEY_LIME = Oklab::KEY_LIME;
+    Oklch Oklch::LILAC = Oklab::LILAC;
+    Oklch Oklch::MAROON = Oklab::MAROON;
+    Oklch Oklch::BEIGE = Oklab::BEIGE;
+    Oklch Oklch::TAN = Oklab::TAN;
+    Oklch Oklch::PEACH = Oklab::PEACH;
+    Oklch Oklch::LEMON = Oklab::LEMON;
+    Oklch Oklch::LIME = Oklab::LIME;
+    Oklch Oklch::NAVY_BLUE = Oklab::NAVY_BLUE;
+    Oklch Oklch::MISALI = Oklab::MISALI;
+    Oklch Oklch::GOLD = Oklab::GOLD;
+    Oklch Oklch::SILVER = Oklab::SILVER;
+    Oklch Oklch::RUBY = Oklab::RUBY;
+    Oklch Oklch::SAPPHIRE = Oklab::SAPPHIRE;
+    Oklch Oklch::EMERALD = Oklab::EMERALD;
+    Oklch Oklch::DIAMOND = Oklab::DIAMOND;
+    Oklch Oklch::PEARL = Oklab::PEARL;
+    Oklch Oklch::PLATINUM = Oklab::PLATINUM;
+    Oklch Oklch::CELADON = Oklab::CELADON;
+    Oklch Oklch::FUCHSIA = Oklab::FUCHSIA;
+    Oklch Oklch::SAFFRON = Oklab::SAFFRON;
+    Oklch Oklch::CERULEAN = Oklab::CERULEAN;
+    Oklch Oklch::INDIGO = Oklab::INDIGO;
+    Oklch Oklch::PEWTER = Oklab::PEWTER;
+    Oklch Oklch::VIRIDIAN = Oklab::VIRIDIAN;
+    Oklch Oklch::GOLDENROD = Oklab::GOLDENROD;
+    Oklch Oklch::MAHOGANY = Oklab::MAHOGANY;
+    Oklch Oklch::VIOLET = Oklab::VIOLET;
+    Oklch Oklch::CINNABAR = Oklab::CINNABAR;
+
+    // OKLCH COLORS ===================================================
+
     INLINE Colorf ToRGB(Oklab_ref oklab)
     {
         f32 l_ = oklab.L + 0.3963377774f * oklab.a + 0.2158037573f * oklab.b;
