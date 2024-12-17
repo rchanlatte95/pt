@@ -26,6 +26,13 @@ namespace rac::gfx
     typedef const mut_Oklab* Oklab_ptr;
     typedef const mut_Oklab& Oklab_ref;
 
+    class alignas(4) mut_Oklch;
+    typedef mut_Oklch* mut_Oklch_ptr;
+    typedef mut_Oklch& mut_Oklch_ref;
+    typedef const mut_Oklch Oklch;
+    typedef const mut_Oklch* Oklch_ptr;
+    typedef const mut_Oklch& Oklch_ref;
+
     // these factors are grabbed from: https://en.wikipedia.org/wiki/Luma_(video)
     // under the section: Rec. 601 luma versus Rec. 709 luma coefficients
     // I am assuming most monitors in circulation are digital HD monitors.
@@ -229,9 +236,9 @@ namespace rac::gfx
 
         INLINE Color Luminance() const noexcept
         {
-            f32 rY = LUMA_REC709_R * LinearToGamma(r);
-            f32 gY = LUMA_REC709_G * LinearToGamma(g);
-            f32 bY = LUMA_REC709_B * LinearToGamma(b);
+            f32 rY = LUMA_REC709_R * GammaToLinear(r);
+            f32 gY = LUMA_REC709_G * GammaToLinear(g);
+            f32 bY = LUMA_REC709_B * GammaToLinear(b);
             u8 new_r = (u8)(rY * 255.999f);
             u8 new_g = (u8)(gY * 255.999f);
             u8 new_b = (u8)(bY * 255.999f);
@@ -287,6 +294,8 @@ namespace rac::gfx
         }
     };
 
+    // oklab is a "cartesian" color space, compared to the polar
+    // equivalent oklch
     class alignas(4) mut_Oklab
     {
     public:
@@ -372,9 +381,9 @@ namespace rac::gfx
         }
         mut_Oklab(Color_ref c)
         {
-            mut_f32 rf = GammaToLinear(c.r * INV_U8_MAX);
-            mut_f32 gf = GammaToLinear(c.g * INV_U8_MAX);
-            mut_f32 bf = GammaToLinear(c.b * INV_U8_MAX);
+            mut_f32 rf = c.r * INV_U8_MAX;
+            mut_f32 gf = c.g * INV_U8_MAX;
+            mut_f32 bf = c.b * INV_U8_MAX;
 
             f32 l = 0.4122214708f * rf + 0.5363325363f * gf + 0.0514459929f * bf;
             f32 m = 0.2119034982f * rf + 0.6806995451f * gf + 0.1073969566f * bf;
@@ -392,6 +401,127 @@ namespace rac::gfx
 
         INLINE v3 ToRGB() const noexcept
         {
+            f32 l_ = L + 0.3963377774f * a + 0.2158037573f * b;
+            f32 m_ = L - 0.1055613458f * a - 0.0638541728f * b;
+            f32 s_ = L - 0.0894841775f * a - 1.2914855480f * b;
+
+            f32 l = l_ * l_ * l_;
+            f32 m = m_ * m_ * m_;
+            f32 s = s_ * s_ * s_;
+
+            return {
+                +4.0767416621f * l - 3.3077115913f * m + 0.2309699292f * s,
+                -1.2684380046f * l + 2.6097574011f * m - 0.3413193965f * s,
+                -0.0041960863f * l - 0.7034186147f * m + 1.7076147010f * s,
+            };
+        }
+    };
+
+    class alignas(4) mut_Oklch
+    {
+    public:
+
+        static Oklch BLACK;
+        static Oklch LIGHT_GRAY;
+        static Oklch GRAY;
+        static Oklch DARK_GRAY;
+        static Oklch WHITE;
+
+        static Oklch RED;
+        static Oklch GREEN;
+        static Oklch BLUE;
+        static Oklch CYAN;
+        static Oklch MAGENTA;
+        static Oklch YELLOW;
+
+        static Oklch ORANGE;
+        static Oklch PURPLE;
+        static Oklch LAVENDER;
+        static Oklch IVORY;
+        static Oklch BURGUNDY;
+        static Oklch SKY_BLUE;
+        static Oklch OLIVE;
+        static Oklch FOREST_GREEN;
+        static Oklch OXBLOOD;
+        static Oklch OXFORD_BLUE;
+        static Oklch TURQUOISE;
+        static Oklch CHARTREUSE;
+        static Oklch SALMON;
+        static Oklch BROWN;
+        static Oklch RUST;
+        static Oklch TEAL;
+        static Oklch COBALT;
+        static Oklch EGGPLANT;
+        static Oklch PINK;
+        static Oklch KEY_LIME;
+
+        static Oklch LILAC;
+        static Oklch MAROON;
+        static Oklch BEIGE;
+        static Oklch TAN;
+        static Oklch PEACH;
+        static Oklch LEMON;
+        static Oklch LIME;
+        static Oklch NAVY_BLUE;
+
+        // https://colornames.org/color/80c0ff
+        static Oklch MISALI;
+
+        static Oklch GOLD;
+        static Oklch SILVER;
+        static Oklch RUBY;
+        static Oklch SAPPHIRE;
+        static Oklch EMERALD;
+        static Oklch DIAMOND;
+        static Oklch PEARL;
+        static Oklch PLATINUM;
+        static Oklch CELADON;
+        static Oklch FUCHSIA;
+        static Oklch SAFFRON;
+        static Oklch CERULEAN;
+        static Oklch INDIGO;
+        static Oklch PEWTER;
+        static Oklch VIRIDIAN;
+        static Oklch GOLDENROD;
+        static Oklch MAHOGANY;
+        static Oklch VIOLET;
+        static Oklch CINNABAR;
+
+        mut_f32 L = 0.0f;
+        mut_f32 c = 0.0f;
+        mut_f32 h = 0.0f;
+        mut_f32 opacity = 0.0f;
+
+        mut_Oklch() {}
+        mut_Oklch(f32 _l, f32 _c, f32 _h, f32 _opacity = 1.0f)
+        {
+            L = _l;
+            c = _c;
+            h = _h;
+            opacity = _opacity;
+        }
+        mut_Oklch(Oklab_ref oklab)
+        {
+            c = sqrtf(oklab.a * oklab.a + oklab.b * oklab.b);
+            f32 t = atan2f(oklab.b, oklab.a) * RADIAN_TO_DEGREE;
+            h = t >= F32_EPSILON ? t : t + 360.0f;
+            opacity = oklab.opacity;
+        }
+        mut_Oklch(Color_ref color)
+        {
+            Oklab o = Oklab(color);
+
+            c = sqrtf(o.a * o.a + o.b * o.b);
+            f32 t = atan2f(o.b, o.a) * RADIAN_TO_DEGREE;
+            h = t >= F32_EPSILON ? t : t + 360.0f;
+            opacity = color.opacity * INV_U8_MAX;
+        }
+
+        INLINE v3 ToRGB() const noexcept
+        {
+            f32 a = c * cosf(h);
+            f32 b = c * sinf(h);
+
             f32 l_ = L + 0.3963377774f * a + 0.2158037573f * b;
             f32 m_ = L - 0.1055613458f * a - 0.0638541728f * b;
             f32 s_ = L - 0.0894841775f * a - 1.2914855480f * b;
@@ -489,23 +619,6 @@ namespace rac::gfx
             };
         }
 
-        INLINE Colorf ToRGB(Oklab_ref oklab)
-        {
-            f32 l_ = oklab.L + 0.3963377774f * oklab.a + 0.2158037573f * oklab.b;
-            f32 m_ = oklab.L - 0.1055613458f * oklab.a - 0.0638541728f * oklab.b;
-            f32 s_ = oklab.L - 0.0894841775f * oklab.a - 1.2914855480f * oklab.b;
-
-            f32 l = l_ * l_ * l_;
-            f32 m = m_ * m_ * m_;
-            f32 s = s_ * s_ * s_;
-
-            return {
-                +4.0767416621f * l - 3.3077115913f * m + 0.2309699292f * s,
-                -1.2684380046f * l + 2.6097574011f * m - 0.3413193965f * s,
-                -0.0041960863f * l - 0.7034186147f * m + 1.7076147010f * s,
-            };
-        }
-
         MAY_INLINE static Colorf Lerp(Colorf from, Colorf to, f32 a)
         {
             f32 one_minus_a = 1.0f - a;
@@ -528,28 +641,20 @@ namespace rac::gfx
             return Colorf(oklab.ToRGB(), oklab.opacity);
         }
 
-        INLINE f32 LinearToGamma(f32 linear_color_component) const noexcept
-        {
-            return powf(linear_color_component, INV_GAMMA);
-        }
-        INLINE f32 GammaToLinear(f32 gamma_color_component) const noexcept
-        {
-            return powf(gamma_color_component, GAMMA);
-        }
         INLINE Colorf ToLinear() const noexcept
         {
-            return Colorf(LinearToGamma(r), LinearToGamma(g), LinearToGamma(b), opacity);
+            return Colorf(GammaToLinear(r), GammaToLinear(g), GammaToLinear(b), opacity);
         }
         INLINE Colorf ToGamma() const noexcept
         {
-            return Colorf(GammaToLinear(r), GammaToLinear(g), GammaToLinear(b), opacity);
+            return Colorf(LinearToGamma(r), LinearToGamma(g), LinearToGamma(b), opacity);
         }
 
         INLINE Colorf Luminance() const noexcept
         {
-            f32 rY = LUMA_REC709_R * LinearToGamma(r);
-            f32 gY = LUMA_REC709_G * LinearToGamma(g);
-            f32 bY = LUMA_REC709_B * LinearToGamma(b);
+            f32 rY = LUMA_REC709_R * GammaToLinear(r);
+            f32 gY = LUMA_REC709_G * GammaToLinear(g);
+            f32 bY = LUMA_REC709_B * GammaToLinear(b);
             return Colorf(rY, gY, bY, opacity);
         }
 
@@ -727,4 +832,25 @@ namespace rac::gfx
     Oklab Oklab::CINNABAR = Oklab(Color::CINNABAR);
 
     // OKLAB COLORS ===================================================
+
+    INLINE Colorf ToRGB(Oklab_ref oklab)
+    {
+        f32 l_ = oklab.L + 0.3963377774f * oklab.a + 0.2158037573f * oklab.b;
+        f32 m_ = oklab.L - 0.1055613458f * oklab.a - 0.0638541728f * oklab.b;
+        f32 s_ = oklab.L - 0.0894841775f * oklab.a - 1.2914855480f * oklab.b;
+
+        f32 l = l_ * l_ * l_;
+        f32 m = m_ * m_ * m_;
+        f32 s = s_ * s_ * s_;
+
+        return  { +4.0767416621f * l - 3.3077115913f * m + 0.2309699292f * s,
+                -1.2684380046f * l + 2.6097574011f * m - 0.3413193965f * s,
+                -0.0041960863f * l - 0.7034186147f * m + 1.7076147010f * s,
+                oklab.opacity };
+    }
+    INLINE Colorf ToRGB(Oklab_ref oklab, bool apply_gamma)
+    {
+        Colorf res = ToRGB(oklab);
+        return apply_gamma ? res.ToGamma() : res;
+    }
 }
