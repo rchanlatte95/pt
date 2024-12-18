@@ -71,6 +71,22 @@ namespace rac::gfx
         }
     }
 
+    u8 _32BIT_COLOR_COMPONENT_MIN = 0;
+    u8 _32BIT_COLOR_COMPONENT_MAX = 255;
+    f32 _32BIT_COLOR_COMPONENT_MAX_EPSILON = _32BIT_COLOR_COMPONENT_MAX - F32_EPSILON;
+    INLINE u8 Saturate(f32 x)
+    {
+        if (x > _32BIT_COLOR_COMPONENT_MAX_EPSILON)
+        {
+            return _32BIT_COLOR_COMPONENT_MAX;
+        }
+        if (x < F32_EPSILON)
+        {
+            return _32BIT_COLOR_COMPONENT_MIN;
+        }
+        return (u8)x;
+    }
+
     class alignas(4) mut_Color
     {
     public:
@@ -165,10 +181,10 @@ namespace rac::gfx
         }
         mut_Color(f32 _r, f32 _g, f32 _b, f32 _a)
         {
-            b = (u8)(_b * 255.999f);
-            g = (u8)(_g * 255.999f);
-            r = (u8)(_r * 255.999f);
-            opacity = (u8)(_a * 255.999f);
+            b = Saturate(_b * 255.999f);
+            g = Saturate(_g * 255.999f);
+            r = Saturate(_r * 255.999f);
+            opacity = Saturate(_a * 255.999f);
         }
         mut_Color(u32 color_code)
         {
@@ -440,6 +456,33 @@ namespace rac::gfx
                 -0.0041960863f * l - 0.7034186147f * m + 1.7076147010f * s,
             };
         }
+        INLINE v3 ToRGB(bool gammize) const noexcept
+        {
+            f32 l_ = L + 0.3963377774f * a + 0.2158037573f * b;
+            f32 m_ = L - 0.1055613458f * a - 0.0638541728f * b;
+            f32 s_ = L - 0.0894841775f * a - 1.2914855480f * b;
+
+            f32 l = l_ * l_ * l_;
+            f32 m = m_ * m_ * m_;
+            f32 s = s_ * s_ * s_;
+
+            if (gammize)
+            {
+                return {
+                LinearToGamma(4.0767416621f * l - 3.3077115913f * m + 0.2309699292f * s),
+                LinearToGamma(-1.2684380046f * l + 2.6097574011f * m - 0.3413193965f * s),
+                LinearToGamma(-0.0041960863f * l - 0.7034186147f * m + 1.7076147010f * s),
+                };
+            }
+            else
+            {
+                return {
+                +4.0767416621f * l - 3.3077115913f * m + 0.2309699292f * s,
+                -1.2684380046f * l + 2.6097574011f * m - 0.3413193965f * s,
+                -0.0041960863f * l - 0.7034186147f * m + 1.7076147010f * s,
+                };
+            }
+        }
     };
 
     class alignas(4) mut_Oklch
@@ -663,25 +706,6 @@ namespace rac::gfx
             f32 new_b = from.b * one_minus_a + to.b * a;
             f32 new_a = from.opacity * one_minus_a + to.opacity * a;
             return Colorf(new_r, new_g, new_b, new_a);
-        }
-
-        // Linearly interpolate from one color to another based on a
-        MAY_INLINE static Colorf Mix(Oklab_ref from, Oklab_ref to, f32 t)
-        {
-            if (t >= 0.1f)
-            {
-                int k = 0;
-            }
-            //v0 + t * (v1 - v0)
-            f32 one_minus_t = 1.0f - t;
-            f32 new_L = one_minus_t * from.L + t * to.L;
-            f32 new_A = one_minus_t * from.a + t * to.a;
-            f32 new_B = one_minus_t * from.b + t * to.b;
-            f32 new_opacity = one_minus_t * from.opacity + t * to.opacity;
-            Oklab oklab = mut_Oklab(new_L, new_A, new_B, new_opacity);
-            Colorf res = Colorf(oklab.ToRGB(), oklab.opacity).ToGamma();
-            Colorf ln = Colorf(oklab.ToRGB(), oklab.opacity);
-            return res;
         }
 
         INLINE Colorf ToLinear() const noexcept
@@ -941,24 +965,61 @@ namespace rac::gfx
 
     // OKLCH COLORS ===================================================
 
-    INLINE Colorf ToRGB(Oklab_ref oklab)
+    INLINE Colorf ToRGB(Oklab_ref c)
     {
-        f32 l_ = oklab.L + 0.3963377774f * oklab.a + 0.2158037573f * oklab.b;
-        f32 m_ = oklab.L - 0.1055613458f * oklab.a - 0.0638541728f * oklab.b;
-        f32 s_ = oklab.L - 0.0894841775f * oklab.a - 1.2914855480f * oklab.b;
+        float l_ = c.L + 0.3963377774f * c.a + 0.2158037573f * c.b;
+        float m_ = c.L - 0.1055613458f * c.a - 0.0638541728f * c.b;
+        float s_ = c.L - 0.0894841775f * c.a - 1.2914855480f * c.b;
+
+        float l = l_ * l_ * l_;
+        float m = m_ * m_ * m_;
+        float s = s_ * s_ * s_;
+
+        return {
+            +4.0767416621f * l - 3.3077115913f * m + 0.2309699292f * s,
+            -1.2684380046f * l + 2.6097574011f * m - 0.3413193965f * s,
+            -0.0041960863f * l - 0.7034186147f * m + 1.7076147010f * s,
+            c.opacity
+        };
+    }
+    INLINE Colorf ToSRGB(Oklab_ref c)
+    {
+        f32 l_ = c.L + 0.3963377774f * c.a + 0.2158037573f * c.b;
+        f32 m_ = c.L - 0.1055613458f * c.a - 0.0638541728f * c.b;
+        f32 s_ = c.L - 0.0894841775f * c.a - 1.2914855480f * c.b;
 
         f32 l = l_ * l_ * l_;
         f32 m = m_ * m_ * m_;
         f32 s = s_ * s_ * s_;
 
-        return  { +4.0767416621f * l - 3.3077115913f * m + 0.2309699292f * s,
-                -1.2684380046f * l + 2.6097574011f * m - 0.3413193965f * s,
-                -0.0041960863f * l - 0.7034186147f * m + 1.7076147010f * s,
-                oklab.opacity };
+        f32 linear_r = +4.0767416621f * l - 3.3077115913f * m + 0.2309699292f * s;
+        f32 linear_g = -1.2684380046f * l + 2.6097574011f * m - 0.3413193965f * s;
+        f32 linear_b = -0.0041960863f * l - 0.7034186147f * m + 1.7076147010f * s;
+
+#if RELEASE
+        return {
+            LinearToGamma(linear_r),
+            LinearToGamma(linear_g),
+            LinearToGamma(linear_b),
+            c.opacity
+        };
+#else
+        f32 r = LinearToGamma(linear_r);
+        f32 g = LinearToGamma(linear_g);
+        f32 b = LinearToGamma(linear_b);
+        return { r, g, b, c.opacity };
+#endif
     }
-    INLINE Colorf ToRGB(Oklab_ref oklab, bool apply_gamma)
+
+    // Linearly interpolate from one color to another based on a
+    MAY_INLINE static Colorf Mix(Oklab_ref from, Oklab_ref to, f32 t)
     {
-        Colorf res = ToRGB(oklab);
-        return apply_gamma ? res.ToGamma() : res;
+        f32 one_minus_t = 1.0f - t;
+        f32 new_L = one_minus_t * from.L + t * to.L;
+        f32 new_A = one_minus_t * from.a + t * to.a;
+        f32 new_B = one_minus_t * from.b + t * to.b;
+        f32 new_opacity = one_minus_t * from.opacity + t * to.opacity;
+        Oklab oklab = mut_Oklab(new_L, new_A, new_B, new_opacity);
+        return ToSRGB(oklab);
     }
 }

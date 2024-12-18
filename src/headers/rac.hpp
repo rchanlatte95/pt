@@ -51,9 +51,15 @@
 #include <x86intrin.h>
 #endif
 
+#if RELEASE
 #define MAY_INLINE __inline
-#define INLINE __forceinline
+#define INLINE  __forceinline
 #define NO_INLINE __declspec(noinline)
+#else
+#define MAY_INLINE
+#define INLINE
+#define NO_INLINE
+#endif
 
 namespace rac
 {
