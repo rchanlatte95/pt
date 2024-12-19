@@ -187,8 +187,8 @@ namespace rac::img
     }
 
     cstr PortablePixelMap::PPM_EXT = ".ppm";
-    u32 PortablePixelMap::HEIGHT = 1024;
-    u32 PortablePixelMap::WIDTH = HEIGHT;
+    u32 PortablePixelMap::HEIGHT = _HEIGHT;
+    u32 PortablePixelMap::WIDTH = _WIDTH;
     f32 PortablePixelMap::INV_HEIGHT = 1.0f / (f32)HEIGHT;
     f32 PortablePixelMap::INV_WIDTH = 1.0f / (f32)WIDTH;
     f32 PortablePixelMap::ASPECT_RATIO = (f32)WIDTH / (f32)HEIGHT;

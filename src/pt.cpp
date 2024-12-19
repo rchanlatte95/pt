@@ -137,9 +137,9 @@ static void MixColors(Oklab_ref from, Oklab_ref to)
         }
         scanlinesDone += 1.0f;
         f32 pct_done = scanlinesDone * invScanlineCt;
-        printf("\r\tPROCESSING:\t%4d / %4d scanlines (%.2f%% RENDERED).", (i32)scanlinesDone, ppm::HEIGHT, pct_done);
+        printf("\r\tPROCESSING:\t%4d / %4d scanlines (%.2f%% RENDERED).           ", (i32)scanlinesDone, ppm::HEIGHT, pct_done);
     }
-    printf("\r\n");
+    printf("\rCOMPLETED!                                                                                      \r\n");
 }
 
 int main()
@@ -148,7 +148,17 @@ int main()
     //bool successfulPathtrace = PathTrace();
     //return successfulPathtrace ? EXIT_SUCCESS : EXIT_FAILURE;
 
+    i32 MIX_MAX = 8;
+    Oklab from_colors[MIX_MAX]  { Oklab::ORANGE, Oklab::RED, Oklab::PURPLE, Oklab::CYAN, Oklab::MAGENTA, Oklab::YELLOW, Oklab::WHITE, Oklab::WHITE};
+    Oklab to_colors[MIX_MAX]    { Oklab::BLUE, Oklab::GREEN, Oklab::YELLOW, Oklab::RED, Oklab::GREEN, Oklab::BLUE, Oklab::BLUE, Oklab::BLACK };
+    std::string fns[MIX_MAX]    { "orange-to-blue", "red-to-green", "pink-to-yellow", "cyan-to-red", "magenta-to-green", "yellow-to-blue", "white-to-blue" , "white-to-black" };
 
+    std::string output_path;
+    for (int i = 0; i < MIX_MAX; ++i)
+    {
+        MixColors(from_colors[i], to_colors[i]);
+        FileSaveResult writeResult = render.SaveToDesktop(fns[i].c_str(), output_path);
+    }
 
     return EXIT_SUCCESS;
 }
