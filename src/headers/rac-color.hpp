@@ -1015,11 +1015,6 @@ namespace rac::gfx
     MAY_INLINE static Colorf Mix(Oklab_ref from, Oklab_ref to, f32 t)
     {
         f32 one_minus_t = 1.0f - t;
-        /*
-        res.r = dst.r * (1 - src.a) + src.r * src.a
-        res.g = dst.g * (1 -src.a) + src.g * src.a
-        res.b = dst.b * (1 - src.a) + src.b * src.a
-        */
         f32 new_L = one_minus_t * from.L + t * to.L;
         f32 new_A = one_minus_t * from.a + t * to.a;
         f32 new_B = one_minus_t * from.b + t * to.b;

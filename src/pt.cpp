@@ -19,9 +19,8 @@ using namespace rac::rnd::XorShiftRotate;
 using namespace rac::rnd::distribution::uniform;
 
 mut_ppm render;
-mut_camera cam(ppm::WIDTH, ppm::HEIGHT);
 
-static void RenderScene()
+static void RenderScene(camera_ref cam)
 {
     printf("Casting rays into scene...\r\n\r\n");
 
@@ -91,11 +90,12 @@ static void Pareto(std::vector<mut_v2>& data_pts)
 
 static bool PathTrace()
 {
+    mut_camera cam(ppm::WIDTH, ppm::HEIGHT);
     mut_PerfSample perf_tracker;
 
     perf_tracker.Start();
 
-    RenderScene();
+    RenderScene(cam);
 
     PerfSampleResult render_perf = perf_tracker.End();
 
@@ -123,7 +123,7 @@ static bool PathTrace()
     return true;
 }
 
-static void MixColors()
+static void MixColors(Oklab_ref from, Oklab_ref to)
 {
     f32 invScanlineCt = 100.0f / (f32)ppm::HEIGHT;
     mut_f32 scanlinesDone = 0.0f;
@@ -132,7 +132,7 @@ static void MixColors()
         f32 factor = (f32)y / (f32)ppm::HEIGHT;
         for (mut_u32 x = 0; x < ppm::WIDTH; ++x)
         {
-            Color c = Mix(Oklab::RED, Oklab::GREEN, factor);
+            Color c = Mix(from, to, factor);
             render(x, y) = c;
         }
         scanlinesDone += 1.0f;
