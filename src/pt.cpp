@@ -45,10 +45,8 @@ static void RenderScene()
             }
             else
             {
-                // NOTE(RYAN_2024-12-16): Seems light? Weird stuff.
                 Color c = Mix(Oklab::MISALI, Oklab::WHITE, factor);
                 render(x, y) = c;
-                //render(x, y) = Colorf::Lerp(Color::MISALI, Color::WHITE, factor);
             }
         }
 
@@ -79,6 +77,31 @@ static void Plot(std::vector<mut_v2>& data_pts, Color_ref pt_color, Color_ref ba
     printf("\r\n");
 }
 
+static void MixColors()
+{
+    f32 invScanlineCt = 100.0f / (f32)ppm::HEIGHT;
+    mut_f32 scanlinesDone = 0.0f;
+    primitives::sphere test_sphere(v3(0.0f, 0.0f, -1.0f), 0.5f);
+    mut_rayhit hit_info;
+    for (mut_u32 y = 0; y < ppm::HEIGHT; ++y)
+    {
+        f32 factor = (f32)y / (f32)ppm::HEIGHT;
+        for (mut_u32 x = 0; x < ppm::WIDTH; ++x)
+        {
+            v3 pixel_pos = cam.GetPixelPos(x, y);
+            v3 ray_direction = pixel_pos - cam.center;
+            ray r(cam.center, ray_direction);
+
+            Color c = Mix(Oklab::RED, Oklab::GREEN, factor);
+            render(x, y) = c;
+        }
+        scanlinesDone += 1.0f;
+        f32 pct_done = scanlinesDone * invScanlineCt;
+        printf("\r\tPROCESSING:\t%4d / %4d scanlines (%.2f%% RENDERED).", (i32)scanlinesDone, ppm::HEIGHT, pct_done);
+    }
+    printf("\r\n");
+}
+
 f32 ALPHA = 1.16096404744f; //  log₄(5)
 f32 INV_ALPHA = 1.0f / ALPHA; //  1 / log₄(5)
 static void Pareto(std::vector<mut_v2>& data_pts)
@@ -91,17 +114,11 @@ static void Pareto(std::vector<mut_v2>& data_pts)
     }
 }
 
-int main()
+static bool PathTrace()
 {
-    XsrRng::Init();
-
     perf_tracker.Start();
 
     RenderScene();
-    //std::vector<mut_v2> points = std::vector<mut_v2>();
-    //UniformDist::Fill01(points, 1 << 14);
-    //MapTo01(points);
-    //Plot(points, Color::RED);
 
     PerfSampleResult render_perf = perf_tracker.End();
 
@@ -115,7 +132,7 @@ int main()
     if (writeResult.Failed())
     {
         printf("\r\n\tPath tracer result unable to save to: %s\r\n", output_path.c_str());
-        return EXIT_FAILURE;
+        return false;
     }
 
     PerfSampleResult write_perf = perf_tracker.End();
@@ -125,6 +142,18 @@ int main()
     f64 cycleRate = MB_Written / write_perf.Milicycles();
     printf("\r\n\tCompleted write to disk in %.3fms (%.3f MiliCycles) | %.3f MB/s (%.3f MB/MiliCycle)\r\n", write_perf.Miliseconds(), write_perf.Milicycles(), byteRate, cycleRate);
     printf("\r\n\tPath tracer result saved to: %s\r\n", output_path.c_str());
+
+    return true;
+}
+
+int main()
+{
+    XsrRng::Init();
+
+
+
+    //bool successfulPathtrace = PathTrace();
+    //return successfulPathtrace ? EXIT_SUCCESS : EXIT_FAILURE;
 
     return EXIT_SUCCESS;
 }
