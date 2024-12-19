@@ -20,7 +20,6 @@ using namespace rac::rnd::distribution::uniform;
 
 mut_ppm render;
 mut_camera cam(ppm::WIDTH, ppm::HEIGHT);
-mut_PerfSample perf_tracker;
 
 static void RenderScene()
 {
@@ -56,6 +55,7 @@ static void RenderScene()
     }
     printf("\r\n");
 }
+
 static void Plot(std::vector<mut_v2>& data_pts, Color_ref pt_color, Color_ref background_color = Color::WHITE)
 {
     render.Fill(background_color);
@@ -77,31 +77,6 @@ static void Plot(std::vector<mut_v2>& data_pts, Color_ref pt_color, Color_ref ba
     printf("\r\n");
 }
 
-static void MixColors()
-{
-    f32 invScanlineCt = 100.0f / (f32)ppm::HEIGHT;
-    mut_f32 scanlinesDone = 0.0f;
-    primitives::sphere test_sphere(v3(0.0f, 0.0f, -1.0f), 0.5f);
-    mut_rayhit hit_info;
-    for (mut_u32 y = 0; y < ppm::HEIGHT; ++y)
-    {
-        f32 factor = (f32)y / (f32)ppm::HEIGHT;
-        for (mut_u32 x = 0; x < ppm::WIDTH; ++x)
-        {
-            v3 pixel_pos = cam.GetPixelPos(x, y);
-            v3 ray_direction = pixel_pos - cam.center;
-            ray r(cam.center, ray_direction);
-
-            Color c = Mix(Oklab::RED, Oklab::GREEN, factor);
-            render(x, y) = c;
-        }
-        scanlinesDone += 1.0f;
-        f32 pct_done = scanlinesDone * invScanlineCt;
-        printf("\r\tPROCESSING:\t%4d / %4d scanlines (%.2f%% RENDERED).", (i32)scanlinesDone, ppm::HEIGHT, pct_done);
-    }
-    printf("\r\n");
-}
-
 f32 ALPHA = 1.16096404744f; //  log₄(5)
 f32 INV_ALPHA = 1.0f / ALPHA; //  1 / log₄(5)
 static void Pareto(std::vector<mut_v2>& data_pts)
@@ -116,6 +91,8 @@ static void Pareto(std::vector<mut_v2>& data_pts)
 
 static bool PathTrace()
 {
+    mut_PerfSample perf_tracker;
+
     perf_tracker.Start();
 
     RenderScene();
@@ -146,14 +123,32 @@ static bool PathTrace()
     return true;
 }
 
+static void MixColors()
+{
+    f32 invScanlineCt = 100.0f / (f32)ppm::HEIGHT;
+    mut_f32 scanlinesDone = 0.0f;
+    for (mut_u32 y = 0; y < ppm::HEIGHT; ++y)
+    {
+        f32 factor = (f32)y / (f32)ppm::HEIGHT;
+        for (mut_u32 x = 0; x < ppm::WIDTH; ++x)
+        {
+            Color c = Mix(Oklab::RED, Oklab::GREEN, factor);
+            render(x, y) = c;
+        }
+        scanlinesDone += 1.0f;
+        f32 pct_done = scanlinesDone * invScanlineCt;
+        printf("\r\tPROCESSING:\t%4d / %4d scanlines (%.2f%% RENDERED).", (i32)scanlinesDone, ppm::HEIGHT, pct_done);
+    }
+    printf("\r\n");
+}
+
 int main()
 {
-    XsrRng::Init();
-
-
-
+    //XsrRng::Init();
     //bool successfulPathtrace = PathTrace();
     //return successfulPathtrace ? EXIT_SUCCESS : EXIT_FAILURE;
+
+
 
     return EXIT_SUCCESS;
 }

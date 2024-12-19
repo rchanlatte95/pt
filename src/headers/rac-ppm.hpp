@@ -18,7 +18,7 @@ namespace rac::img
     using namespace rac::mem::windows;
 
     static u32 PPM_FMT_STR_LEN = sizeof("xxx, xxx, xxx ");
-    static u32 _HEIGHT = 1024;
+    static u32 _HEIGHT = 512;
     static u32 _WIDTH = _HEIGHT;
     static u32 _AREA = _WIDTH * _HEIGHT;
     static u32 PPM_FILE_SZ = _AREA * (PPM_FMT_STR_LEN + 1);
